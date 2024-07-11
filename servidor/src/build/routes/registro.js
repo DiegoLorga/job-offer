@@ -16,7 +16,7 @@ class RegistroRoutes {
                 }));
             }
             //crear usuario en la base de datos
-            res.status(200).json((0, jsonResponse_1.jsonResponse)(200, { messege: "Usuario creado correctamente" }));
+            res.status(200).json((0, jsonResponse_1.jsonResponse)(200, { message: "Usuario creado correctamente" }));
         });
         /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
         this.router.post('/', empresaController.createUsuario);
