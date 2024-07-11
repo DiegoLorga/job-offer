@@ -45,6 +45,9 @@ export default function Registro() {
                 console.log(json);
                 setSuccessMessage(json.body.message)
                 setErrorResponse("");
+                setTimeout(() => {
+                    goTo("/");
+                }, 2000);
                 //goTo("/");
             } else {
                 console.log("Algo va mal");
