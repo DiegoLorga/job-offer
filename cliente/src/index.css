@@ -65,3 +65,8 @@ a {
   color: #a94442;
   padding: 10px;
 }
+.successMessage {
+  background-color: #c5e6cf;
+  color: green; /* Color verde para mensajes de éxito */
+  padding: 10px; /* Espacio inferior */
+}

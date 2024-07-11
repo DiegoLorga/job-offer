@@ -1,7 +1,9 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
-import DefaultLayout from "../layout/DefaultLayout";
-import { useState } from "react";
+import React, { useState } from "react";
+import { API_URL } from "../auth/apis";
+import { AuthReponseRegister, AuthResponseError } from "../types/types";
+
 
 export default function Registro() {
     const [nombre, setNombre] = useState("");
@@ -11,16 +13,60 @@ export default function Registro() {
     const [direccion, setDireccion] = useState("");
     const [ciudad, setCiudad] = useState("");
     const [estado, setEstado] = useState("");
+    const [errorResponse, setErrorResponse] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");  // Nuevo estado para el mensaje de éxito
+
+
 
     const auth = useAuth();
-    if(auth.isAuthenticated){
-        return <Navigate to="/Empresa"/>
+    const goTo = useNavigate();
+
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${API_URL}/registro`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nombre,
+                    correo,
+                    contrasena,
+                    verificar,
+                    direccion,
+                    ciudad,
+                    estado
+                })
+            });
+            if (response.ok) {
+                console.log("El usuario fue creado correctamnete");
+                const json = await response.json() as AuthReponseRegister;
+                console.log(json);
+                setSuccessMessage(json.body.message)
+                setErrorResponse("");
+                //goTo("/");
+            } else {
+                console.log("Algo va mal");
+                const json = await response.json() as  AuthResponseError;
+                setErrorResponse(json.body.error)
+                setSuccessMessage("");  // Limpiar mensaje de éxito si hay un error
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
+    }
+
+    if (auth.isAuthenticated) {
+        return <Navigate to="/Empresa" />
     }
 
     return (
-        <DefaultLayout>
-            <form className="form">
+            <form className="form" onSubmit={handleSubmit}>
                 <h1>Registro</h1>
+                {!!errorResponse  && <div className = "errorMessage">{errorResponse}</div>}
+                {!!successMessage  && <div className = "successMessage">{successMessage}</div>}
                 <label> Nombre </label>
                 <input
                     type="text"
@@ -69,10 +115,8 @@ export default function Registro() {
                     onChange={(e) => setEstado(e.target.value)}
                 />
 
-                <button>Login</button>
+                <button type="submit" >Registarse</button>
             </form>
-
-        </DefaultLayout>
 
     );
 }

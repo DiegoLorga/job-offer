@@ -2,6 +2,8 @@ import DefaultLayout from "../layout/DefaultLayout"
 import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 export default function Login() {
     const [correo, setCorreo] = useState("");
@@ -28,9 +30,14 @@ export default function Login() {
                     type="password"
                     value={contrasena}
                     onChange={(e) => setContrasena(e.target.value)}
+                    
                 />
-
-                <button>Login</button>
+                < br /> 
+                <button>  Login  </button>
+                <label>
+                    <br />
+                    <Link to="/Registro"> ¿No tienes cuenta? Registrate aquí </Link>
+                </label>
             </form>
 
         </DefaultLayout>
