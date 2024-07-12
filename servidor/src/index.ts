@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import { Mongoose } from 'mongoose';
 //import swaggerDocument from './swagger.json';
 import registroRoutes from './routes/registro';
 import administradorRoutes from './routes/administrador';
@@ -11,9 +10,12 @@ import loginRoutes from './routes/login';
 import refreshtokenRoutes from './routes/refresh-token';
 import singoutRoutes from './routes/signout';
 import todoRoutes from './routes/todos';
+import { connectDB } from './database';
+import rolRoutes from './routes/rol';
 class Server {
     public app: Application;
     constructor() {
+        connectDB();
         this.app = express();
         this.config();
         this.routes();
@@ -37,6 +39,7 @@ class Server {
         this.app.use('/api/refreshtoken', refreshtokenRoutes);
         this.app.use('/api/singout', singoutRoutes);
         this.app.use('/api/todos', todoRoutes);
+        this.app.use('/api/rol',rolRoutes);
 
     }
     start(): void {

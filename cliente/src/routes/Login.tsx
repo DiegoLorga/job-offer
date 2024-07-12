@@ -4,13 +4,14 @@ import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../auth/apis";
-import { AuthResponseError } from "../types/types";
+import { AuthResponseError, AuthResponse } from '../types/types';
 
 
 export default function Login() {
     const [correo, setCorreo] = useState("");
     const [contrasena, setContrasena] = useState("");
     const [errorResponse, setErrorResponse] = useState("");
+    const [authResponse,setAuthResponse] =useState("")
     const auth = useAuth();
     const goTo = useNavigate();
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -28,6 +29,9 @@ export default function Login() {
             });
             if (response.ok) {
                 console.log("El usuario fue creado correctamnete");
+                const json = await response.json() as AuthResponse;
+                console.log(json);
+                
                 setErrorResponse("");
                 goTo("/");;
                 //goTo("/");

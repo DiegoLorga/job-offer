@@ -13,16 +13,21 @@ export default function Registro() {
     const [direccion, setDireccion] = useState("");
     const [ciudad, setCiudad] = useState("");
     const [estado, setEstado] = useState("");
-    const [errorResponse, setErrorResponse] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");  // Nuevo estado para el mensaje de éxito
-
+    const [errorCampos, setErrorCampos] = useState("");
+    const [errorContrasenas, setErrorContrasenas] = useState("");
+    const [errorCorreo, setErrorCorreo] = useState("");
+    const [errorNombre, setErrorNombre] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
 
     const auth = useAuth();
     const goTo = useNavigate();
 
+
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+
         try {
             const response = await fetch(`${API_URL}/registro`, {
                 method: "POST",
@@ -39,87 +44,109 @@ export default function Registro() {
                     estado
                 })
             });
+
+
             if (response.ok) {
-                console.log("El usuario fue creado correctamnete");
                 const json = await response.json() as AuthReponseRegister;
-                console.log(json);
-                setSuccessMessage(json.body.message)
-                setErrorResponse("");
+                setSuccessMessage(json.body.message);
+                setErrorCampos("");
+                setErrorContrasenas("");
+                setErrorCorreo("");
+                setErrorNombre("");
                 setTimeout(() => {
                     goTo("/");
                 }, 2000);
-                //goTo("/");
             } else {
-                console.log("Algo va mal");
-                const json = await response.json() as  AuthResponseError;
-                setErrorResponse(json.body.error)
-                setSuccessMessage("");  // Limpiar mensaje de éxito si hay un error
+                const json = await response.json() as AuthResponseError;
+                setErrorCampos(json.body.camposError || "");
+                setErrorCorreo(json.body.correoError || "");
+                setErrorNombre(json.body.nombreError || "");
+                setErrorContrasenas(json.body.contrasenasError || "");
+                setSuccessMessage("");
             }
         } catch (error) {
             console.log(error);
-
         }
     }
 
+
     if (auth.isAuthenticated) {
-        return <Navigate to="/Empresa" />
+        return <Navigate to="/Empresa" />;
     }
 
+
     return (
-            <form className="form" onSubmit={handleSubmit}>
-                <h1>Registro</h1>
-                {!!errorResponse  && <div className = "errorMessage">{errorResponse}</div>}
-                {!!successMessage  && <div className = "successMessage">{successMessage}</div>}
-                <label> Nombre </label>
-                <input
-                    type="text"
-                    value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
-                />
+        <form className="form" onSubmit={handleSubmit}>
+            <h1>Registro</h1>
+            {!!errorCampos && <div className="errorMessage">{errorCampos}</div>}
+            {!!successMessage && <div className="successMessage">{successMessage}</div>}
+            <br/>
+            <label> Nombre </label>
+            <input
+                type="text"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                name="nombre"
+                id="nombre"
+                className={errorNombre ? 'error' : ''}
+            />
+            {!!errorNombre && <div className="errorMessage2">{errorNombre}</div>}
 
-                <label> Correo </label>
-                <input
-                    type="text"
-                    value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
-                />
 
-                <label> Contraseña </label>
-                <input
-                    type="password"
-                    value={contrasena}
-                    onChange={(e) => setContrasena(e.target.value)}
-                />
+            <label> Correo </label>
+            <input
+                type="text"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+                className={errorCorreo ? 'error' : ''}
+            />
+            {!!errorCorreo && <div className="errorMessage2">{errorCorreo}</div>}
 
-                <label> Verificar Contraseña </label>
-                <input
-                    type="password"
-                    value={verificar}
-                    onChange={(e) => setVerificar(e.target.value)}
-                />
 
-                <label> Direccion </label>
-                <input type="text"
-                    value={direccion}
-                    onChange={(e) => setDireccion(e.target.value)}
-                />
+            <label> Contraseña </label>
+            <input
+                type="password"
+                value={contrasena}
+                onChange={(e) => setContrasena(e.target.value)}
+                className={errorContrasenas ? 'error' : ''}
+            />
 
-                <label> Ciudad </label>
-                <input
-                    type="text"
-                    value={ciudad}
-                    onChange={(e) => setCiudad(e.target.value)}
-                />
 
-                <label> Estado </label>
-                <input
-                    type="text"
-                    value={estado}
-                    onChange={(e) => setEstado(e.target.value)}
-                />
+            <label> Verificar Contraseña </label>
+            <input
+                type="password"
+                value={verificar}
+                onChange={(e) => setVerificar(e.target.value)}
+                className={errorContrasenas ? 'error' : ''}
+            />
+            {!!errorContrasenas && <div className="errorMessage2">{errorContrasenas}</div>}
 
-                <button type="submit" >Registarse</button>
-            </form>
 
+            <label> Dirección </label>
+            <input
+                type="text"
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
+            />
+
+
+            <label> Ciudad </label>
+            <input
+                type="text"
+                value={ciudad}
+                onChange={(e) => setCiudad(e.target.value)}
+            />
+
+
+            <label> Estado </label>
+            <input
+                type="text"
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+            />
+
+
+            <button type="submit">Registrarse</button>
+        </form>
     );
 }

@@ -4,19 +4,23 @@
   font-weight: 400;
 }
 
+
 body {
   padding: 0;
   margin: 0;
 }
 
+
 label {
   display: block;
 }
+
 
 .form {
   width: 400px;
   margin: 0 auto;
 }
+
 
 input[type="text"],
 [type="password"] {
@@ -26,6 +30,7 @@ input[type="text"],
   width: 100%;
   margin: 5px 0 10px 0;
 }
+
 
 input[type="button"],
 button {
@@ -37,28 +42,34 @@ button {
   color: white;
 }
 
+
 nav {
   background-color: #eee;
 }
 
+
 nav ul {
   margin: 0;
 }
+
 
 nav ul li {
   display: inline-block;
   padding: 10px;
 }
 
+
 a {
   color: rgb(97, 28, 161);
   text-decoration: none;
 }
 
+
 .dashboard {
   width: 500px;
   margin: auto;
 }
+
 
 .errorMessage {
   background-color: #f2dede;
@@ -69,4 +80,16 @@ a {
   background-color: #c5e6cf;
   color: green; /* Color verde para mensajes de éxito */
   padding: 10px; /* Espacio inferior */
+}
+
+
+.errorMessage2 {
+  color: #a94442;
+  font-size: 14px; /* Tamaño de letra más pequeño */
+  padding: 10px;
+}
+
+
+.error {
+  border: 2px solid  #a94442;
 }

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
+import refreshtokenRoutes from './refresh-token';
 class LoginRoutes {
     public router: Router = Router();
     constructor() {
@@ -13,10 +14,22 @@ class LoginRoutes {
                     error: "Al menos un campo está vacío"
 
                 })
-            );
+                );
+            }
+            //autenticar usuario 
+            const accessToken = "access_Token";
+            const refreshtoken = "refresh_token";
+            const user = {
+                id: "1",
+                nombre: "Gizelle",
+                correo: "ramires@gmail.com",
+                direccion: "Actlima",
+                ciudad: "Huajuapan",
+                estado: "Oaxaca"
+
             }
             //crear usuario en la base de datos
-            res.status(200).json(jsonResponse(200,{message: "Ingreso Correcto"}));
+            res.status(200).json(jsonResponse(200, {user, refreshtoken, accessToken }));
         });
         /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
         this.router.post('/', empresaController.createUsuario);

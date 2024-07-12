@@ -15,8 +15,11 @@ const login_1 = __importDefault(require("./routes/login"));
 const refresh_token_1 = __importDefault(require("./routes/refresh-token"));
 const signout_1 = __importDefault(require("./routes/signout"));
 const todos_1 = __importDefault(require("./routes/todos"));
+const database_1 = require("./database");
+const rol_1 = __importDefault(require("./routes/rol"));
 class Server {
     constructor() {
+        (0, database_1.connectDB)();
         this.app = (0, express_1.default)();
         this.config();
         this.routes();
@@ -38,6 +41,7 @@ class Server {
         this.app.use('/api/refreshtoken', refresh_token_1.default);
         this.app.use('/api/singout', signout_1.default);
         this.app.use('/api/todos', todos_1.default);
+        this.app.use('/api/rol', rol_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

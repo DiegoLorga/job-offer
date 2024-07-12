@@ -1,4 +1,3 @@
-
 export interface AuthResponse{
     body:{
         user: User;
@@ -7,11 +6,17 @@ export interface AuthResponse{
     };
 }
 
+
 export interface AuthResponseError{
     body:{
         error: string;
+        camposError?: string;
+        contrasenasError?: string;
+        correoError?: string;
+        nombreError?:string;
     };
 }
+
 
 export interface User{
     body:{
@@ -26,5 +31,7 @@ export interface User{
 export interface AuthReponseRegister{
     body:{
         message:string;
+
+
     }
 }

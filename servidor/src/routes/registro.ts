@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
+import { usuariosController } from '../controllers/usuarioController';
 
 class RegistroRoutes {
     public router: Router = Router();
@@ -7,18 +8,8 @@ class RegistroRoutes {
         this.config();
     }
     config(): void {
-        this.router.post("/", (req, res) => {
-            const { nombre, correo, contrasena, verificar, direccion, ciudad, estado } = req.body;
-            if (!!!nombre || !!!correo || !!!contrasena || !!!verificar || !!!direccion || !!!ciudad || !!!estado) {
-                return res.status(400).json(jsonResponse(400, {
-                    error: "Al menos un campo está vacío"
-
-                })
-            );
-            }
-            //crear usuario en la base de datos
-            res.status(200).json(jsonResponse(200,{message: "Usuario creado correctamente"}));
-        });
+        this.router.post("/",usuariosController.createUsuario )
+        this.router.get("/correo/:correo",usuariosController.validarCorreo)
         /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
         this.router.post('/', empresaController.createUsuario);
         this.router.delete('/:id',empresaController.borrarUsuario);
