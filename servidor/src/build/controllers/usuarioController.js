@@ -53,54 +53,10 @@ class UsuarioController {
             }
         });
     }
-    /*public async validarCorreo(req: Request, res: Response): Promise<void> {
-        const { correo } = req.params;
-
-        if (!validator.isEmail(correo)) {
-            res.status(400).json(jsonResponse(400, {
-                error: "El correo no es válido"
-            }));
-            return;
-        }
-
-        res.status(200).json(jsonResponse(200, {
-            message: "El correo es válido"
-        }));
-    }*/
-    validarCampos(req) {
-        const { nombre, correo, contrasena, verificar, direccion, ciudad, estado, } = req.body;
-        let camposError = null;
-        let contrasenasError = null;
-        let correoError = null;
-        let nombreError = null;
-        if (!nombre || !correo || !contrasena || !verificar || !direccion || !ciudad || !estado) {
-            camposError = "Todos los campos son requeridos";
-        }
-        if (contrasena !== verificar) {
-            contrasenasError = "Las contraseñas no coinciden";
-        }
-        else if (!this.validarContrasena(contrasena)) {
-            contrasenasError = "La contraseña debe tener al menos 8 caracteres, una mayúscula, un dígito y un carácter especial";
-        }
-        if (!this.validarCorreo(correo)) {
-            correoError = "Correo no válido";
-        }
-        if (!this.validarNombre(nombre)) {
-            nombreError = "Nombre no válido";
-        }
-        return { camposError, contrasenasError, correoError, nombreError };
-    }
-    validarContrasena(contrasena) {
-        const regex = /^(?=.*[A-ZÀ-ÿ])(?=.*\d)(?=.*[@$!%*?&#+^()_+=\{\}\[\]|:;,.<>~-])[A-Za-zÀ-ÿ\d@$!%*?&#+^()_+=\{\}\[\]|:;,.<>~-]{8,}$/;
-        return regex.test(contrasena);
-    }
-    validarCorreo(correo) {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(correo);
-    }
-    validarNombre(nombre) {
-        const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
-        return nameRegex.test(nombre);
+    validarCorreo(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { correo } = req.params;
+        });
     }
 }
 exports.usuariosController = new UsuarioController();

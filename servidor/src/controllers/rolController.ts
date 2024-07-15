@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { connectDB } from '../database'; //acceso a la base de datos
 import Rol from '../models/rol.model'
 import { jsonResponse } from '../lib/jsonResponse';
 

@@ -1,0 +1,39 @@
+[{
+  "_id": {
+    "$oid": "6690637124eacbffd867f32f"
+  },
+  "tipo": "Empresa",
+  "createdAt": {
+    "$date": "2024-07-11T22:57:53.868Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-11T22:57:53.868Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6690640c24eacbffd867f333"
+  },
+  "tipo": "Usuario",
+  "createdAt": {
+    "$date": "2024-07-11T23:00:28.240Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-11T23:00:28.240Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6690641524eacbffd867f335"
+  },
+  "tipo": "Administrador",
+  "createdAt": {
+    "$date": "2024-07-11T23:00:37.465Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-11T23:00:37.465Z"
+  },
+  "__v": 0
+}]

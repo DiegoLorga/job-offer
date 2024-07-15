@@ -9,7 +9,7 @@ class RegistroRoutes {
     }
     config() {
         this.router.post("/", usuarioController_1.usuariosController.createUsuario);
-        this.router.get("/correo/:correo", usuarioController_1.usuariosController.validarCorreo);
+        //this.router.get("/correo/:correo",usuariosController.validarCorreo)
         /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
         this.router.post('/', empresaController.createUsuario);
         this.router.delete('/:id',empresaController.borrarUsuario);

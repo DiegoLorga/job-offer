@@ -1,0 +1,59 @@
+[{
+  "_id": {
+    "$oid": "6691616b6a4afc733a8ee41c"
+  },
+  "nombre": "Gizelle Ramirez Martinez",
+  "correo": "ramirezgizelle@gmail.com",
+  "contrasena": "$2a$10$W.7pArXZoCT0zuS2k2uZe.A5iGyCxYnyBn991aHkx95fi4jsRT/6C",
+  "id_rol": {
+    "$oid": "6690641524eacbffd867f335"
+  },
+  "direccion": "gfhfg",
+  "estado": "fghfg",
+  "ciudad": "gfhfg",
+  "createdAt": {
+    "$date": "2024-07-12T17:01:31.041Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-12T17:01:31.041Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66916eba4a4df4b14ca66017"
+  },
+  "nombre": "ad",
+  "correo": "aadA",
+  "contrasena": "$2a$10$ML.3Hf1ccAXJfBMLj/2m4.N6NIzByA5TLq9hzp/h1ZEEys3rQw4ie",
+  "id_rol": null,
+  "direccion": "ada",
+  "estado": "adA",
+  "ciudad": "Dad",
+  "createdAt": {
+    "$date": "2024-07-12T17:58:18.860Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-12T17:58:18.860Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "669175e96f83eaf9e80e596f"
+  },
+  "nombre": "Diego",
+  "correo": "ramseslorga@gmail.com",
+  "contrasena": "$2a$10$m6SOtlP0M1RHEV73FBve/eOuftQDAz/LLqBE6Qudzj7Wu4uNAeXau",
+  "id_rol": null,
+  "direccion": "Acatlima, Huajuapan de Leon",
+  "estado": "Oaxaca",
+  "ciudad": "Huajuapan de Leon",
+  "createdAt": {
+    "$date": "2024-07-12T18:28:57.530Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-12T18:28:57.530Z"
+  },
+  "__v": 0
+}]

@@ -4,7 +4,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../auth/apis";
-import { AuthResponseError, AuthResponse } from '../types/types';
+import { AuthResponseError, AuthReponseRegister } from '../types/types';
 
 
 export default function Login() {
@@ -12,6 +12,7 @@ export default function Login() {
     const [contrasena, setContrasena] = useState("");
     const [errorResponse, setErrorResponse] = useState("");
     const [authResponse,setAuthResponse] =useState("")
+    const [sucessMessage,setSuccessMessage] = useState("");
     const auth = useAuth();
     const goTo = useNavigate();
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -28,12 +29,12 @@ export default function Login() {
                 })
             });
             if (response.ok) {
-                console.log("El usuario fue creado correctamnete");
-                const json = await response.json() as AuthResponse;
+                console.log("El usuario ingresó");
+                const json = await response.json() as AuthReponseRegister;
                 console.log(json);
-                
+                setSuccessMessage(json.body.message);
                 setErrorResponse("");
-                goTo("/");;
+                goTo("/Empleado");
                 //goTo("/");
             } else {
                 console.log("Algo va mal");
@@ -55,6 +56,7 @@ export default function Login() {
             <form className="form" onSubmit={handleSubmit}>
                 <h1>Login</h1>
                 {!!errorResponse && <div className="errorMessage">{errorResponse}</div>}
+                {!!sucessMessage && <div className="sucessMessage">{sucessMessage}</div>}
                 <label> Correo </label>
                 <input
                     type="text"
