@@ -20,7 +20,6 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Creando un usuario");
             const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol, verificar } = req.body;
             let camposError = null;
             let contrasenasError = null;
@@ -59,12 +58,6 @@ class UsuarioController {
             }
             try {
                 const tipoRol = yield rol_model_1.default.findById(id_rol);
-                if (!tipoRol) {
-                    res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
-                        error: "Rol no encontrado"
-                    }));
-                    return;
-                }
                 const hashedPassword = yield bcryptjs_1.default.hash(contrasena, 10);
                 const nuevoUsuario = new usuario_model_1.default({
                     nombre,
@@ -76,20 +69,16 @@ class UsuarioController {
                     id_rol: tipoRol
                 });
                 const UsuarioGuardado = yield nuevoUsuario.save();
-                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
-                    message: "Usuario creado correctamente",
-                    usuario: {
-                        nombre: UsuarioGuardado.nombre,
-                        correo: UsuarioGuardado.correo,
-                        contrasena: UsuarioGuardado.contrasena,
-                        direccion: UsuarioGuardado.direccion,
-                        ciudad: UsuarioGuardado.ciudad,
-                        estado: UsuarioGuardado.estado
-                    }
-                }));
+                res.json({
+                    nombre: UsuarioGuardado.nombre,
+                    correo: UsuarioGuardado.correo,
+                    contrasena: UsuarioGuardado.contrasena,
+                    direccion: UsuarioGuardado.direccion,
+                    ciudad: UsuarioGuardado.ciudad,
+                    estado: UsuarioGuardado.estado
+                });
             }
             catch (error) {
-                console.error("Error al crear usuario:", error);
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     error: "No se pudo crear el usuario"
                 }));

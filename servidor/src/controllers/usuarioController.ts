@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 class UsuarioController {
 
     public async createUsuario(req: Request, res: Response): Promise<void> {
-        console.log("Creando un usuario");
+        
         const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol, verificar } = req.body;
         
         let camposError: string | null = null;
@@ -50,13 +50,6 @@ class UsuarioController {
 
         try {
             const tipoRol = await Rol.findById(id_rol);
-            if (!tipoRol) {
-                res.status(400).json(jsonResponse(400, {
-                    error: "Rol no encontrado"
-                }));
-                return;
-            }
-
             const hashedPassword = await bcrypt.hash(contrasena, 10);
 
             const nuevoUsuario = new Usuario({
@@ -70,19 +63,15 @@ class UsuarioController {
             });
 
             const UsuarioGuardado = await nuevoUsuario.save();
-            res.status(200).json(jsonResponse(200, {
-                message: "Usuario creado correctamente",
-                usuario: {
-                    nombre: UsuarioGuardado.nombre,
-                    correo: UsuarioGuardado.correo,
-                    contrasena: UsuarioGuardado.contrasena,
-                    direccion: UsuarioGuardado.direccion,
-                    ciudad: UsuarioGuardado.ciudad,
-                    estado: UsuarioGuardado.estado
-                }
-            }));
+            res.json({
+                nombre: UsuarioGuardado.nombre,
+                correo: UsuarioGuardado.correo,
+                contrasena: UsuarioGuardado.contrasena,
+                direccion: UsuarioGuardado.direccion,
+                ciudad: UsuarioGuardado.ciudad,
+                estado: UsuarioGuardado.estado
+            });
         } catch (error) {
-            console.error("Error al crear usuario:", error);
             res.status(400).json(jsonResponse(400, {
                 error: "No se pudo crear el usuario"
             }));

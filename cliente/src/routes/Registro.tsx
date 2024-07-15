@@ -48,7 +48,7 @@ export default function Registro() {
             if (response.ok) {
                 const json = await response.json() as AuthReponseRegister;
                 console.log(json);
-                setSuccessMessage(json.body.message);
+                setSuccessMessage("Usuario creado exitosamente");
                 setErrorCampos("");
                 setErrorContrasenas("");
                 setErrorCorreo("");
