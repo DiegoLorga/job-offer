@@ -16,6 +16,7 @@ exports.loginController = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const jsonResponse_1 = require("../lib/jsonResponse");
+const usuarioController_1 = require("./usuarioController");
 class LoginController {
     constructor() {
     }
@@ -26,28 +27,20 @@ class LoginController {
                 const usuario = yield usuario_model_1.default.findOne({ correo });
                 if (!usuario) {
                     res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
-                        error: "El usuario no existe"
+                        error: "Datos inválidos"
                     }));
                     return;
                 }
                 const contrasenaValida = yield bcryptjs_1.default.compare(contrasena, usuario.contrasena);
                 if (!contrasenaValida) {
                     res.status(401).json((0, jsonResponse_1.jsonResponse)(401, {
-                        error: "La contraseña es incorrecta"
+                        error: "Datos inválidos"
                     }));
                     return;
                 }
-                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
-                    message: "El usuario y la contraseña son correctos",
-                    usuario: {
-                        nombre: usuario.nombre,
-                        correo: usuario.correo,
-                        direccion: usuario.direccion,
-                        ciudad: usuario.ciudad,
-                        estado: usuario.estado,
-                        id_rol: usuario.id_rol
-                    }
-                }));
+                const accessToken = usuarioController_1.usuariosController;
+                const refreshToken = usuarioController_1.usuariosController;
+                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, { correo, accessToken, refreshToken }));
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {

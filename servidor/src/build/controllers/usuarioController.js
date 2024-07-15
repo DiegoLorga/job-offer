@@ -13,16 +13,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usuariosController = void 0;
+exports.createAccessToken = createAccessToken;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const rol_model_1 = __importDefault(require("../models/rol.model"));
-const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jsonResponse_1 = require("../lib/jsonResponse");
+const generarTokens_1 = require("../auth/generarTokens");
+const tokens_model_1 = __importDefault(require("../models/tokens.model"));
 class UsuarioController {
-    constructor() {
-    }
+    constructor() { }
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Creado un  usuario");
+            console.log("Creando usuario");
             const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol } = req.body;
             const tipoRol = yield rol_model_1.default.findById(id_rol);
             try {
@@ -46,17 +48,27 @@ class UsuarioController {
                     estado: UsuarioGuardado.estado
                 });
             }
-            catch (_a) {
+            catch (error) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
-                    error: "No se pudo crear el rol"
+                    error: "No se pudo crear el usuario"
                 }));
             }
         });
     }
-    validarCorreo(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { correo } = req.params;
-        });
-    }
+}
+function createAccessToken(user) {
+    return (0, generarTokens_1.generaAccessToken)(user);
+}
+function createRefreshToken(user) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const refreshToken = (0, generarTokens_1.generaRefreshToken)(user);
+        try {
+            yield new tokens_model_1.default({ token: refreshToken }).save();
+            return refreshToken;
+        }
+        catch (error) {
+            console.log(error);
+        }
+    });
 }
 exports.usuariosController = new UsuarioController();

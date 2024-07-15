@@ -3,6 +3,7 @@ import bcrypt, { hash } from 'bcryptjs';
 import Login from '../models/login.model';
 import Usuario from '../models/usuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
+import { usuariosController } from './usuarioController';
 
 
 class LoginController {
@@ -17,7 +18,7 @@ class LoginController {
 
             if (!usuario) {
                 res.status(404).json(jsonResponse(404, {
-                    error: "El usuario no existe"
+                    error: "Datos inválidos"
                 }));
                 return;
             }
@@ -26,22 +27,15 @@ class LoginController {
 
             if (!contrasenaValida) {
                 res.status(401).json(jsonResponse(401, {
-                    error: "La contraseña es incorrecta"
+                    error: "Datos inválidos"
                 }));
                 return;
             }
+            const accessToken = usuariosController;
+            const refreshToken = usuariosController;
 
-            res.status(200).json(jsonResponse(200, {
-                message: "El usuario y la contraseña son correctos",
-                usuario: {
-                    nombre: usuario.nombre,
-                    correo: usuario.correo,
-                    direccion: usuario.direccion,
-                    ciudad: usuario.ciudad,
-                    estado: usuario.estado,
-                    id_rol: usuario.id_rol
-                }
-            }));
+            res.status(200).json(jsonResponse(200, {correo,accessToken,refreshToken}));
+        
         } catch (error) {
             res.status(500).json(jsonResponse(500, {
                 error: "Error del servidor"

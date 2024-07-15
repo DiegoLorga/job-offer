@@ -1,21 +1,20 @@
 import { Request, Response } from 'express';
-import { connectDB } from '../database'; //acceso a la base de datos
-import Usuario from '../models/usuario.model'
+import Usuario from '../models/usuario.model';
 import Rol from '../models/rol.model';
-import { jsonResponse } from '../lib/jsonResponse';
-import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import mongoose from 'mongoose';
-
+import { jsonResponse } from '../lib/jsonResponse';
+import { User, generaAccessToken, generaRefreshToken } from '../auth/generarTokens';
+import Token from '../models/tokens.model';
 class UsuarioController {
+    constructor() { }
 
-    constructor() {
-    }
     public async createUsuario(req: Request, res: Response): Promise<void> {
-        console.log("Creado un  usuario");
+        console.log("Creando usuario");
         const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol } = req.body;
-        const tipoRol = await Rol.findById(id_rol)
+        const tipoRol = await Rol.findById(id_rol);
+
         try {
+
             const hashedPassword = await bcrypt.hash(contrasena, 10);
 
             const nuevoUsuario = new Usuario({
@@ -26,7 +25,8 @@ class UsuarioController {
                 ciudad,
                 estado,
                 id_rol: tipoRol
-            })
+            });
+
             const UsuarioGuardado = await nuevoUsuario.save();
             res.json({
                 nombre: UsuarioGuardado.nombre,
@@ -35,37 +35,28 @@ class UsuarioController {
                 direccion: UsuarioGuardado.direccion,
                 ciudad: UsuarioGuardado.ciudad,
                 estado: UsuarioGuardado.estado
-            })
-        } catch {
+            });
+        } catch (error) {
             res.status(400).json(jsonResponse(400, {
-                error: "No se pudo crear el rol"
-
-            })
-            )
-
+                error: "No se pudo crear el usuario"
+            }));
         }
     }
+}
+export function createAccessToken(user: User): string {
+    return generaAccessToken(user);
+}
+async function createRefreshToken(user: User): Promise<string | undefined > {
+    const refreshToken = generaRefreshToken(user);
 
-    public async validarCorreo(req: Request, res: Response): Promise<void> {
-        const {correo} = req.params;
-
+    try{
+        await new Token({token: refreshToken}).save()
+        return refreshToken;
+    }catch(error){
+        console.log(error);
         
     }
-
-    /*public async validarCorreo(req: Request, res: Response): Promise<void> {
-        const { correo } = req.params;
-
-        if (!validator.isEmail(correo)) {
-            res.status(400).json(jsonResponse(400, {
-                error: "El correo no es válido"
-            }));
-            return;
-        }
-
-        res.status(200).json(jsonResponse(200, {
-            message: "El correo es válido"
-        }));
-    }*/
-
 }
+
+
 export const usuariosController = new UsuarioController();
