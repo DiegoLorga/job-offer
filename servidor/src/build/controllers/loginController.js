@@ -26,14 +26,14 @@ class LoginController {
                 const usuario = yield usuario_model_1.default.findOne({ correo });
                 if (!usuario) {
                     res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
-                        error: "El usuario no existe"
+                        error: "Usuario inválido"
                     }));
                     return;
                 }
                 const contrasenaValida = yield bcryptjs_1.default.compare(contrasena, usuario.contrasena);
                 if (!contrasenaValida) {
                     res.status(401).json((0, jsonResponse_1.jsonResponse)(401, {
-                        error: "La contraseña es incorrecta"
+                        error: "Usuario inválido"
                     }));
                     return;
                 }

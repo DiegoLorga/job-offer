@@ -1,3 +1,4 @@
+
 import { Request, Response } from 'express';
 import bcrypt, { hash } from 'bcryptjs';
 import Login from '../models/login.model';
@@ -17,7 +18,7 @@ class LoginController {
 
             if (!usuario) {
                 res.status(404).json(jsonResponse(404, {
-                    error: "El usuario no existe"
+                    error: "Usuario inválido"
                 }));
                 return;
             }
@@ -26,7 +27,7 @@ class LoginController {
 
             if (!contrasenaValida) {
                 res.status(401).json(jsonResponse(401, {
-                    error: "La contraseña es incorrecta"
+                    error:"Usuario inválido"
                 }));
                 return;
             }

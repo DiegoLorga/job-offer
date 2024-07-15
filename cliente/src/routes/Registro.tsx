@@ -1,9 +1,9 @@
+
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import React, { useState } from "react";
 import { API_URL } from "../auth/apis";
 import { AuthReponseRegister, AuthResponseError } from "../types/types";
-
 
 export default function Registro() {
     const [nombre, setNombre] = useState("");
@@ -17,8 +17,7 @@ export default function Registro() {
     const [errorContrasenas, setErrorContrasenas] = useState("");
     const [errorCorreo, setErrorCorreo] = useState("");
     const [errorNombre, setErrorNombre] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
-
+    const [sucessMessage,setSuccessMessage] = useState("");
 
     const auth = useAuth();
     const goTo = useNavigate();
@@ -48,6 +47,7 @@ export default function Registro() {
 
             if (response.ok) {
                 const json = await response.json() as AuthReponseRegister;
+                console.log(json);
                 setSuccessMessage(json.body.message);
                 setErrorCampos("");
                 setErrorContrasenas("");
@@ -79,7 +79,7 @@ export default function Registro() {
         <form className="form" onSubmit={handleSubmit}>
             <h1>Registro</h1>
             {!!errorCampos && <div className="errorMessage">{errorCampos}</div>}
-            {!!successMessage && <div className="successMessage">{successMessage}</div>}
+            {!!sucessMessage && <div className="successMessage">{sucessMessage}</div>}
             <br/>
             <label> Nombre </label>
             <input

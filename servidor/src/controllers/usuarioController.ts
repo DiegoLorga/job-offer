@@ -1,21 +1,62 @@
 import { Request, Response } from 'express';
-import { connectDB } from '../database'; //acceso a la base de datos
-import Usuario from '../models/usuario.model'
+import Usuario from '../models/usuario.model';
 import Rol from '../models/rol.model';
 import { jsonResponse } from '../lib/jsonResponse';
-import validator from 'validator';
 import bcrypt from 'bcryptjs';
-import mongoose from 'mongoose';
 
 class UsuarioController {
 
-    constructor() {
-    }
     public async createUsuario(req: Request, res: Response): Promise<void> {
-        console.log("Creado un  usuario");
-        const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol } = req.body;
-        const tipoRol = await Rol.findById(id_rol)
+        console.log("Creando un usuario");
+        const { nombre, correo, contrasena, direccion, ciudad, estado, id_rol, verificar } = req.body;
+        
+        let camposError: string | null = null;
+        let contrasenasError: string | null = null;
+        let nombreError: string | null = null;
+        let correoError: string | null = null;
+
+        if (!nombre || !correo || !contrasena || !verificar || !direccion || !ciudad || !estado) {
+            camposError = "Todos los campos son requeridos";
+        } else {
+            if (contrasena !== verificar) {
+                contrasenasError = "Las contraseñas no coinciden";
+            }else{
+                const contrasenaregex = /^(?=.*[A-ZÀ-ÿ])(?=.*\d)(?=.*[@$!%*?&#+^()_+=\{\}\[\]|:;,.<>~-])[A-Za-zÀ-ÿ\d@$!%*?&#+^()_+=\{\}\[\]|:;,.<>~-]{8,}$/;
+                if (!contrasenaregex.test(contrasena)) {
+                    contrasenasError = "La contraseña debe tener al menos 8 caracteres, una mayúscula, un dígito y un carácter especial";
+                }
+            }
+            const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
+            if (!nameRegex.test(nombre)) {
+                nombreError = "Nombre no válido";
+            }
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(correo)) {
+                correoError = "Correo no válido";
+            }
+
+       
+        }
+
+        if (camposError || contrasenasError || nombreError) {
+            res.status(400).json(jsonResponse(400, {
+                camposError,
+                contrasenasError,
+                nombreError,
+                correoError
+            }));
+            return;
+        }
+
         try {
+            const tipoRol = await Rol.findById(id_rol);
+            if (!tipoRol) {
+                res.status(400).json(jsonResponse(400, {
+                    error: "Rol no encontrado"
+                }));
+                return;
+            }
+
             const hashedPassword = await bcrypt.hash(contrasena, 10);
 
             const nuevoUsuario = new Usuario({
@@ -26,46 +67,29 @@ class UsuarioController {
                 ciudad,
                 estado,
                 id_rol: tipoRol
-            })
+            });
+
             const UsuarioGuardado = await nuevoUsuario.save();
-            res.json({
-                nombre: UsuarioGuardado.nombre,
-                correo: UsuarioGuardado.correo,
-                contrasena: UsuarioGuardado.contrasena,
-                direccion: UsuarioGuardado.direccion,
-                ciudad: UsuarioGuardado.ciudad,
-                estado: UsuarioGuardado.estado
-            })
-        } catch {
-            res.status(400).json(jsonResponse(400, {
-                error: "No se pudo crear el rol"
-
-            })
-            )
-
-        }
-    }
-
-    public async validarCorreo(req: Request, res: Response): Promise<void> {
-        const {correo} = req.params;
-
-        
-    }
-
-    /*public async validarCorreo(req: Request, res: Response): Promise<void> {
-        const { correo } = req.params;
-
-        if (!validator.isEmail(correo)) {
-            res.status(400).json(jsonResponse(400, {
-                error: "El correo no es válido"
+            res.status(200).json(jsonResponse(200, {
+                message: "Usuario creado correctamente",
+                usuario: {
+                    nombre: UsuarioGuardado.nombre,
+                    correo: UsuarioGuardado.correo,
+                    contrasena: UsuarioGuardado.contrasena,
+                    direccion: UsuarioGuardado.direccion,
+                    ciudad: UsuarioGuardado.ciudad,
+                    estado: UsuarioGuardado.estado
+                }
             }));
-            return;
+        } catch (error) {
+            console.error("Error al crear usuario:", error);
+            res.status(400).json(jsonResponse(400, {
+                error: "No se pudo crear el usuario"
+            }));
         }
+    }
 
-        res.status(200).json(jsonResponse(200, {
-            message: "El correo es válido"
-        }));
-    }*/
 
 }
+
 export const usuariosController = new UsuarioController();
