@@ -1,15 +1,15 @@
-import { Link } from "react-router-dom";
-import Registro from '../routes/Registro';
+import Navigation from "../routes/Navegacion";
 
-interface DefaultLayoutProps{
+interface DefaultLayoutProps {
     children: React.ReactNode;
+    showNav?: boolean;
 }
 
-export default function DefaultLayout({children}: DefaultLayoutProps){
-    return(
+export default function DefaultLayout({ children, showNav = false }: DefaultLayoutProps) {
+    return (
         <>
-        <main>{children}</main>
+            {showNav && <Navigation />}
+            <main>{children}</main>
         </>
     );
-
 }
