@@ -17,6 +17,7 @@ const signout_1 = __importDefault(require("./routes/signout"));
 const todos_1 = __importDefault(require("./routes/todos"));
 const database_1 = require("./database");
 const rol_1 = __importDefault(require("./routes/rol"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 class Server {
     constructor() {
         (0, database_1.connectDB)();
@@ -26,9 +27,10 @@ class Server {
         // this.app.use('/documentacion', swagger_ui_express.serve, swagger_ui_express.setup(swaggerDocument));
     }
     config() {
+        this.app.use((0, cookie_parser_1.default)());
         this.app.set('port', process.env.PORT || 3000); //En que puerto va a ejecutar
         this.app.use((0, morgan_1.default)('dev')); //que ejecutamos y que tiempo
-        this.app.use((0, cors_1.default)());
+        this.app.use((0, cors_1.default)({ origin: " http://localhost:5173", credentials: true }));
         this.app.use(express_1.default.json()); //permite que utilicemos json
         this.app.use(express_1.default.urlencoded({ extended: false })); //decodifca las url
     }

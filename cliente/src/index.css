@@ -15,6 +15,14 @@ label {
   display: block;
 }
 
+select{
+  display: block;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  margin: 5px 0 10px 0;
+}
+
 
 .form {
   width: 400px;

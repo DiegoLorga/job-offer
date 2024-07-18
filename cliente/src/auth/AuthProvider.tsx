@@ -1,22 +1,54 @@
-import { useContext, createContext, useState, useEffect} from "react";
+import { useContext, createContext, useState, useEffect } from "react";
+import { API_URL } from "./apis";
 
-interface AuthProvideProps {
-    children: React.ReactNode;
+interface AuthContextProps {
+    isAuthenticated: boolean;
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AuthContext = createContext({
-    isAuthenticated:false,
-})
+const AuthContext = createContext<AuthContextProps>({
+    isAuthenticated: false,
+    setIsAuthenticated: () => {},
+});
 
-//componete para validad la autentificacion y no dejar pasar a las rutas prtegidas 
-export function AuthProvider({ children }: AuthProvideProps) {
-    const [isAuthenticated,setIsAuthenticated]=useState(false);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        // Verificar la autenticación al cargar la aplicación
+        const checkAuth = async () => {
+            try {
+                const response = await fetch(`${API_URL}/login/perfil`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false);
+                }
+            } catch (error) {
+                setIsAuthenticated(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
+
+    const value = {
+        isAuthenticated,
+        setIsAuthenticated,
+    };
 
     return (
-        <AuthContext.Provider value ={{ isAuthenticated }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
-    )
-
+    );
 }
-export const useAuth = () => useContext(AuthContext)
+
+export const useAuth = () => useContext(AuthContext);

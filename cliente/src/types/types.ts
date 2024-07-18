@@ -31,7 +31,17 @@ export interface User{
 export interface AuthReponseRegister{
     body:{
         message:string;
-
-
     }
+    token: string; // Aquí se define la propiedad token
 }
+export interface ProfileResponse {
+    body: {
+      user: User;
+    };
+  }
+  
+  export interface ProfileError {
+    body: {
+      error: string;
+    };
+  }
