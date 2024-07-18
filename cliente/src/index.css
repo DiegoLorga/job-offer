@@ -109,8 +109,8 @@ n/* Navigation.css */
   position: fixed; /* Fija la barra de navegación en la pantalla */
   top: 0;
   width: 100%; /* Ancho completo de la barra de navegación */
-  background-color: #4CAF50; /* Cambia este valor al color que desees */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+  background-color: #256d27; /* Cambia este valor al color que desees */
+  box-shadow: 0 2px 5px rgba(4, 255, 200, 0.1); /* Sombra para dar profundidad */
   display: flex;
   align-items: center; /* Alinea los elementos verticalmente */
   padding: 10px 20px; /* Espaciado interno */
