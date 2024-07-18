@@ -16,6 +16,7 @@ exports.loginController = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const jsonResponse_1 = require("../lib/jsonResponse");
+const jwt_1 = require("../libs/jwt");
 class LoginController {
     constructor() {
     }
@@ -37,6 +38,9 @@ class LoginController {
                     }));
                     return;
                 }
+                const token = yield (0, jwt_1.createAccesToken)({ id: usuario._id });
+                console.log(usuario._id);
+                res.cookie('token', token);
                 res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
                     message: "El usuario y la contraseña son correctos",
                     usuario: {
@@ -54,6 +58,28 @@ class LoginController {
                     error: "Error del servidor"
                 }));
             }
+        });
+    }
+    logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("deslogueando");
+            res.cookie('token', "", { expires: new Date(0) });
+            res.sendStatus(200);
+            return;
+        });
+    }
+    perfil(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const usuarioEncontrado = yield usuario_model_1.default.findById(req.usuario.id);
+            if (!usuarioEncontrado)
+                res.status(400).json({ mensaje: "Usuario no encontrado" });
+            res.json({
+                id: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado._id,
+                nombre: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.nombre,
+                correo: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.correo,
+                createdAt: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.createdAt,
+                updatedAt: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.updatedAt
+            });
         });
     }
 }

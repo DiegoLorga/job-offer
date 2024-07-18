@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const loginController_1 = require("../controllers/loginController");
+const auth_1 = require("../middleware/auth");
 class LoginRoutes {
     constructor() {
         this.router = (0, express_1.Router)();
@@ -9,6 +10,9 @@ class LoginRoutes {
     }
     config() {
         this.router.post("/", loginController_1.loginController.verificarUsuario);
+        this.router.post("/logout", loginController_1.loginController.logout);
+        this.router.get('/perfil', auth_1.validarToken, loginController_1.loginController.perfil);
+        this.router.get("/verificar", auth_1.validarToken);
     }
 }
 const loginRoutes = new LoginRoutes();

@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
-import Rol from '../models/rol.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
+import { createAccesToken } from '../libs/jwt';
 
 class UsuarioController {
+
 
     public async createUsuario(req: Request, res: Response): Promise<void> {
 
@@ -16,6 +17,7 @@ class UsuarioController {
         let contrasenasError: string | null = null;
         let nombreError: string | null = null;
         let correoError: string | null = null;
+
 
         if (!nombre || !correo || !contrasena || !verificar || !direccion || !ciudad || !estado) {
             camposError = "Todos los campos son requeridos";
@@ -36,7 +38,11 @@ class UsuarioController {
             if (!emailRegex.test(correo)) {
                 correoError = "Correo no válido";
             }
+
+
+
         }
+
 
         if (camposError || contrasenasError || nombreError || correoError) {
             res.status(400).json(jsonResponse(400, {
@@ -48,9 +54,9 @@ class UsuarioController {
             return;
         }
 
-        try {
 
-            const tipoRol = '6690640c24eacbffd867f333'
+        try {
+            const tipoRol = "6690640c24eacbffd867f333";
             const hashedPassword = await bcrypt.hash(contrasena, 10);
 
             const nuevoUsuario = new Usuario({
@@ -62,13 +68,22 @@ class UsuarioController {
                 estado,
                 id_rol: tipoRol
             });
+            //console.log("Hola, antes de Token");
 
             const UsuarioGuardado = await nuevoUsuario.save();
+            console.log("Hola, antes de Token");
+            const token = await createAccesToken({ id: UsuarioGuardado._id });
+
+            res.cookie('token', token)
+
+            console.log("Hola, despues de Token");
+            
+            console.log(res.cookie);
+
             res.json({
-                id_rol: UsuarioGuardado.id_rol,
+                idRol: UsuarioGuardado.id_rol,
                 nombre: UsuarioGuardado.nombre,
                 correo: UsuarioGuardado.correo,
-                contrasena: UsuarioGuardado.contrasena,
                 direccion: UsuarioGuardado.direccion,
                 ciudad: UsuarioGuardado.ciudad,
                 estado: UsuarioGuardado.estado
@@ -79,7 +94,6 @@ class UsuarioController {
             }));
         }
     }
-
     public async getEstados(req: Request, res: Response): Promise<void> {
 
         const estados = await Estado.find();
@@ -95,5 +109,11 @@ class UsuarioController {
         console.log("Ciudades encontradas:", ciudades);
 
     }
+
+
+
+
 }
-    export const usuariosController = new UsuarioController();
+
+
+export const usuariosController = new UsuarioController();

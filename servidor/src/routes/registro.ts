@@ -9,9 +9,10 @@ class RegistroRoutes {
     }
     
     config(): void {
-        this.router.post("/", usuariosController.createUsuario);
+        this.router.post("/", usuariosController.createUsuario)
         this.router.get("/getEstados", usuariosController.getEstados);
         this.router.get("/getCiudades/:clave", usuariosController.getCiudades);
+
     }
 }
 const registroRoutes = new RegistroRoutes();

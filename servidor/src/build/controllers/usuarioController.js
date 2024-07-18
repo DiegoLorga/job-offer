@@ -18,6 +18,7 @@ const estado_model_1 = __importDefault(require("../models/estado.model"));
 const ciudad_model_1 = __importDefault(require("../models/ciudad.model"));
 const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jwt_1 = require("../libs/jwt");
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -58,7 +59,7 @@ class UsuarioController {
                 return;
             }
             try {
-                const tipoRol = '6690640c24eacbffd867f333';
+                const tipoRol = "6690640c24eacbffd867f333";
                 const hashedPassword = yield bcryptjs_1.default.hash(contrasena, 10);
                 const nuevoUsuario = new usuario_model_1.default({
                     nombre,
@@ -69,12 +70,17 @@ class UsuarioController {
                     estado,
                     id_rol: tipoRol
                 });
+                //console.log("Hola, antes de Token");
                 const UsuarioGuardado = yield nuevoUsuario.save();
+                console.log("Hola, antes de Token");
+                const token = yield (0, jwt_1.createAccesToken)({ id: UsuarioGuardado._id });
+                res.cookie('token', token);
+                console.log("Hola, despues de Token");
+                console.log(res.cookie);
                 res.json({
-                    id_rol: UsuarioGuardado.id_rol,
+                    idRol: UsuarioGuardado.id_rol,
                     nombre: UsuarioGuardado.nombre,
                     correo: UsuarioGuardado.correo,
-                    contrasena: UsuarioGuardado.contrasena,
                     direccion: UsuarioGuardado.direccion,
                     ciudad: UsuarioGuardado.ciudad,
                     estado: UsuarioGuardado.estado

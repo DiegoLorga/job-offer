@@ -12,6 +12,7 @@ import singoutRoutes from './routes/signout';
 import todoRoutes from './routes/todos';
 import { connectDB } from './database';
 import rolRoutes from './routes/rol';
+import cookieParser from 'cookie-parser'
 class Server {
     public app: Application;
     constructor() {
@@ -24,9 +25,10 @@ class Server {
 
 
     config(): void {
+        this.app.use(cookieParser());
         this.app.set('port', process.env.PORT || 3000); //En que puerto va a ejecutar
         this.app.use(morgan('dev')); //que ejecutamos y que tiempo
-        this.app.use(cors());
+        this .app.use(cors({origin:  " http://localhost:5173" , credentials:  true })); 
         this.app.use(express.json()); //permite que utilicemos json
         this.app.use(express.urlencoded({ extended: false })); //decodifca las url
     }

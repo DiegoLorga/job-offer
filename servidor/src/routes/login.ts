@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { jsonResponse } from '../lib/jsonResponse';
-import refreshtokenRoutes from './refresh-token';
 import { loginController } from '../controllers/loginController';
+import { validarToken } from '../middleware/auth';
 class LoginRoutes {
     public router: Router = Router();
     constructor() {
@@ -9,6 +8,10 @@ class LoginRoutes {
     }
     config(): void {
         this.router.post("/",loginController.verificarUsuario )
+        this.router.post("/logout",loginController.logout)
+        this.router.get('/perfil', validarToken,loginController.perfil);
+        this.router.get("/verificar",validarToken);
+
 }
 }
 const loginRoutes = new LoginRoutes();

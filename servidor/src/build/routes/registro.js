@@ -11,11 +11,6 @@ class RegistroRoutes {
         this.router.post("/", usuarioController_1.usuariosController.createUsuario);
         this.router.get("/getEstados", usuarioController_1.usuariosController.getEstados);
         this.router.get("/getCiudades/:clave", usuarioController_1.usuariosController.getCiudades);
-        //this.router.get("/correo/:correo",usuariosController.validarCorreo)
-        /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
-        this.router.post('/', empresaController.createUsuario);
-        this.router.delete('/:id',empresaController.borrarUsuario);
-        this.router.put('/:id',empresaController.actualizarUsuario);*/
     }
 }
 const registroRoutes = new RegistroRoutes();
