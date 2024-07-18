@@ -8,9 +8,8 @@ class LoginRoutes {
     }
     config(): void {
         this.router.post("/",loginController.verificarUsuario )
-        this.router.post("/logout",loginController.logout)
+        this.router.get("/logout",loginController.logout)
         this.router.get('/perfil', validarToken,loginController.perfil);
-        this.router.get("/verificar",validarToken);
 
 }
 }

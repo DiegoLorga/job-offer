@@ -8,7 +8,6 @@ interface DefaultLayoutProps{
 export default function DefaultLayout({children}: DefaultLayoutProps){
     return(
         <>
- 
         <main>{children}</main>
         </>
     );
