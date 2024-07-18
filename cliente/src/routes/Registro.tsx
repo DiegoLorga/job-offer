@@ -7,22 +7,22 @@ import { AuthReponseRegister, AuthResponseError } from "../types/types";
 interface Estado {
     _id: string;
     nombre: string;
-    clave: string;
+    clave: string; // Añade clave si no está presente en el modelo de Estado
 }
 
 interface Ciudad {
     _id: string;
     nombre: string;
-    clave: string;
+    clave: string; // Añade claveEstado si no está presente en el modelo de Ciudad
 }
 
-const Registro: React.FC = () => {
+export default function Registro() {
     const [nombre, setNombre] = useState("");
     const [correo, setCorreo] = useState("");
     const [contrasena, setContrasena] = useState("");
     const [verificar, setVerificar] = useState("");
     const [direccion, setDireccion] = useState("");
-    const [ciudad, setCiudad] = useState("");
+    const [ciudad, setCiudad] = useState(""); // Estado de ciudad
     const [errorCampos, setErrorCampos] = useState("");
     const [errorContrasenas, setErrorContrasenas] = useState("");
     const [errorCorreo, setErrorCorreo] = useState("");
@@ -30,11 +30,12 @@ const Registro: React.FC = () => {
     const [sucessMessage, setSuccessMessage] = useState("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [selectedEstado, setSelectedEstado] = useState<string>("");
-    const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+    const [ciudades, setCiudades] = useState<Ciudad[]>([]); // Estado para almacenar la lista de ciudades filtradas
 
     const auth = useAuth();
     const goTo = useNavigate();
 
+    // Obtener la lista de estados al cargar el componente
     useEffect(() => {
         async function fetchEstados() {
             try {
@@ -42,10 +43,10 @@ const Registro: React.FC = () => {
                 if (response.ok) {
                     const data = await response.json() as Estado[];
                     setEstados(data);
-                    // Selección por defecto del primer estado
                     if (data.length > 0) {
                         setSelectedEstado(data[0].clave);
                     }
+                    
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -57,6 +58,7 @@ const Registro: React.FC = () => {
         fetchEstados();
     }, []);
 
+    // Cargar ciudades al cambiar el estado seleccionado
     useEffect(() => {
         async function fetchCiudades() {
             try {
@@ -64,8 +66,6 @@ const Registro: React.FC = () => {
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
-                    // Si cambia el estado seleccionado, reiniciar la ciudad seleccionada
-                    setCiudad("");
                 } else {
                     console.error('Error al obtener las ciudades:', response.statusText);
                 }
@@ -94,7 +94,7 @@ const Registro: React.FC = () => {
                     contrasena,
                     verificar,
                     direccion,
-                    ciudad,
+                    ciudad, // Usar estado de ciudad
                     estado: selectedEstado
                 })
             });
@@ -189,11 +189,11 @@ const Registro: React.FC = () => {
 
             <label> Ciudad </label>
             <select
-                value={ciudad}
+                value={ciudad} // Usar el estado de ciudad
                 onChange={(e) => setCiudad(e.target.value)}
             >
                 {ciudades.map(ciudad => (
-                    <option key={ciudad._id} value={ciudad.clave}>{ciudad.nombre}</option>
+                    <option key={ciudad._id} value={ciudad._id}>{ciudad.nombre}</option>
                 ))}
             </select>
 
@@ -201,5 +201,3 @@ const Registro: React.FC = () => {
         </form>
     );
 }
-
-export default Registro;
