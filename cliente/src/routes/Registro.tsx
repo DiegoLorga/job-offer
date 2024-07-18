@@ -66,6 +66,9 @@ export default function Registro() {
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
+                    if (data.length > 0) {
+                        setCiudad(data[0].clave);
+                    }
                 } else {
                     console.error('Error al obtener las ciudades:', response.statusText);
                 }
@@ -187,7 +190,7 @@ export default function Registro() {
                 ))}
             </select>
 
-            <label> Ciudad </label>
+            <label> Ciudaaaaad </label>
             <select
                 value={ciudad} // Usar el estado de ciudad
                 onChange={(e) => setCiudad(e.target.value)}
