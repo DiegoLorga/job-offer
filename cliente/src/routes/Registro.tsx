@@ -66,6 +66,9 @@ export default function Registro() {
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
+                    if (data.length > 0) {
+                        setCiudad(data[0].clave);
+                    }
                 } else {
                     console.error('Error al obtener las ciudades:', response.statusText);
                 }
