@@ -1,4 +1,3 @@
-import DefaultLayout from "../layout/DefaultLayout";
 import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -72,6 +71,9 @@ export default function Login() {
             />
             <br />
             <button>Login</button>
+            <label>
+                <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña? </Link>
+            </label>
             <label>
                 <br />
                 <Link to="/Registro">¿No tienes cuenta? Regístrate aquí</Link>

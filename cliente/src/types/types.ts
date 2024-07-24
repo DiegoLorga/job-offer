@@ -1,5 +1,5 @@
-export interface AuthResponse{
-    body:{
+export interface AuthResponse {
+    body: {
         user: User;
         accessToken: string;
         refreshToken: string;
@@ -7,19 +7,19 @@ export interface AuthResponse{
 }
 
 
-export interface AuthResponseError{
-    body:{
+export interface AuthResponseError {
+    body: {
         error: string;
         camposError?: string;
         contrasenasError?: string;
         correoError?: string;
-        nombreError?:string;
+        nombreError?: string;
     };
 }
 
 
-export interface User{
-    body:{
+export interface User {
+    body: {
         _id: string;
         nombre: string;
         correo: string;
@@ -28,20 +28,21 @@ export interface User{
         estado: string;
     }
 }
-export interface AuthReponseRegister{
-    body:{
-        message:string;
+export interface AuthReponseRegister {
+    body: {
+        message: string;
     }
     token: string; // Aquí se define la propiedad token
 }
 export interface ProfileResponse {
     body: {
-      user: User;
+        user: User;
     };
-  }
-  
-  export interface ProfileError {
+}
+
+export interface ProfileError {
     body: {
-      error: string;
+        error: string;
     };
-  }
+}
+

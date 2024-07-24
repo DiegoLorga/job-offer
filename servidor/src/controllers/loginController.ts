@@ -8,10 +8,9 @@ import { createAccesToken } from '../libs/jwt';
 
 class LoginController {
 
-
     constructor() {
     }
-    public async verificarUsuario(req: Request, res: Response): Promise<void> {
+    public async login(req: Request, res: Response): Promise<void> {
         const { correo, contrasena } = req.body;
 
         try {

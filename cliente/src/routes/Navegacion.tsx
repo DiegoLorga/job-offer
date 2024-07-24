@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { API_URL } from "../auth/apis";
 export default function Navigation() {

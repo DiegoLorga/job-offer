@@ -7,7 +7,7 @@ class LoginRoutes {
         this.config();
     }
     config(): void {
-        this.router.post("/",loginController.verificarUsuario )
+        this.router.post("/",loginController.login )
         this.router.get("/logout",loginController.logout)
         this.router.get('/perfil', validarToken,loginController.perfil);
 

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -w",
-    "dev": "nodemon src/build/index.js"
+    "dev": "nodemon src/build/index.js",
+    "correo": "nodemon src/build/app.js"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +22,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.0",
     "morgan": "^1.10.0",
-    "validator": "^13.12.0"
+    "validator": "^13.12.0",
+    "emailjs": "^2.2.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
