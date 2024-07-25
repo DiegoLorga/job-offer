@@ -37,6 +37,7 @@ class LoginController {
             res.status(200).json(jsonResponse(200, {
                 message: "El usuario y la contraseña son correctos",
                 usuario: {
+                    id_usuario: usuario._id,
                     nombre: usuario.nombre,
                     correo: usuario.correo,
                     direccion: usuario.direccion,

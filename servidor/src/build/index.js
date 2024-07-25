@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-//import swaggerDocument from './swagger.json';
 const registro_1 = __importDefault(require("./routes/registro"));
 const administrador_1 = __importDefault(require("./routes/administrador"));
 const empleado_1 = __importDefault(require("./routes/empleado"));
@@ -24,7 +23,6 @@ class Server {
         this.app = (0, express_1.default)();
         this.config();
         this.routes();
-        // this.app.use('/documentacion', swagger_ui_express.serve, swagger_ui_express.setup(swaggerDocument));
     }
     config() {
         this.app.use((0, cookie_parser_1.default)());

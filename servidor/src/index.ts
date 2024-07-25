@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-//import swaggerDocument from './swagger.json';
 import registroRoutes from './routes/registro';
 import administradorRoutes from './routes/administrador';
 import empleadoRoutes from './routes/empleado';
@@ -20,7 +19,6 @@ class Server {
         this.app = express();
         this.config();
         this.routes();
-       // this.app.use('/documentacion', swagger_ui_express.serve, swagger_ui_express.setup(swaggerDocument));
     }
 
 

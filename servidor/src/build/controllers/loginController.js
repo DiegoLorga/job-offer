@@ -20,7 +20,7 @@ const jwt_1 = require("../libs/jwt");
 class LoginController {
     constructor() {
     }
-    verificarUsuario(req, res) {
+    login(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { correo, contrasena } = req.body;
             try {
@@ -44,6 +44,7 @@ class LoginController {
                 res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
                     message: "El usuario y la contraseña son correctos",
                     usuario: {
+                        id_usuario: usuario._id,
                         nombre: usuario.nombre,
                         correo: usuario.correo,
                         direccion: usuario.direccion,
