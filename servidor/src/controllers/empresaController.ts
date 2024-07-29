@@ -4,14 +4,16 @@ import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
 import Rol from '../models/rol.model';
+import mongoose from 'mongoose';
+import PerfilEmpresa from '../models/perfilEmpresa.model';
+import OfertaLaboral from '../models/OfertaLaboral.model';
 
 class EmpresaController {
 
     constructor() {
     }
     public async createEmpresa(req: Request, res: Response): Promise<void> {
-        const { nombre, correo, contrasena, direccion, ciudad, estado, giro } = req.body;
-
+        const { nombre, correo, contrasena, direccion, ciudad, estado, giro, descripcion, mision, empleos, paginaoficial, redesSociales } = req.body;
         try {
 
             const rol = await Rol.findOne({ tipo: "Empresa" }); // Cambia "TipoDeseado" por el tipo que buscas
@@ -37,8 +39,20 @@ class EmpresaController {
                 giro,
                 id_rol: tipoRol
             });
-
             const EmpresaGuardado = await nuevaEmpresa.save();
+
+            console.log("Empresaaaaa")
+
+            const nuevoPerfilEmpresa = new PerfilEmpresa({
+                id_empresa: EmpresaGuardado._id,
+                descripcion,
+                mision,
+                empleos,
+                paginaoficial,
+                redesSociales,
+            });
+
+            const PerfilGuardado = await nuevoPerfilEmpresa.save();
 
             const token = await createAccesToken({ id: EmpresaGuardado._id });
 
@@ -54,6 +68,12 @@ class EmpresaController {
                 ciudad: EmpresaGuardado.ciudad,
                 estado: EmpresaGuardado.estado,
                 giro: EmpresaGuardado.giro,
+                descripcion: PerfilGuardado.descripcion,
+                mision: PerfilGuardado.mision,
+                empleos: PerfilGuardado.empleos,
+                paginaoficial: PerfilGuardado.paginaoficial,
+                redesSociales: PerfilGuardado.redesSociales
+
             });
         } catch (error) {
             res.status(400).json(jsonResponse(400, {
@@ -63,52 +83,94 @@ class EmpresaController {
     }
 
     public async list(req: Request, res: Response): Promise<void> {
-        console.log("Mostrando todas las empresas");
-        const empresa = await Empresa.find
-        res.json(empresa)
+        try {
+            console.log("Mostrando todas las empresas");
+            const empresa = await Empresa.find();
+            res.json(empresa)
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un problema"
+            }));
+
+        }
     }
 
     public async listOne(req: Request, res: Response): Promise<void> {
-        console.log("Mostrando un empresa");
-        const OneEmpresa = await Empresa.findById(req.params.id)
-        res.json(OneEmpresa);
+        try {
+            console.log("Mostrando una empresa");
+            const OneEmpresa = await Empresa.findById(req.params.id)
+            res.json(OneEmpresa);
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un error"
+            }));
+        }
     }
 
     public async borrarEmpresa(req: Request, res: Response): Promise<void> {
         console.log("Borrando una empresa");
-
+    
         try {
             const idEmpresa = req.params.id;
+    
+            // Buscar y eliminar el perfil de la empresa usando el ID de la empresa
+            const perfil = await PerfilEmpresa.findOneAndDelete({ id_empresa: idEmpresa });
+    
+            if (!perfil) {
+                console.log("Perfil no encontrado o ya eliminado");
+            }
 
-            // Eliminar documentos relacionados primero
-            //await Proyecto.deleteMany({ id_empresa: idEmpresa });
-
-            // Luego eliminar la empresa
+            const oferta = await OfertaLaboral.findOneAndDelete({ id_empresa: idEmpresa });
+    
+            if (!oferta) {
+                console.log("Oferta no encontrada o ya eliminada");
+            }
+    
+            // Eliminar la empresa
             const empresa = await Empresa.findByIdAndDelete(idEmpresa);
-
+    
             if (!empresa) {
                 res.status(404).json(jsonResponse(404, {
                     error: "Empresa no encontrada"
                 }));
                 return;
             }
-
+    
             res.json({
                 message: "Empresa y documentos relacionados eliminados correctamente",
                 empresa
             });
         } catch (error) {
+            console.error(error);  // Log the specific error for debugging
             res.status(400).json(jsonResponse(400, {
                 error: "No se pudo eliminar la empresa"
             }));
         }
     }
-
-
+    
     public async actualizarEmpresa(req: Request, res: Response): Promise<void> {
-        console.log("Actualizando un empresa");
-        const empresa = await Empresa.findByIdAndUpdate(req.params.id, req.body, { new: true })
-        res.json(empresa)
+        try {
+            console.log("Actualizando un empresa");
+            const empresa = await Empresa.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            res.json(empresa)
+        } catch (error) {
+            res.status(500).json(jsonResponse(400, {
+                error: "No se pudo actualizar la información de la empresa"
+            }));
+        }
     }
+
+    public async actualizarPerfilEmpresa(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Actualizando un empresa");
+            const perfil = await PerfilEmpresa.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            res.json(perfil)
+        } catch (error) {
+            res.status(500).json(jsonResponse(400, {
+                error: "No se pudo actualizar la información del perfil"
+            }));
+        }
+    }
+
 }
 export const empresaController = new EmpresaController();

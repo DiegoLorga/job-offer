@@ -1,0 +1,57 @@
+[{
+  "_id": {
+    "$oid": "66a7f67f6f5b2ed4af8c6172"
+  },
+  "link": "https://www.facebook.com/?locale=es_LA",
+  "id_empresa": {
+    "$oid": "66a3fdb355166fc5f7a6365c"
+  },
+  "id_redes": {
+    "$oid": "66a7e96d770dfea8c6d71936"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T20:07:27.119Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T20:07:27.119Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7f6bc6f5b2ed4af8c6174"
+  },
+  "link": "https://www.tiktok.com/es/",
+  "id_empresa": {
+    "$oid": "66a3fdb355166fc5f7a6365c"
+  },
+  "id_redes": {
+    "$oid": "66a7e98e770dfea8c6d71938"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T20:08:28.791Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T20:08:28.791Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7f6e56f5b2ed4af8c6176"
+  },
+  "link": "https://www.instagram.com/",
+  "id_empresa": {
+    "$oid": "66a3fdb355166fc5f7a6365c"
+  },
+  "id_redes": {
+    "$oid": "66a7e9ab770dfea8c6d7193a"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T20:09:09.405Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T20:09:09.405Z"
+  },
+  "__v": 0
+}]

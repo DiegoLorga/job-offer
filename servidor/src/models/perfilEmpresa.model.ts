@@ -1,32 +1,32 @@
 import mongoose, { Schema, Model, Mixed } from 'mongoose';
 
-interface Empresa {
+interface PerfilEmpresa {
     id_empresa: Mixed;
     descripcion: string;
     mision: string;
     empleos: string;
-    link:string;
+    paginaoficial:string;
     redesSociales:string;
     createdAt: Date;
     updatedAt: Date;
 }
-const schemaEmpresa = new Schema<Empresa>({
+const schemaPerfilEmpresa = new Schema<PerfilEmpresa>({
     descripcion:
     {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     mision:
     {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     empleos:
     {
         type: String,
-        required: true
+        required: false
     },
     id_empresa: {
         type: Schema.Types.ObjectId,
@@ -34,19 +34,19 @@ const schemaEmpresa = new Schema<Empresa>({
         requiere: true
 
     },
-    link:
+    paginaoficial:
     {
         type: String,
-        required: true
+        required: false
     },
     redesSociales:
     {
         type: String,
-        required: true
+        required: false
     },
 },
     {
         timestamps: true
     }
 )
-export default mongoose.model('Empresa', schemaEmpresa);
+export default mongoose.model('PerfilEmpresa', schemaPerfilEmpresa);

@@ -18,12 +18,14 @@ const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = require("../libs/jwt");
 const rol_model_1 = __importDefault(require("../models/rol.model"));
+const perfilEmpresa_model_1 = __importDefault(require("../models/perfilEmpresa.model"));
+const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 class EmpresaController {
     constructor() {
     }
     createEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { nombre, correo, contrasena, direccion, ciudad, estado, giro } = req.body;
+            const { nombre, correo, contrasena, direccion, ciudad, estado, giro, descripcion, mision, empleos, paginaoficial, redesSociales } = req.body;
             try {
                 const rol = yield rol_model_1.default.findOne({ tipo: "Empresa" }); // Cambia "TipoDeseado" por el tipo que buscas
                 if (!rol) {
@@ -45,6 +47,16 @@ class EmpresaController {
                     id_rol: tipoRol
                 });
                 const EmpresaGuardado = yield nuevaEmpresa.save();
+                console.log("Empresaaaaa");
+                const nuevoPerfilEmpresa = new perfilEmpresa_model_1.default({
+                    id_empresa: EmpresaGuardado._id,
+                    descripcion,
+                    mision,
+                    empleos,
+                    paginaoficial,
+                    redesSociales,
+                });
+                const PerfilGuardado = yield nuevoPerfilEmpresa.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: EmpresaGuardado._id });
                 res.cookie('token', token);
                 console.log(res.cookie);
@@ -56,6 +68,11 @@ class EmpresaController {
                     ciudad: EmpresaGuardado.ciudad,
                     estado: EmpresaGuardado.estado,
                     giro: EmpresaGuardado.giro,
+                    descripcion: PerfilGuardado.descripcion,
+                    mision: PerfilGuardado.mision,
+                    empleos: PerfilGuardado.empleos,
+                    paginaoficial: PerfilGuardado.paginaoficial,
+                    redesSociales: PerfilGuardado.redesSociales
                 });
             }
             catch (error) {
@@ -67,16 +84,30 @@ class EmpresaController {
     }
     list(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Mostrando todas las empresas");
-            const empresa = yield empresa_model_1.default.find;
-            res.json(empresa);
+            try {
+                console.log("Mostrando todas las empresas");
+                const empresa = yield empresa_model_1.default.find();
+                res.json(empresa);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    error: "Hubo un problema"
+                }));
+            }
         });
     }
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Mostrando un empresa");
-            const OneEmpresa = yield empresa_model_1.default.findById(req.params.id);
-            res.json(OneEmpresa);
+            try {
+                console.log("Mostrando una empresa");
+                const OneEmpresa = yield empresa_model_1.default.findById(req.params.id);
+                res.json(OneEmpresa);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    error: "Hubo un error"
+                }));
+            }
         });
     }
     borrarEmpresa(req, res) {
@@ -84,9 +115,16 @@ class EmpresaController {
             console.log("Borrando una empresa");
             try {
                 const idEmpresa = req.params.id;
-                // Eliminar documentos relacionados primero
-                //await Proyecto.deleteMany({ id_empresa: idEmpresa });
-                // Luego eliminar la empresa
+                // Buscar y eliminar el perfil de la empresa usando el ID de la empresa
+                const perfil = yield perfilEmpresa_model_1.default.findOneAndDelete({ id_empresa: idEmpresa });
+                if (!perfil) {
+                    console.log("Perfil no encontrado o ya eliminado");
+                }
+                const oferta = yield OfertaLaboral_model_1.default.findOneAndDelete({ id_empresa: idEmpresa });
+                if (!oferta) {
+                    console.log("Oferta no encontrada o ya eliminada");
+                }
+                // Eliminar la empresa
                 const empresa = yield empresa_model_1.default.findByIdAndDelete(idEmpresa);
                 if (!empresa) {
                     res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
@@ -100,6 +138,7 @@ class EmpresaController {
                 });
             }
             catch (error) {
+                console.error(error); // Log the specific error for debugging
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     error: "No se pudo eliminar la empresa"
                 }));
@@ -108,9 +147,30 @@ class EmpresaController {
     }
     actualizarEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log("Actualizando un empresa");
-            const empresa = yield empresa_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            res.json(empresa);
+            try {
+                console.log("Actualizando un empresa");
+                const empresa = yield empresa_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.json(empresa);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
+                    error: "No se pudo actualizar la información de la empresa"
+                }));
+            }
+        });
+    }
+    actualizarPerfilEmpresa(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Actualizando un empresa");
+                const perfil = yield perfilEmpresa_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.json(perfil);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
+                    error: "No se pudo actualizar la información del perfil"
+                }));
+            }
         });
     }
 }

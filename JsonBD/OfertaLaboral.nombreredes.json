@@ -1,0 +1,78 @@
+[{
+  "_id": {
+    "$oid": "66a7e96d770dfea8c6d71936"
+  },
+  "nombre": "Facebook",
+  "createdAt": {
+    "$date": "2024-07-29T19:11:41.974Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:11:41.974Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7e98e770dfea8c6d71938"
+  },
+  "nombre": "TikTok",
+  "createdAt": {
+    "$date": "2024-07-29T19:12:14.838Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:12:14.838Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7e9ab770dfea8c6d7193a"
+  },
+  "nombre": "Instagram",
+  "createdAt": {
+    "$date": "2024-07-29T19:12:43.382Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:12:43.382Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7e9b7770dfea8c6d7193c"
+  },
+  "nombre": "LinkedIn",
+  "createdAt": {
+    "$date": "2024-07-29T19:12:55.228Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:12:55.228Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7ea34770dfea8c6d7193e"
+  },
+  "nombre": "X",
+  "createdAt": {
+    "$date": "2024-07-29T19:15:00.946Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:15:00.946Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7ea3e770dfea8c6d71940"
+  },
+  "nombre": "Pinterest",
+  "createdAt": {
+    "$date": "2024-07-29T19:15:10.715Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:15:10.715Z"
+  },
+  "__v": 0
+}]

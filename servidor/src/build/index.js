@@ -14,6 +14,8 @@ const database_1 = require("./database");
 const rol_1 = __importDefault(require("./routes/rol"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const usuario_1 = __importDefault(require("./routes/usuario"));
+const perfilEmpresa_1 = __importDefault(require("./routes/perfilEmpresa"));
+const ofertalaboral_1 = __importDefault(require("./routes/ofertalaboral"));
 class Server {
     constructor() {
         (0, database_1.connectDB)();
@@ -36,6 +38,8 @@ class Server {
         this.app.use('/api/empresa', empresa_1.default);
         this.app.use('/api/login', login_1.default);
         this.app.use('/api/rol', rol_1.default);
+        this.app.use('/api/perfilEmpresa', perfilEmpresa_1.default);
+        this.app.use('/api/OfertaLaboral', ofertalaboral_1.default);
     }
     start() {
         this.app.listen(this.app.get('port'), () => {

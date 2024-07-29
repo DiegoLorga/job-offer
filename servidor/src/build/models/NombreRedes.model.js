@@ -24,76 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const schemaOfertaLaboral = new mongoose_1.Schema({
-    id_empresa: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Empresa',
-        requiere: true
-    },
-    titulo: {
+const schemaNombreRedes = new mongoose_1.Schema({
+    nombre: {
         type: String,
         required: true,
         trim: true
-    },
-    puesto: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    sueldo: {
-        type: Number,
-        required: true,
-        trim: true,
-    },
-    horario: {
-        type: String,
-        required: true
-    },
-    modalidad: {
-        type: String,
-        required: true
-    },
-    direccion: {
-        type: String,
-        required: true
-    },
-    ciudad: {
-        type: String,
-        required: true
-    },
-    estado: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: Number,
-        required: true
-    },
-    descripcion: {
-        type: String,
-        required: true
-    },
-    requisitos: {
-        type: String,
-        required: true
-    },
-    telefono: {
-        type: Number,
-        required: true
-    },
-    correo: {
-        type: String,
-        required: true
-    },
-    educacion: {
-        type: String,
-        required: true
-    },
-    idioma: {
-        type: String,
-        required: true
     },
 }, {
     timestamps: true
 });
-exports.default = mongoose_1.default.model('OfertaLaboral', schemaOfertaLaboral);
+exports.default = mongoose_1.default.model('NombreRedes', schemaNombreRedes);

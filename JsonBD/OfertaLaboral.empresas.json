@@ -1,0 +1,44 @@
+[{
+  "_id": {
+    "$oid": "66a3fdb355166fc5f7a6365c"
+  },
+  "nombre": "Test",
+  "correo": "test2@gmail.com",
+  "contrasena": "Hola123#",
+  "id_rol": {
+    "$oid": "6690637124eacbffd867f32f"
+  },
+  "direccion": "gere",
+  "estado": "frgqs",
+  "ciudad": "gfee",
+  "giro": "Marketing",
+  "createdAt": {
+    "$date": "2024-07-26T19:49:07.206Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T17:19:43.259Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a819305e1592992a38b7c7"
+  },
+  "nombre": "Elektra",
+  "correo": "elektra@gmail.com",
+  "contrasena": "$2a$10$Z9uJ4OUhzbaqsy1307sLzukuTOb/RBOB9eIe3sBAahyaMW2fdbqMO",
+  "id_rol": {
+    "$oid": "6690637124eacbffd867f32f"
+  },
+  "direccion": "gere",
+  "estado": "frgqs",
+  "ciudad": "gfee",
+  "giro": "Marketing",
+  "createdAt": {
+    "$date": "2024-07-29T22:35:28.039Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T22:35:28.039Z"
+  },
+  "__v": 0
+}]
