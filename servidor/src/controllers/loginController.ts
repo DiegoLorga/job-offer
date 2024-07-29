@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import bcrypt, { hash } from 'bcryptjs';
 import Usuario from '../models/usuario.model';
@@ -32,8 +31,8 @@ class LoginController {
             }
             const token = await createAccesToken({ id: usuario._id });
             console.log(usuario._id);
-           res.cookie('token', token);
-           
+            res.cookie('token', token);
+
             res.status(200).json(jsonResponse(200, {
                 message: "El usuario y la contraseña son correctos",
                 usuario: {
@@ -71,7 +70,7 @@ class LoginController {
             updatedAt: usuarioEncontrado?.updatedAt
         })
     }
-    
+
 }
 
 

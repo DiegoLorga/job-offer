@@ -6,14 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
-const registro_1 = __importDefault(require("./routes/registro"));
+const usuario_1 = __importDefault(require("./routes/usuario"));
 const administrador_1 = __importDefault(require("./routes/administrador"));
 const empleado_1 = __importDefault(require("./routes/empleado"));
 const empresa_1 = __importDefault(require("./routes/empresa"));
 const login_1 = __importDefault(require("./routes/login"));
-const refresh_token_1 = __importDefault(require("./routes/refresh-token"));
-const signout_1 = __importDefault(require("./routes/signout"));
-const todos_1 = __importDefault(require("./routes/todos"));
 const database_1 = require("./database");
 const rol_1 = __importDefault(require("./routes/rol"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -33,14 +30,11 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: false })); //decodifca las url
     }
     routes() {
-        this.app.use('/api/registro', registro_1.default);
+        this.app.use('/api/usuario', usuario_1.default);
         this.app.use('/api/administrador', administrador_1.default);
         this.app.use('/api/empleado', empleado_1.default);
         this.app.use('/api/empresa', empresa_1.default);
         this.app.use('/api/login', login_1.default);
-        this.app.use('/api/refreshtoken', refresh_token_1.default);
-        this.app.use('/api/singout', signout_1.default);
-        this.app.use('/api/todos', todos_1.default);
         this.app.use('/api/rol', rol_1.default);
     }
     start() {

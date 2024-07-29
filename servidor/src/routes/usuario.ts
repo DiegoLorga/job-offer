@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
 import { usuariosController } from '../controllers/usuarioController';
 
-class RegistroRoutes {
+class UsuarioRoutes {
     public router: Router = Router();
     constructor() {
         this.config();
@@ -15,5 +15,5 @@ class RegistroRoutes {
 
     }
 }
-const registroRoutes = new RegistroRoutes();
-export default registroRoutes.router;
+const usuaioRoutes = new UsuarioRoutes();
+export default usuaioRoutes.router;

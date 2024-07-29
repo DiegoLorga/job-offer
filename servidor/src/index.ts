@@ -1,14 +1,11 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import registroRoutes from './routes/registro';
+import usuarioRoutes from './routes/usuario';
 import administradorRoutes from './routes/administrador';
 import empleadoRoutes from './routes/empleado';
 import empresaRoutes from './routes/empresa';
 import loginRoutes from './routes/login';
-import refreshtokenRoutes from './routes/refresh-token';
-import singoutRoutes from './routes/signout';
-import todoRoutes from './routes/todos';
 import { connectDB } from './database';
 import rolRoutes from './routes/rol';
 import cookieParser from 'cookie-parser'
@@ -31,14 +28,11 @@ class Server {
         this.app.use(express.urlencoded({ extended: false })); //decodifca las url
     }
     routes(): void {
-        this.app.use('/api/registro', registroRoutes);
+        this.app.use('/api/usuario', usuarioRoutes);
         this.app.use('/api/administrador', administradorRoutes);
         this.app.use('/api/empleado', empleadoRoutes);
         this.app.use('/api/empresa', empresaRoutes);
         this.app.use('/api/login', loginRoutes);
-        this.app.use('/api/refreshtoken', refreshtokenRoutes);
-        this.app.use('/api/singout', singoutRoutes);
-        this.app.use('/api/todos', todoRoutes);
         this.app.use('/api/rol',rolRoutes);
 
     }
