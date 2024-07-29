@@ -101,3 +101,48 @@ a {
 .error {
   border: 2px solid  #a94442;
 }
+n/* Navigation.css */
+
+/* Navigation.css */
+
+.navigation {
+  position: fixed; /* Fija la barra de navegación en la pantalla */
+  top: 0;
+  width: 100%; /* Ancho completo de la barra de navegación */
+  background-color: #256d27; /* Cambia este valor al color que desees */
+  box-shadow: 0 2px 5px rgba(4, 255, 200, 0.1); /* Sombra para dar profundidad */
+  display: flex;
+  align-items: center; /* Alinea los elementos verticalmente */
+  padding: 10px 20px; /* Espaciado interno */
+}
+
+.navigation ul {
+  list-style: none; /* Elimina las viñetas de la lista */
+  padding: 0;
+  margin: 0;
+  display: flex; /* Alinea los elementos en fila */
+  width: 100%; /* Ocupa todo el ancho disponible */
+}
+
+.navigation ul li {
+  margin-right: 20px; /* Espaciado entre los elementos de la lista */
+}
+
+.navigation ul li.logout {
+  margin-left: auto; /* Empuja el botón de Logout a la orilla derecha */
+}
+
+button {
+  background-color: #007bff; /* Color de fondo del botón */
+  color: white; /* Color del texto del botón */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interno del botón */
+  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+  border-radius: 5px; /* Esquinas redondeadas */
+}
+
+button:hover {
+  background-color: #0056b3; /* Color de fondo al pasar el ratón */
+}
+
+

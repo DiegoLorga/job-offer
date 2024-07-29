@@ -1,4 +1,3 @@
-import DefaultLayout from "../layout/DefaultLayout";
 import { useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -52,31 +51,34 @@ export default function Login() {
     }
 
     return (
-        <DefaultLayout>
-            <form className="form" onSubmit={handleSubmit}>
-                <h1>Login</h1>
-                {!!errorResponse && <div className="errorMessage">{errorResponse}</div>}
-                {!!successMessage && <div className="successMessage">{successMessage}</div>}
-                <label>Correo</label>
-                <input
-                    type="text"
-                    value={correo}
-                    onChange={(e) => setCorreo(e.target.value)}
-                />
 
-                <label>Contraseña</label>
-                <input
-                    type="password"
-                    value={contrasena}
-                    onChange={(e) => setContrasena(e.target.value)}
-                />
+        <form className="form" onSubmit={handleSubmit}>
+            <h1>Login</h1>
+            {!!errorResponse && <div className="errorMessage">{errorResponse}</div>}
+            {!!successMessage && <div className="successMessage">{successMessage}</div>}
+            <label>Correo</label>
+            <input
+                type="text"
+                value={correo}
+                onChange={(e) => setCorreo(e.target.value)}
+            />
+
+            <label>Contraseña</label>
+            <input
+                type="password"
+                value={contrasena}
+                onChange={(e) => setContrasena(e.target.value)}
+            />
+            <br />
+            <button>Login</button>
+            <label>
+                <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña? </Link>
+            </label>
+            <label>
                 <br />
-                <button>Login</button>
-                <label>
-                    <br />
-                    <Link to="/Registro">¿No tienes cuenta? Regístrate aquí</Link>
-                </label>
-            </form>
-        </DefaultLayout>
+                <Link to="/Registro">¿No tienes cuenta? Regístrate aquí</Link>
+            </label>
+        </form>
+
     );
 }

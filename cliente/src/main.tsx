@@ -8,6 +8,7 @@ import Empresa from './routes/Empresa';
 import Empleado from './routes/Empleado';
 import Administrador from './routes/Administrador';
 import ProtectedRoute from './routes/ProtectedRoute';
+import RecuperarContrasena from './routes/RecuperarContrasena';
 import { AuthProvider } from './auth/AuthProvider';
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/Registro",
     element: <Registro />,
+  },
+  {
+    path: "/RecuperarContrasena",
+    element: <RecuperarContrasena/>,
   },
   {
     path: "/",
