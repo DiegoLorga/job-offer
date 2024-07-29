@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
+import PerfilUsuario from '../models/perfilUsuario.model';
+import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
@@ -65,15 +67,33 @@ class UsuarioController {
                 estado,
                 id_rol: tipoRol
             });
-            //console.log("Hola, antes de Token");
 
             const UsuarioGuardado = await nuevoUsuario.save();
+            
+            const nuevoPerfil = new PerfilUsuario({
+                id_usuario: UsuarioGuardado._id,
+                cv: false,
+                experiencia: '',
+                especialidad: '',
+                habilidades: '',
+                educacion: '',
+                idiomas: '',
+                certificaciones: false,
+                repositorio: '',
+                status: false,
+                foto: false
+            });
 
-            const token = await createAccesToken({ id: UsuarioGuardado._id });
+            const PerfilGuardado = await nuevoPerfil.save();
+            
+            const nuevaFotoPerfil = new FotosPerfilUsuario({
+                id_fotoUs : PerfilGuardado._id
+            });
+            await nuevaFotoPerfil.save();
 
+
+            const token = await createAccesToken({ id: UsuarioGuardado._id })
             res.cookie('token', token)
-
-            console.log("Hola, despues de Token");
             
             console.log(res.cookie);
 
@@ -83,7 +103,7 @@ class UsuarioController {
                 correo: UsuarioGuardado.correo,
                 direccion: UsuarioGuardado.direccion,
                 ciudad: UsuarioGuardado.ciudad,
-                estado: UsuarioGuardado.estado
+                estado: UsuarioGuardado.estado,
             });
         } catch (error) {
             res.status(400).json(jsonResponse(400, {
@@ -142,6 +162,12 @@ class UsuarioController {
 
     public async eliminarUsuario(req: Request, res: Response): Promise<void> {
         try {
+            const perfilEliminado = await PerfilUsuario.findOneAndDelete({ id_usuario: req.params.id });
+            console.log(perfilEliminado);
+            if(perfilEliminado){
+                await FotosPerfilUsuario.findOneAndDelete({ id_fotoUs: perfilEliminado._id});
+            }
+            
             const usuario = await Usuario.findByIdAndDelete(req.params.id)
             res.json(usuario)
         }
