@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import usuarioRoutes from './routes/usuario';
 import administradorRoutes from './routes/administrador';
 import empleadoRoutes from './routes/empleado';
 import empresaRoutes from './routes/empresa';
@@ -9,6 +8,7 @@ import loginRoutes from './routes/login';
 import { connectDB } from './database';
 import rolRoutes from './routes/rol';
 import cookieParser from 'cookie-parser'
+import usuarioRoutes from './routes/usuario';
 class Server {
     public app: Application;
     constructor() {

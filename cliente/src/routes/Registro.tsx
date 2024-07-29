@@ -7,13 +7,13 @@ import { AuthReponseRegister, AuthResponseError } from "../types/types";
 interface Estado {
     _id: string;
     nombre: string;
-    clave: string;
+    clave: string; // Añade clave si no está presente en el modelo de Estado
 }
 
 interface Ciudad {
     _id: string;
     nombre: string;
-    clave: string;
+    clave: string; // Añade claveEstado si no está presente en el modelo de Ciudad
 }
 
 export default function Registro() {
@@ -30,7 +30,8 @@ export default function Registro() {
     const [sucessMessage, setSuccessMessage] = useState("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [selectedEstado, setSelectedEstado] = useState<string>("");
-    const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+    const [ciudades, setCiudades] = useState<Ciudad[]>([]); // Estado para almacenar la lista de ciudades filtradas
+
     const auth = useAuth();
     const goTo = useNavigate();
 

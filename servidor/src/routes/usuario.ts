@@ -12,8 +12,12 @@ class UsuarioRoutes {
         this.router.post("/", usuariosController.createUsuario)
         this.router.get("/getEstados", usuariosController.getEstados);
         this.router.get("/getCiudades/:clave", usuariosController.getCiudades);
+        this.router.get("/listaUsuarios", usuariosController.listUsuarios);
+        this.router.get("/getUsuario/:id", usuariosController.UsuarioEncontrado);
+        this.router.delete("/eliminarUsuario/:id", usuariosController.eliminarUsuario);
 
     }
 }
 const usuaioRoutes = new UsuarioRoutes();
 export default usuaioRoutes.router;
+

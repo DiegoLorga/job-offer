@@ -10,6 +10,9 @@ const administrador_1 = __importDefault(require("./routes/administrador"));
 const empleado_1 = __importDefault(require("./routes/empleado"));
 const empresa_1 = __importDefault(require("./routes/empresa"));
 const login_1 = __importDefault(require("./routes/login"));
+const refresh_token_1 = __importDefault(require("./routes/refresh-token"));
+const signout_1 = __importDefault(require("./routes/signout"));
+const todos_1 = __importDefault(require("./routes/todos"));
 const database_1 = require("./database");
 const rol_1 = __importDefault(require("./routes/rol"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
@@ -20,6 +23,7 @@ class Server {
         this.app = (0, express_1.default)();
         this.config();
         this.routes();
+        // this.app.use('/documentacion', swagger_ui_express.serve, swagger_ui_express.setup(swaggerDocument));
     }
     config() {
         this.app.use((0, cookie_parser_1.default)());
@@ -35,6 +39,9 @@ class Server {
         this.app.use('/api/empleado', empleado_1.default);
         this.app.use('/api/empresa', empresa_1.default);
         this.app.use('/api/login', login_1.default);
+        this.app.use('/api/refreshtoken', refresh_token_1.default);
+        this.app.use('/api/singout', signout_1.default);
+        this.app.use('/api/todos', todos_1.default);
         this.app.use('/api/rol', rol_1.default);
     }
     start() {
