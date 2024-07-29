@@ -24,35 +24,35 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const schemaEmpresa = new mongoose_1.Schema({
+const schemaPerfilEmpresa = new mongoose_1.Schema({
     descripcion: {
         type: String,
-        required: true,
+        required: false,
         trim: true
     },
     mision: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
     empleos: {
         type: String,
-        required: true
+        required: false
     },
     id_empresa: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Empresa',
         requiere: true
     },
-    link: {
+    paginaoficial: {
         type: String,
-        required: true
+        required: false
     },
     redesSociales: {
         type: String,
-        required: true
+        required: false
     },
 }, {
     timestamps: true
 });
-exports.default = mongoose_1.default.model('Empresa', schemaEmpresa);
+exports.default = mongoose_1.default.model('PerfilEmpresa', schemaPerfilEmpresa);

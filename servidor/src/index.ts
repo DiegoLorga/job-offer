@@ -9,6 +9,8 @@ import { connectDB } from './database';
 import rolRoutes from './routes/rol';
 import cookieParser from 'cookie-parser'
 import usuarioRoutes from './routes/usuario';
+import PerfilEmpresaRoutes from './routes/perfilEmpresa';
+import ofertaLaboralRoutes from './routes/ofertalaboral';
 class Server {
     public app: Application;
     constructor() {
@@ -34,6 +36,8 @@ class Server {
         this.app.use('/api/empresa', empresaRoutes);
         this.app.use('/api/login', loginRoutes);
         this.app.use('/api/rol',rolRoutes);
+        this.app.use('/api/perfilEmpresa',PerfilEmpresaRoutes);
+        this.app.use('/api/OfertaLaboral',ofertaLaboralRoutes)
 
     }
     start(): void {

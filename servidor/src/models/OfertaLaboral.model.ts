@@ -1,7 +1,8 @@
 import mongoose, { Schema, Model, Mixed } from 'mongoose';
 
-interface Empresa {
+interface OfertaLaboral {
     id_empresa: Mixed;
+    titulo:string;
     puesto: string;
     sueldo: number;
     horario: string;
@@ -9,7 +10,7 @@ interface Empresa {
     direccion:string;
     ciudad: string;
     estado:string;
-    status:boolean;
+    status:number;
     descripcion: string;
     requisitos:string;
     telefono:number;
@@ -19,12 +20,18 @@ interface Empresa {
     createdAt: Date;
     updatedAt: Date;
 }
-const schemaEmpresa = new Schema<Empresa>({
+const schemaOfertaLaboral = new Schema<OfertaLaboral>({
     id_empresa: {
         type: Schema.Types.ObjectId,
         ref: 'Empresa',
         requiere: true
 
+    },
+    titulo:
+    {
+        type: String,
+        required: true,
+        trim: true
     },
     puesto:
     {
@@ -65,7 +72,7 @@ const schemaEmpresa = new Schema<Empresa>({
     },
     status:
     {
-        type: Boolean,
+        type: Number,
         required: true
     },
     descripcion:
@@ -103,4 +110,4 @@ const schemaEmpresa = new Schema<Empresa>({
         timestamps: true
     }
 )
-export default mongoose.model('Empresa', schemaEmpresa);
+export default mongoose.model('OfertaLaboral', schemaOfertaLaboral);
