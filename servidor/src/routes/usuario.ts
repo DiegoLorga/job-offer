@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
 import { usuariosController } from '../controllers/usuarioController';
 
-class RegistroRoutes {
+class UsuarioRoutes {
     public router: Router = Router();
     constructor() {
         this.config();
@@ -12,8 +12,11 @@ class RegistroRoutes {
         this.router.post("/", usuariosController.createUsuario)
         this.router.get("/getEstados", usuariosController.getEstados);
         this.router.get("/getCiudades/:clave", usuariosController.getCiudades);
+        this.router.get("/listaUsuarios", usuariosController.listUsuarios);
+        this.router.get("/getUsuario/:id", usuariosController.UsuarioEncontrado);
+        this.router.delete("/eliminarUsuario/:id", usuariosController.eliminarUsuario);
 
     }
 }
-const registroRoutes = new RegistroRoutes();
-export default registroRoutes.router;
+const usuarioRoutes = new UsuarioRoutes();
+export default usuarioRoutes.router;

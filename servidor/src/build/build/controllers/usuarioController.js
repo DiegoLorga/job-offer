@@ -94,40 +94,21 @@ class UsuarioController {
     }
     listUsuarios(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const usuarios = yield usuario_model_1.default.find();
-                const usuariosFormateados = usuarios.map(usuario => ({
-                    id: usuario._id,
-                    nombre: usuario.nombre,
-                    correo: usuario.correo,
-                    id_rol: usuario.id_rol
-                }));
-                res.json(usuariosFormateados);
-            }
-            catch (error) {
-                res.status(500).json({ mensaje: "Error al obtener los usuarios", error });
-            }
+            const Usuarios = yield usuario_model_1.default.find();
+            res.json(Usuarios);
         });
     }
     UsuarioEncontrado(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const usuarioEncontrado = yield usuario_model_1.default.findById(req.params.id); // Usando `req.params.id` para obtener el ID del usuario
-                if (!usuarioEncontrado) {
-                    res.status(500).json({ mensaje: "Error al buscar el usuario" });
-                }
-                else {
-                    res.json({
-                        id: usuarioEncontrado._id,
-                        nombre: usuarioEncontrado.nombre,
-                        correo: usuarioEncontrado.correo,
-                        id_rol: usuarioEncontrado.id_rol
-                    });
-                }
-            }
-            catch (error) {
-                res.status(500).json({ mensaje: "Error al buscar el usuario", error });
-            }
+            const usuarioEncontrado = yield usuario_model_1.default.findById(req.usuario.id);
+            if (!usuarioEncontrado)
+                res.status(400).json({ mensaje: "Usuario no encontrado" });
+            res.json({
+                id: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado._id,
+                nombre: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.nombre,
+                correo: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.correo,
+                id_rol: usuarioEncontrado === null || usuarioEncontrado === void 0 ? void 0 : usuarioEncontrado.id_rol
+            });
         });
     }
     getEstados(req, res) {
@@ -141,17 +122,7 @@ class UsuarioController {
             const clave = req.params.clave;
             const ciudades = yield ciudad_model_1.default.find({ clave: clave });
             res.json(ciudades);
-        });
-    }
-    eliminarUsuario(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const usuario = yield usuario_model_1.default.findByIdAndDelete(req.params.id);
-                res.json(usuario);
-            }
-            catch (error) {
-                res.status(500).json({ message: error.message });
-            }
+            console.log("Ciudades encontradas:", ciudades);
         });
     }
 }

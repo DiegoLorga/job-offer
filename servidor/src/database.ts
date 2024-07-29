@@ -1,9 +1,10 @@
+ //para poder interactuar con MongoDB se importa la librería Mongoose
 import mongoose from 'mongoose'
 
 export const connectDB = async () => {
   try {
+    //realizamos la conexión con nuestra base de datos
     await mongoose.connect('mongodb://localhost/OfertaLaboral');
-    // await mongoose.connect('mongodb://127.0.0.1/CIIT');
     console.log("Base de datos conectada");
   }
   catch (error) {

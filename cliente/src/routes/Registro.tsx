@@ -7,13 +7,13 @@ import { AuthReponseRegister, AuthResponseError } from "../types/types";
 interface Estado {
     _id: string;
     nombre: string;
-    clave: string; // Añade clave si no está presente en el modelo de Estado
+    clave: string; 
 }
 
 interface Ciudad {
     _id: string;
     nombre: string;
-    clave: string; // Añade claveEstado si no está presente en el modelo de Ciudad
+    clave: string; 
 }
 
 export default function Registro() {
@@ -22,7 +22,7 @@ export default function Registro() {
     const [contrasena, setContrasena] = useState("");
     const [verificar, setVerificar] = useState("");
     const [direccion, setDireccion] = useState("");
-    const [ciudad, setCiudad] = useState(""); // Estado de ciudad
+    const [ciudad, setCiudad] = useState("");
     const [errorCampos, setErrorCampos] = useState("");
     const [errorContrasenas, setErrorContrasenas] = useState("");
     const [errorCorreo, setErrorCorreo] = useState("");
@@ -30,8 +30,7 @@ export default function Registro() {
     const [sucessMessage, setSuccessMessage] = useState("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [selectedEstado, setSelectedEstado] = useState<string>("");
-    const [ciudades, setCiudades] = useState<Ciudad[]>([]); // Estado para almacenar la lista de ciudades filtradas
-
+    const [ciudades, setCiudades] = useState<Ciudad[]>([]); 
     const auth = useAuth();
     const goTo = useNavigate();
 
@@ -39,7 +38,7 @@ export default function Registro() {
     useEffect(() => {
         async function fetchEstados() {
             try {
-                const response = await fetch(`${API_URL}/registro/getEstados`);
+                const response = await fetch(`${API_URL}/usuario/getEstados`);
                 if (response.ok) {
                     const data = await response.json() as Estado[];
                     setEstados(data);
@@ -62,7 +61,7 @@ export default function Registro() {
     useEffect(() => {
         async function fetchCiudades() {
             try {
-                const response = await fetch(`${API_URL}/registro/getCiudades/${selectedEstado}`);
+                const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
@@ -86,7 +85,7 @@ export default function Registro() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${API_URL}/registro`, {
+            const response = await fetch(`${API_URL}/usuario`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -111,7 +110,7 @@ export default function Registro() {
                 setErrorCorreo("");
                 setErrorNombre("");
                 setTimeout(() => {
-                    goTo("/");
+                    goTo("/registro");
                 }, 2000);
             } else {
                 const json = await response.json() as AuthResponseError;
