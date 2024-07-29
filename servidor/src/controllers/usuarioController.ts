@@ -74,7 +74,7 @@ class UsuarioController {
             res.cookie('token', token)
 
             console.log("Hola, despues de Token");
-
+            
             console.log(res.cookie);
 
             res.json({
@@ -91,6 +91,43 @@ class UsuarioController {
             }));
         }
     }
+
+    public async listUsuarios(req: Request, res: Response): Promise<void> {
+        try {
+            const usuarios = await Usuario.find();
+            const usuariosFormateados = usuarios.map(usuario => ({
+                id: usuario._id,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                id_rol: usuario.id_rol
+            }));
+            res.json(usuariosFormateados);
+        } catch (error) {
+            res.status(500).json({ mensaje: "Error al obtener los usuarios", error });
+        }
+    }
+    
+
+    public async UsuarioEncontrado(req: Request, res: Response): Promise<void> {
+        try {
+            const usuarioEncontrado = await Usuario.findById(req.params.id); // Usando `req.params.id` para obtener el ID del usuario
+            if (!usuarioEncontrado) {
+                res.status(500).json({ mensaje: "Error al buscar el usuario"});
+            }else{
+                res.json({
+                    id: usuarioEncontrado._id,
+                    nombre: usuarioEncontrado.nombre,
+                    correo: usuarioEncontrado.correo,
+                    id_rol: usuarioEncontrado.id_rol
+                });
+            }
+            
+        } catch (error) {
+            res.status(500).json({ mensaje: "Error al buscar el usuario", error });
+        }
+    }
+    
+
     public async getEstados(req: Request, res: Response): Promise<void> {
         const estados = await Estado.find();
         res.json(estados);
@@ -98,8 +135,8 @@ class UsuarioController {
     }
 
     public async getCiudades(req: Request, res: Response): Promise<void> {
-        const clave = req.params.clave;
-        const ciudades = await Ciudad.find({ clave: clave });
+        const clave = req.params.clave; 
+        const ciudades = await Ciudad.find({ clave: clave }); 
         res.json(ciudades)
     }
 
