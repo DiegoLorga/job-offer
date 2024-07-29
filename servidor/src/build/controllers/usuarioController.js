@@ -16,6 +16,8 @@ exports.usuariosController = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const estado_model_1 = __importDefault(require("../models/estado.model"));
 const ciudad_model_1 = __importDefault(require("../models/ciudad.model"));
+const perfilUsuario_model_1 = __importDefault(require("../models/perfilUsuario.model"));
+const fotosPerfilUsuario_model_1 = __importDefault(require("../models/fotosPerfilUsuario.model"));
 const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = require("../libs/jwt");
@@ -70,11 +72,27 @@ class UsuarioController {
                     estado,
                     id_rol: tipoRol
                 });
-                //console.log("Hola, antes de Token");
                 const UsuarioGuardado = yield nuevoUsuario.save();
+                const nuevoPerfil = new perfilUsuario_model_1.default({
+                    id_usuario: UsuarioGuardado._id,
+                    cv: false,
+                    experiencia: '',
+                    especialidad: '',
+                    habilidades: '',
+                    educacion: '',
+                    idiomas: '',
+                    certificaciones: false,
+                    repositorio: '',
+                    status: false,
+                    foto: false
+                });
+                const PerfilGuardado = yield nuevoPerfil.save();
+                const nuevaFotoPerfil = new fotosPerfilUsuario_model_1.default({
+                    id_fotoUs: PerfilGuardado._id
+                });
+                yield nuevaFotoPerfil.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: UsuarioGuardado._id });
                 res.cookie('token', token);
-                console.log("Hola, despues de Token");
                 console.log(res.cookie);
                 res.json({
                     idRol: UsuarioGuardado.id_rol,
@@ -82,7 +100,7 @@ class UsuarioController {
                     correo: UsuarioGuardado.correo,
                     direccion: UsuarioGuardado.direccion,
                     ciudad: UsuarioGuardado.ciudad,
-                    estado: UsuarioGuardado.estado
+                    estado: UsuarioGuardado.estado,
                 });
             }
             catch (error) {
@@ -146,6 +164,11 @@ class UsuarioController {
     eliminarUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                const perfilEliminado = yield perfilUsuario_model_1.default.findOneAndDelete({ id_usuario: req.params.id });
+                console.log(perfilEliminado);
+                if (perfilEliminado) {
+                    yield fotosPerfilUsuario_model_1.default.findOneAndDelete({ id_fotoUs: perfilEliminado._id });
+                }
                 const usuario = yield usuario_model_1.default.findByIdAndDelete(req.params.id);
                 res.json(usuario);
             }
