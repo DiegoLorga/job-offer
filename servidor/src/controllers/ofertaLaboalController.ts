@@ -1,7 +1,7 @@
 import { json, Request, Response } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
 import OfertaLaboral from '../models/OfertaLaboral.model';
-
+import Categoria from '../models/categoria.model';
 
 class ofertaLaboralController {
 
@@ -10,7 +10,7 @@ class ofertaLaboralController {
     public async createOfertaLaboral(req: Request, res: Response): Promise<void> {
         console.log("Creado una red social");
         const { id_empresa, titulo, puesto, sueldo, horario, modalidad, direccion, ciudad, estado, status,
-            descripcion, requisitos, telefono, correo, educacion, idioma } = req.body;
+            descripcion, requisitos, telefono, correo, educacion, idioma, experienciaLaboral, categoria } = req.body;
         const inicio = 0;
             try {
             const nuevaOfertaLaboral = new OfertaLaboral({
@@ -29,7 +29,9 @@ class ofertaLaboralController {
                 telefono,
                 correo,
                 educacion,
-                idioma
+                idioma,
+                experienciaLaboral,
+                categoria
             })
             const OfertaLaboralGuardado = await nuevaOfertaLaboral.save();
 
@@ -51,6 +53,8 @@ class ofertaLaboralController {
                 correo: OfertaLaboralGuardado.correo,
                 educacion: OfertaLaboralGuardado.educacion,
                 idioma: OfertaLaboralGuardado.id_empresa,
+                experienciaLaboral: OfertaLaboralGuardado.experienciaLaboral,
+                categoria: OfertaLaboralGuardado.categoria
             })
         } catch {
             res.status(400).json(jsonResponse(400, {
@@ -119,6 +123,33 @@ class ofertaLaboralController {
                 error: "No se pudo actualizar la información de la oferta"
             }));
         }
+    }
+
+    public async createCategoria(req: Request, res: Response): Promise<void>{
+        console.log("Creado un  rol");
+        const {nombre}=req.body;
+        try{
+            const nuevaCategoria= new Categoria({
+                nombre
+            }) 
+            const CategoriaGuardado = await nuevaCategoria.save();
+            res.json({
+                tipo: CategoriaGuardado.nombre
+            })
+        }catch{
+            res.status(400).json(jsonResponse(400, {
+                error: "No se pudo crear la categoria"
+
+            })
+        )
+
+        }   
+    }
+
+    public async list(req: Request, res: Response): Promise<void> {
+        console.log("Mostrando categorias");
+        const categoria = await Categoria.find();
+        res.json(categoria)
     }
 
 

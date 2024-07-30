@@ -188,5 +188,7 @@ class EmpresaController {
         }
     }
 
+    
+
 }
 export const empresaController = new EmpresaController();

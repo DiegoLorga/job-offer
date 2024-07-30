@@ -15,13 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OfertaLaboralController = void 0;
 const jsonResponse_1 = require("../lib/jsonResponse");
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
+const categoria_model_1 = __importDefault(require("../models/categoria.model"));
 class ofertaLaboralController {
     constructor() {
     }
     createOfertaLaboral(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("Creado una red social");
-            const { id_empresa, titulo, puesto, sueldo, horario, modalidad, direccion, ciudad, estado, status, descripcion, requisitos, telefono, correo, educacion, idioma } = req.body;
+            const { id_empresa, titulo, puesto, sueldo, horario, modalidad, direccion, ciudad, estado, status, descripcion, requisitos, telefono, correo, educacion, idioma, experienciaLaboral, categoria } = req.body;
             const inicio = 0;
             try {
                 const nuevaOfertaLaboral = new OfertaLaboral_model_1.default({
@@ -40,7 +41,9 @@ class ofertaLaboralController {
                     telefono,
                     correo,
                     educacion,
-                    idioma
+                    idioma,
+                    experienciaLaboral,
+                    categoria
                 });
                 const OfertaLaboralGuardado = yield nuevaOfertaLaboral.save();
                 res.json({
@@ -61,6 +64,8 @@ class ofertaLaboralController {
                     correo: OfertaLaboralGuardado.correo,
                     educacion: OfertaLaboralGuardado.educacion,
                     idioma: OfertaLaboralGuardado.id_empresa,
+                    experienciaLaboral: OfertaLaboralGuardado.experienciaLaboral,
+                    categoria: OfertaLaboralGuardado.categoria
                 });
             }
             catch (_a) {
@@ -128,6 +133,33 @@ class ofertaLaboralController {
                     error: "No se pudo actualizar la información de la oferta"
                 }));
             }
+        });
+    }
+    createCategoria(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Creado un  rol");
+            const { nombre } = req.body;
+            try {
+                const nuevaCategoria = new categoria_model_1.default({
+                    nombre
+                });
+                const CategoriaGuardado = yield nuevaCategoria.save();
+                res.json({
+                    tipo: CategoriaGuardado.nombre
+                });
+            }
+            catch (_a) {
+                res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
+                    error: "No se pudo crear la categoria"
+                }));
+            }
+        });
+    }
+    list(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("Mostrando categorias");
+            const categoria = yield categoria_model_1.default.find();
+            res.json(categoria);
         });
     }
 }
