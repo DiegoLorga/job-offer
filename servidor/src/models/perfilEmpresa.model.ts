@@ -7,6 +7,7 @@ interface PerfilEmpresa {
     empleos: string;
     paginaoficial:string;
     redesSociales:string;
+    fotoEmp: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -14,19 +15,16 @@ const schemaPerfilEmpresa = new Schema<PerfilEmpresa>({
     descripcion:
     {
         type: String,
-        required: false,
         trim: true
     },
     mision:
     {
         type: String,
-        required: false,
         trim: true,
     },
     empleos:
     {
         type: String,
-        required: false
     },
     id_empresa: {
         type: Schema.Types.ObjectId,
@@ -37,13 +35,15 @@ const schemaPerfilEmpresa = new Schema<PerfilEmpresa>({
     paginaoficial:
     {
         type: String,
-        required: false
     },
     redesSociales:
     {
         type: String,
-        required: false
     },
+    fotoEmp:
+    {
+        type:Boolean,
+    }
 },
     {
         timestamps: true

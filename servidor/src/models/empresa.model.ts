@@ -9,6 +9,7 @@ interface Empresa {
     ciudad: string;
     estado: string;
     giro: string;
+    foto: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -57,6 +58,9 @@ const schemaEmpresa = new Schema<Empresa>({
         type: String,
         required: true
     },
+    foto:{
+        type: Boolean,
+    }
 },
     {
         timestamps: true

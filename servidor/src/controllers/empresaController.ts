@@ -7,13 +7,15 @@ import Rol from '../models/rol.model';
 import mongoose from 'mongoose';
 import PerfilEmpresa from '../models/perfilEmpresa.model';
 import OfertaLaboral from '../models/OfertaLaboral.model';
+import fotosEmpresa from '../models/fotosEmpresa.model';
+import FotosPerfilEmpresa from '../models/fotosPerfilEmpresa.model';
 
 class EmpresaController {
 
     constructor() {
     }
     public async createEmpresa(req: Request, res: Response): Promise<void> {
-        const { nombre, correo, contrasena, direccion, ciudad, estado, giro, descripcion, mision, empleos, paginaoficial, redesSociales } = req.body;
+        const { nombre, correo, contrasena, direccion, ciudad, estado, giro,foto, descripcion, mision, empleos, paginaoficial, redesSociales,fotoEmp } = req.body;
         try {
 
             const rol = await Rol.findOne({ tipo: "Empresa" }); // Cambia "TipoDeseado" por el tipo que buscas
@@ -37,9 +39,15 @@ class EmpresaController {
                 ciudad,
                 estado,
                 giro,
-                id_rol: tipoRol
+                id_rol: tipoRol,
+                foto: false
             });
             const EmpresaGuardado = await nuevaEmpresa.save();
+
+            const nuevaFotoEmpresa= new fotosEmpresa({
+                id_empresa : EmpresaGuardado._id
+            });
+            await nuevaFotoEmpresa.save();
 
             console.log("Empresaaaaa")
 
@@ -50,11 +58,17 @@ class EmpresaController {
                 empleos,
                 paginaoficial,
                 redesSociales,
+                fotoEmp:false
             });
 
             const PerfilGuardado = await nuevoPerfilEmpresa.save();
 
             const token = await createAccesToken({ id: EmpresaGuardado._id });
+
+            const nuevaFotoPerfil = new FotosPerfilEmpresa({
+                id_fotoEm : PerfilGuardado._id
+            });
+            await nuevaFotoPerfil.save();
 
             res.cookie('token', token)
 
@@ -68,11 +82,13 @@ class EmpresaController {
                 ciudad: EmpresaGuardado.ciudad,
                 estado: EmpresaGuardado.estado,
                 giro: EmpresaGuardado.giro,
+                foto: EmpresaGuardado.foto,
                 descripcion: PerfilGuardado.descripcion,
                 mision: PerfilGuardado.mision,
                 empleos: PerfilGuardado.empleos,
                 paginaoficial: PerfilGuardado.paginaoficial,
-                redesSociales: PerfilGuardado.redesSociales
+                redesSociales: PerfilGuardado.redesSociales,
+                FotoEmp: PerfilGuardado.fotoEmp
 
             });
         } catch (error) {

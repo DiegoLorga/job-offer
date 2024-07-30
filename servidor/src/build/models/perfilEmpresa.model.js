@@ -27,17 +27,14 @@ const mongoose_1 = __importStar(require("mongoose"));
 const schemaPerfilEmpresa = new mongoose_1.Schema({
     descripcion: {
         type: String,
-        required: false,
         trim: true
     },
     mision: {
         type: String,
-        required: false,
         trim: true,
     },
     empleos: {
         type: String,
-        required: false
     },
     id_empresa: {
         type: mongoose_1.Schema.Types.ObjectId,
@@ -46,12 +43,13 @@ const schemaPerfilEmpresa = new mongoose_1.Schema({
     },
     paginaoficial: {
         type: String,
-        required: false
     },
     redesSociales: {
         type: String,
-        required: false
     },
+    fotoEmp: {
+        type: Boolean,
+    }
 }, {
     timestamps: true
 });

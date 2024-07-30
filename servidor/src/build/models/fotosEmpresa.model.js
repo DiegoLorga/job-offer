@@ -24,47 +24,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const schemaEmpresa = new mongoose_1.Schema({
-    nombre: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    correo: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true
-    },
-    contrasena: {
-        type: String,
-        required: true
-    },
-    id_rol: {
+const schemafotosEmpresa = new mongoose_1.Schema({
+    id_empresa: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Rol',
+        ref: 'Empresa ',
         requiere: true
     },
-    direccion: {
-        type: String,
-        required: true
-    },
-    estado: {
-        type: String,
-        required: true
-    },
-    ciudad: {
-        type: String,
-        required: true
-    },
-    giro: {
-        type: String,
-        required: true
-    },
-    foto: {
-        type: Boolean,
-    }
 }, {
     timestamps: true
 });
-exports.default = mongoose_1.default.model('Empresa', schemaEmpresa);
+exports.default = mongoose_1.default.model('fotosEmpresa', schemafotosEmpresa);
