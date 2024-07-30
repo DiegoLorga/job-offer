@@ -177,5 +177,22 @@ class UsuarioController {
             }
         });
     }
+    getPerfilUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id_usuario = req.params.id_usuario;
+                const perfilEncontrado = yield perfilUsuario_model_1.default.find({ id_usuario: id_usuario });
+                if (perfilEncontrado) {
+                    res.json(perfilEncontrado);
+                }
+                else {
+                    res.status(404).json({ message: "Perfil de usuario no encontrado" });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
 }
 exports.usuariosController = new UsuarioController();

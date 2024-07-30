@@ -176,6 +176,23 @@ class UsuarioController {
         }
     }
 
+    public async getPerfilUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const id_usuario = req.params.id_usuario;
+            const perfilEncontrado = await PerfilUsuario.find({ id_usuario: id_usuario });
+            
+            if (perfilEncontrado) {
+                res.json(perfilEncontrado);
+            } else {
+                res.status(404).json({ message: "Perfil de usuario no encontrado" });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+    
+
+
 
 
 

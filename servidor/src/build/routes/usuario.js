@@ -14,6 +14,7 @@ class UsuarioRoutes {
         this.router.get("/listaUsuarios", usuarioController_1.usuariosController.listUsuarios);
         this.router.get("/getUsuario/:id", usuarioController_1.usuariosController.UsuarioEncontrado);
         this.router.delete("/eliminarUsuario/:id", usuarioController_1.usuariosController.eliminarUsuario);
+        this.router.get("/getPerfilUsuario/:id_usuario", usuarioController_1.usuariosController.getPerfilUsuario);
     }
 }
 const usuaioRoutes = new UsuarioRoutes();
