@@ -173,7 +173,9 @@ class UsuarioController {
                 res.json(usuario);
             }
             catch (error) {
-                res.status(500).json({ message: error.message });
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
+                    error: "No se pudo eliminar el usuario"
+                }));
             }
         });
     }
@@ -188,6 +190,17 @@ class UsuarioController {
                 else {
                     res.status(404).json({ message: "Perfil de usuario no encontrado" });
                 }
+            }
+            catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    actualizarPerfilUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const perfil = yield perfilUsuario_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.json(perfil);
             }
             catch (error) {
                 res.status(500).json({ message: error.message });

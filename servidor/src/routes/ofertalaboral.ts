@@ -14,6 +14,7 @@ class OfertaLaboralRoutes {
         this.router.post('/crearCategoria',OfertaLaboralController.createCategoria)
         this.router.get('/categorias', OfertaLaboralController.list)
     }
-}
+
+    }
 const ofertaLaboralRoutes = new OfertaLaboralRoutes();
-export default ofertaLaboralRoutes.router;
+export default ofertaLaboralRoutes.router;  

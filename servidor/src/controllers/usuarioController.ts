@@ -171,9 +171,11 @@ class UsuarioController {
             const usuario = await Usuario.findByIdAndDelete(req.params.id)
             res.json(usuario)
         }
-        catch (error: any) {
-            res.status(500).json({ message: error.message });
-        }
+       catch (error) {
+            res.status(500).json(jsonResponse(400, {
+                error: "No se pudo eliminar el usuario"
+            }));
+       }
     }
 
     public async getPerfilUsuario(req: Request, res: Response): Promise<void> {
@@ -191,6 +193,14 @@ class UsuarioController {
         }
     }
     
+    public async actualizarPerfilUsuario(req: Request, res: Response): Promise<void> {
+        try{
+            const perfil = await PerfilUsuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            res.json(perfil)
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 
 
 
