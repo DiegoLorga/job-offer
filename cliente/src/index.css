@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
 :root {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
@@ -147,5 +148,35 @@ button:hover {
 }
 /* Mueve esto al principio del archivo */
 
+/* Asegúrate de que las pestañas estén centradas */
+.tabs {
+  display: flex;
+  justify-content: center;
+}
 
+.tab a {
+  text-align: center;
+}
+
+.center-align {
+  text-align: center;
+}
+
+/* Estilo para el dropdown para hacerlo más largo y ajustar el texto */
+/* Asegúrate de que el dropdown tenga el ancho deseado */
+.dropdown-content {
+  width: 200px !important; /* Ajusta el ancho según tus necesidades */
+}
+
+/* Asegúrate de que los elementos dentro del dropdown no se corten */
+.dropdown-content li {
+  white-space: nowrap; /* Evita el ajuste de línea del texto */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+}
+
+/* Ajusta el padding para una mejor apariencia */
+.dropdown-content li a {
+  padding: 10px 20px; /* Ajusta el padding según sea necesario */
+}
 

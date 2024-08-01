@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import M from 'materialize-css';
 //import 'materialize-css/dist/css/materialize.min.css'; // Comentado para evitar conflictos
 import '../index.css'; // Importa tus estilos personalizados después
-import Empresa from './Empresa';
 
 export default function Navigation() {
     const auth = useAuth();
@@ -37,7 +36,6 @@ export default function Navigation() {
         M.Tabs.init(document.querySelectorAll('.tabs'));
         M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'));
         console.log("Otros inicializados");
-
     }, []);
 
     return (
@@ -53,18 +51,38 @@ export default function Navigation() {
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
                             <ul id="dropdown1" className="dropdown-content">
-                                <li><Link to="/Empresa">Empresa</Link></li>
-                                <li><Link to="/Administrador">Administrador</Link></li>
-                                <li><a href="#!" onClick={handleLogout}>Logout</a></li>
+                                <li>
+                                    <Link
+                                        to="/Empresa">Perfil
+                                        <i className="tiny material-icons">perm_identity</i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="/Administrador">Guardado
+                                        <i className="tiny material-icons">turned_in</i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        to="#!">Postulaciones
+                                        <i className="tiny material-icons">content_paste</i>
+                                    </Link>
+                                </li>
+                                <li>
+                                    <a
+                                        href="#!" onClick={handleLogout}>Logout
+                                        <i className="material-icons">exit_to_app</i>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     </ul>
                 </div>
                 <div className="nav-content">
                     <ul id="tabs-swipe-demo" className="tabs">
-                        <li className="tab col s3"><Link to="/Empleado">Test 1</Link></li>
-                        <li className="tab col s3"><Link to="/Administrador">Test 2</Link></li>
-                        <li className="tab col s3"><Link to="/test3">Test 3</Link></li>
+                        <li className="tab col s3"><Link to="/Empleado">Empleos</Link></li>
+                        <li className="tab col s3"><Link to="/Administrador">Empresas</Link></li>
                     </ul>
                 </div>
             </nav>
