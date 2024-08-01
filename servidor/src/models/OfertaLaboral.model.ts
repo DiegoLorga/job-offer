@@ -17,6 +17,8 @@ interface OfertaLaboral {
     correo: string;
     educacion:string;
     idioma:string;
+    experienciaLaboral:string;
+    categoria: string
     createdAt: Date;
     updatedAt: Date;
 }
@@ -105,6 +107,16 @@ const schemaOfertaLaboral = new Schema<OfertaLaboral>({
         type: String,
         required: true
     },
+    experienciaLaboral:
+    {
+        type: String,
+        required: true
+    },
+    categoria:
+    {
+        type: String,
+        required: true
+    }
 },
     {
         timestamps: true

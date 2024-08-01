@@ -20,12 +20,14 @@ const jwt_1 = require("../libs/jwt");
 const rol_model_1 = __importDefault(require("../models/rol.model"));
 const perfilEmpresa_model_1 = __importDefault(require("../models/perfilEmpresa.model"));
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
+const fotosEmpresa_model_1 = __importDefault(require("../models/fotosEmpresa.model"));
+const fotosPerfilEmpresa_model_1 = __importDefault(require("../models/fotosPerfilEmpresa.model"));
 class EmpresaController {
     constructor() {
     }
     createEmpresa(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { nombre, correo, contrasena, direccion, ciudad, estado, giro, descripcion, mision, empleos, paginaoficial, redesSociales } = req.body;
+            const { nombre, correo, contrasena, direccion, ciudad, estado, giro, foto, descripcion, mision, empleos, paginaoficial, redesSociales, fotoEmp } = req.body;
             try {
                 const rol = yield rol_model_1.default.findOne({ tipo: "Empresa" }); // Cambia "TipoDeseado" por el tipo que buscas
                 if (!rol) {
@@ -44,9 +46,15 @@ class EmpresaController {
                     ciudad,
                     estado,
                     giro,
-                    id_rol: tipoRol
+                    id_rol: tipoRol,
+                    foto: false
                 });
                 const EmpresaGuardado = yield nuevaEmpresa.save();
+                const nuevaFotoEmpresa = new fotosEmpresa_model_1.default({
+                    id_empresa: EmpresaGuardado._id
+                });
+                yield nuevaFotoEmpresa.save();
+                console.log("Empresaaaaa");
                 const nuevoPerfilEmpresa = new perfilEmpresa_model_1.default({
                     id_empresa: EmpresaGuardado._id,
                     descripcion,
@@ -54,9 +62,14 @@ class EmpresaController {
                     empleos,
                     paginaoficial,
                     redesSociales,
+                    fotoEmp: false
                 });
                 const PerfilGuardado = yield nuevoPerfilEmpresa.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: EmpresaGuardado._id });
+                const nuevaFotoPerfil = new fotosPerfilEmpresa_model_1.default({
+                    id_fotoEm: PerfilGuardado._id
+                });
+                yield nuevaFotoPerfil.save();
                 res.cookie('token', token);
                 console.log(res.cookie);
                 res.json({
@@ -67,11 +80,13 @@ class EmpresaController {
                     ciudad: EmpresaGuardado.ciudad,
                     estado: EmpresaGuardado.estado,
                     giro: EmpresaGuardado.giro,
+                    foto: EmpresaGuardado.foto,
                     descripcion: PerfilGuardado.descripcion,
                     mision: PerfilGuardado.mision,
                     empleos: PerfilGuardado.empleos,
                     paginaoficial: PerfilGuardado.paginaoficial,
-                    redesSociales: PerfilGuardado.redesSociales
+                    redesSociales: PerfilGuardado.redesSociales,
+                    FotoEmp: PerfilGuardado.fotoEmp
                 });
             }
             catch (error) {

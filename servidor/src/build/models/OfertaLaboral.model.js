@@ -93,6 +93,14 @@ const schemaOfertaLaboral = new mongoose_1.Schema({
         type: String,
         required: true
     },
+    experienciaLaboral: {
+        type: String,
+        required: true
+    },
+    categoria: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true
 });
