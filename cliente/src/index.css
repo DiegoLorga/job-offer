@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 :root {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.5;
@@ -144,5 +145,7 @@ button {
 button:hover {
   background-color: #0056b3; /* Color de fondo al pasar el ratón */
 }
+/* Mueve esto al principio del archivo */
+
 
 

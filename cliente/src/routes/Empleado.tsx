@@ -1,21 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../auth/AuthProvider";
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 import DefaultLayout from "../layout/DefaultLayout";
 import M from 'materialize-css';
+import 'materialize-css/dist/css/materialize.min.css';
+import '../index.css'; // Importa tus estilos personalizados después
 
-const Empleado: React.FC = () => {
+
+
+export default function Empleados() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
     const auth = useAuth();
     const modalRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Inicializar Materialize JavaScript
         if (modalRef.current) {
             M.Modal.init(modalRef.current);
+            console.log("Modal inicializado");
         }
     }, []);
+
+
 
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
@@ -43,5 +49,3 @@ const Empleado: React.FC = () => {
         </DefaultLayout>
     );
 }
-
-export default Empleado;
