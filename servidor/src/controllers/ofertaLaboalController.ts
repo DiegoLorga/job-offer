@@ -121,6 +121,31 @@ class ofertaLaboralController {
         }
     }
 
-
+        public async buscarOfertas(req: Request, res: Response): Promise<void> {
+            try {
+                // Extracción de parámetros de búsqueda desde la consulta de la URL
+                const { estado, ciudad, sueldo, modalidad, educacion, fechacreacion } = req.body;
+                
+                // Construcción dinámica del filtro de búsqueda
+                const filtros: any = {};
+    
+                if (estado) filtros.estado = estado;
+                if (ciudad) filtros.ciudad = ciudad;
+                if (sueldo) filtros.sueldo = { $gte: Number(sueldo) }; // Sueldo mayor o igual
+                if (modalidad) filtros.modalidad = modalidad;
+                if (educacion) filtros.educacion = educacion;
+                if (fechacreacion) filtros.createdAt = { $gte: new Date(fechacreacion as string) }; // Ofertas creadas después de la fecha
+    
+                // Consulta a la base de datos usando los filtros
+                const ofertas = await OfertaLaboral.find(filtros);
+    
+                res.json(ofertas);
+            } catch (error) {
+                console.error("Error al buscar ofertas:", error);
+                res.status(500).json({
+                    error: "Hubo un error al buscar las ofertas laborales"
+                });
+            }
+        }
 }
 export const OfertaLaboralController = new ofertaLaboralController();

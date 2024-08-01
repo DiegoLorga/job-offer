@@ -41,7 +41,6 @@ class EmpresaController {
             });
             const EmpresaGuardado = await nuevaEmpresa.save();
 
-            console.log("Empresaaaaa")
 
             const nuevoPerfilEmpresa = new PerfilEmpresa({
                 id_empresa: EmpresaGuardado._id,

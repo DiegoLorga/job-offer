@@ -130,5 +130,36 @@ class ofertaLaboralController {
             }
         });
     }
+    buscarOfertas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Extracción de parámetros de búsqueda desde la consulta de la URL
+                const { estado, ciudad, sueldo, modalidad, educacion, fechacreacion } = req.body;
+                // Construcción dinámica del filtro de búsqueda
+                const filtros = {};
+                if (estado)
+                    filtros.estado = estado;
+                if (ciudad)
+                    filtros.ciudad = ciudad;
+                if (sueldo)
+                    filtros.sueldo = { $gte: Number(sueldo) }; // Sueldo mayor o igual
+                if (modalidad)
+                    filtros.modalidad = modalidad;
+                if (educacion)
+                    filtros.educacion = educacion;
+                if (fechacreacion)
+                    filtros.createdAt = { $gte: new Date(fechacreacion) }; // Ofertas creadas después de la fecha
+                // Consulta a la base de datos usando los filtros
+                const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
+                res.json(ofertas);
+            }
+            catch (error) {
+                console.error("Error al buscar ofertas:", error);
+                res.status(500).json({
+                    error: "Hubo un error al buscar las ofertas laborales"
+                });
+            }
+        });
+    }
 }
 exports.OfertaLaboralController = new ofertaLaboralController();

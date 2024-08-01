@@ -12,6 +12,7 @@ class OfertaLaboralRoutes {
         this.router.get('/', ofertaLaboalController_1.OfertaLaboralController.listOfertas);
         this.router.post('/', ofertaLaboalController_1.OfertaLaboralController.createOfertaLaboral);
         this.router.put('/:id', ofertaLaboalController_1.OfertaLaboralController.actualizarOfertaLaboral);
+        this.router.get('/buscar', ofertaLaboalController_1.OfertaLaboralController.buscarOfertas);
     }
 }
 const ofertaLaboralRoutes = new OfertaLaboralRoutes();

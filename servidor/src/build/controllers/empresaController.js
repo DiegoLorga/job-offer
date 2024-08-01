@@ -47,7 +47,6 @@ class EmpresaController {
                     id_rol: tipoRol
                 });
                 const EmpresaGuardado = yield nuevaEmpresa.save();
-                console.log("Empresaaaaa");
                 const nuevoPerfilEmpresa = new perfilEmpresa_model_1.default({
                     id_empresa: EmpresaGuardado._id,
                     descripcion,

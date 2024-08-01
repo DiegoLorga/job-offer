@@ -11,7 +11,9 @@ class OfertaLaboralRoutes {
         this.router.get('/', OfertaLaboralController.listOfertas)
         this.router.post('/', OfertaLaboralController.createOfertaLaboral);
         this.router.put('/:id',OfertaLaboralController.actualizarOfertaLaboral);
+        this.router.get('/buscar',OfertaLaboralController.buscarOfertas);
     }
-}
+
+    }
 const ofertaLaboralRoutes = new OfertaLaboralRoutes();
-export default ofertaLaboralRoutes.router;
+export default ofertaLaboralRoutes.router;  
