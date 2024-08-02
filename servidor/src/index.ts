@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser'
 import usuarioRoutes from './routes/usuario';
 import PerfilEmpresaRoutes from './routes/perfilEmpresa';
 import ofertaLaboralRoutes from './routes/ofertalaboral';
+import path from 'path';
 class Server {
     public app: Application;
     constructor() {
@@ -28,6 +29,7 @@ class Server {
         this .app.use(cors({origin:  " http://localhost:5173" , credentials:  true })); 
         this.app.use(express.json()); //permite que utilicemos json
         this.app.use(express.urlencoded({ extended: false })); //decodifca las url
+        this.app.use(express.static(path.join(__dirname, 'img/perfilUsuario')));
     }
     routes(): void {
         this.app.use('/api/usuario', usuarioRoutes);
@@ -48,3 +50,5 @@ class Server {
 }
 const server = new Server();
 server.start();
+
+
