@@ -82,14 +82,14 @@ export default function Navigation() {
                 <div className="nav-content">
                     <ul id="tabs-swipe-demo" className="tabs">
                         <li className="tab col s3"><Link to="/Empleado">Empleos</Link></li>
-                        <li className="tab col s3"><Link to="/Administrador">Empresas</Link></li>
+                        <li className="tab col s3"><Link to="http://localhost:5173/Administrador">Empresas</Link></li>
                     </ul>
                 </div>
             </nav>
 
             <ul className="sidenav" id="mobile-demo">
                 <li><Link to="/Empleado">Empleado</Link></li>
-                <li><Link to="/Administrador">Administrador</Link></li>
+                <li><Link to="http://localhost:5173/Administrador">Administrador</Link></li>
             </ul>
         </>
     );

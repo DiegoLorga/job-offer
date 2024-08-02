@@ -7,8 +7,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
-//const correoAcceso = require('./correoAcceso');
-const fs_1 = __importDefault(require("fs"));
+const correoAcceso = require('./correoAcceso');
 class Server {
     constructor() {
         dotenv_1.default.config();
@@ -26,22 +25,17 @@ class Server {
         this.app.use(express_1.default.urlencoded({ extended: false }));
     }
     routes() {
-        this.app.post('/uploadImagen', (req, res) => {
-            console.log("upload image");
-            const file = req.body.src;
-            const name = req.body.tipo;
-            const id = req.body.id;
-            // console.log(__dirname)
-            const binaryData = Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""), 'base64').toString('binary');
-            fs_1.default.writeFile(`${__dirname}/imagenes/` + name + '/' + id + '.jpg', binaryData, "binary", (err) => {
-                console.log(err);
-            });
-            res.json({ fileName: id + '.jpg' });
-        });
         this.app.post('/enviarCorreoRecuperarContrasena', (req, res) => {
+            console.log("Entrando a correo");
             console.log(req.body);
-            //correoAcceso(req.body);
-            res.sendStatus(200);
+            try {
+                correoAcceso(req.body);
+                res.sendStatus(200);
+            }
+            catch (error) {
+                console.error("Error:", error);
+                res.status(500).json({ message: 'Error al enviar el correo electrónico.' });
+            }
         });
     }
     start() {
