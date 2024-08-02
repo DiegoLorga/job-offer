@@ -180,3 +180,40 @@ button:hover {
   padding: 10px 20px; /* Ajusta el padding según sea necesario */
 }
 
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+  text-align: center;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 10px;
+}
+
+.successMessage {
+  color: green;
+  margin-top: 10px;
+}
+
+.custom-btn {
+  width: 82%;
+  background-color: #630bde;
+  color: white;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.custom-btn:hover {
+  background-color: #630bde;
+}

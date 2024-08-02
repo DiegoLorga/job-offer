@@ -1,21 +1,19 @@
-import express, { Application, json } from 'express';
+import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
-import jwm from 'jsonwebtoken';
-import dontev from 'dotenv';
+import dotenv from 'dotenv';
 
-//const correoAcceso = require('./correoAcceso');
-import fs from 'fs';
+const correoAcceso = require('./correoAcceso');
 
 class Server {
     public app: Application;
 
     constructor() {
-        dontev.config();
+        dotenv.config();
         this.app = express();
         this.config();
         this.routes();
-        this.app.use(express.static(__dirname+"/imagenes"));
+        this.app.use(express.static(__dirname + "/imagenes"));
     }
 
     config(): void {
@@ -28,37 +26,24 @@ class Server {
     }
 
     routes(): void {
-
-        this.app.post('/uploadImagen', (req, res) => {
-            console.log("upload image")
-            const file = req.body.src;
-            const name = req.body.tipo;
-            const id = req.body.id;
-            // console.log(__dirname)
-            const binaryData =
-                Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""),
-                    'base64').toString('binary');
-            fs.writeFile(`${__dirname}/imagenes/` + name + '/' + id + '.jpg', binaryData,
-                "binary", (err) => {
-                    console.log(err);
-                });
-            res.json({ fileName: id + '.jpg' });
-        });
-
-        this.app.post('/enviarCorreoRecuperarContrasena', (req, res) => {
+        this.app.post('/enviarCorreoRecuperarContrasena', (req: Request, res: Response) => {
+            console.log("Entrando a correo");
             console.log(req.body);
-            //correoAcceso(req.body);
-            res.sendStatus(200);
+            try {
+                correoAcceso(req.body);
+                res.sendStatus(200);
+            } catch (error) {
+                console.error("Error:", error);
+                res.status(500).json({ message: 'Error al enviar el correo electrónico.' });
+            }
         });
-
     }
+
     start() {
         this.app.listen(this.app.get('port'), () => {
             console.log('Server on port', this.app.get('port'));
         });
     }
-
-
 }
 
 const server = new Server();

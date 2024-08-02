@@ -4,6 +4,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../auth/apis";
 import { AuthResponseError, AuthReponseRegister } from '../types/types';
+//import 'materialize-css/dist/css/materialize.min.css';
+import '../index.css'
 
 export default function Login() {
     const [correo, setCorreo] = useState("");
@@ -51,34 +53,58 @@ export default function Login() {
     }
 
     return (
+        <div className="container">
+            <div className="form">
+                <form className="col s12" onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
+                    {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
+                    
+                    <div className="row">
+                        <div className="input-field col s10">
+                            <input
+                                id="correo"
+                                type="email"
+                                className="validate"
+                                value={correo}
+                                onChange={(e) => setCorreo(e.target.value)}
+                            />
+                            <label htmlFor="correo">Correo</label>
+                        </div>
+                    </div>
 
-        <form className="form" onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            {!!errorResponse && <div className="errorMessage">{errorResponse}</div>}
-            {!!successMessage && <div className="successMessage">{successMessage}</div>}
-            <label>Correo</label>
-            <input
-                type="text"
-                value={correo}
-                onChange={(e) => setCorreo(e.target.value)}
-            />
+                    <div className="row">
+                        <div className="input-field col s10">
+                            <input
+                                id="contrasena"
+                                type="password"
+                                className="validate"
+                                value={contrasena}
+                                onChange={(e) => setContrasena(e.target.value)}
+                            />
+                            <label htmlFor="contrasena">Contraseña</label>
+                        </div>
+                    </div>
 
-            <label>Contraseña</label>
-            <input
-                type="password"
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-            />
-            <br />
-            <button>Login</button>
-            <label>
-                <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña? </Link>
-            </label>
-            <label>
-                <br />
-                <Link to="/Registro">¿No tienes cuenta? Regístrate aquí</Link>
-            </label>
-        </form>
+                    <div className="row">
+                        <button className="custom-btn" type="submit">
+                            Login
+                        </button>
+                    </div>
 
+                    <div className="row">
+                        <label>
+                            <Link to="/RecuperarContrasena">¿Olvidaste tu contraseña?</Link>
+                        </label>
+                    </div>
+
+                    <div className="row">
+                        <label>
+                            <Link to="/Registro">¿No tienes cuenta? Regístrate aquí</Link>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }
