@@ -34,11 +34,11 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: "Empresa",
+        path: "/Empresa",
         element: <Empresa />,
       },
       {
-        path: "Empleado",
+        path: "/Empleado",
         element: <ProtectedRoute />,
         children: [
           {
@@ -46,14 +46,18 @@ const router = createBrowserRouter([
             element: <Empleado />,
           },
           {
-            path: "PerfilUsuario",
+            path: "/PerfilUsuario",
             element: <PerfilUsuario />,
           },
         ],
       },
       {
-        path: "Administrador",
+        path: "/Administrador",
         element: <Administrador />,
+      },
+      {
+        path: "/RestablecerContrasena",
+        element: <RestablecerContrasena />,
       },
     ],
   },
