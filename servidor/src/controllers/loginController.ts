@@ -7,10 +7,9 @@ import { createAccesToken } from '../libs/jwt';
 
 class LoginController {
 
-
     constructor() {
     }
-    public async verificarUsuario(req: Request, res: Response): Promise<void> {
+    public async login(req: Request, res: Response): Promise<void> {
         const { correo, contrasena } = req.body;
 
         try {
@@ -32,11 +31,12 @@ class LoginController {
             }
             const token = await createAccesToken({ id: usuario._id });
             console.log(usuario._id);
-           res.cookie('token', token);
-           
+            res.cookie('token', token);
+
             res.status(200).json(jsonResponse(200, {
                 message: "El usuario y la contraseña son correctos",
                 usuario: {
+                    id_usuario: usuario._id,
                     nombre: usuario.nombre,
                     correo: usuario.correo,
                     direccion: usuario.direccion,
@@ -70,7 +70,7 @@ class LoginController {
             updatedAt: usuarioEncontrado?.updatedAt
         })
     }
-    
+
 }
 
 

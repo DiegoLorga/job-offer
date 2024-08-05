@@ -11,11 +11,13 @@
   },
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "materialize-css": "^1.0.0-rc.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.24.1"
+    "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
+    "@types/materialize-css": "^1.0.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",

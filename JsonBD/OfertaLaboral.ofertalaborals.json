@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "66a819205e1592992a38b7c4"
+  },
+  "id_empresa": {
+    "$oid": "66a819305e1592992a38b7c7"
+  },
+  "titulo": "Gerente en ventas",
+  "puesto": "Gerente",
+  "sueldo": 10000,
+  "horario": "8:00 a 20:00",
+  "modalidad": "tiempo completo",
+  "direccion": "Calle Bugambilia",
+  "ciudad": "Huajuapan",
+  "estado": "Oaxaca",
+  "status": 0,
+  "descripcion": "Gerente de ventas para sucursal",
+  "requisitos": "Ser mayor de 18 años",
+  "telefono": {
+    "$numberLong": "9565678909"
+  },
+  "correo": "elektra@gmail.com",
+  "educacion": "Media superior",
+  "idioma": "Español",
+  "createdAt": {
+    "$date": "2024-07-29T22:35:12.991Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T22:36:12.459Z"
+  },
+  "__v": 0
+}]

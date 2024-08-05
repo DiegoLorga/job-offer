@@ -2,9 +2,12 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
+import PerfilUsuario from '../models/perfilUsuario.model';
+import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
+import jwt  from 'jsonwebtoken';
 
 class UsuarioController {
 
@@ -38,9 +41,6 @@ class UsuarioController {
             if (!emailRegex.test(correo)) {
                 correoError = "Correo no válido";
             }
-
-
-
         }
 
 
@@ -68,16 +68,34 @@ class UsuarioController {
                 estado,
                 id_rol: tipoRol
             });
-            //console.log("Hola, antes de Token");
 
             const UsuarioGuardado = await nuevoUsuario.save();
-            console.log("Hola, antes de Token");
-            const token = await createAccesToken({ id: UsuarioGuardado._id });
 
+            const nuevoPerfil = new PerfilUsuario({
+                id_usuario: UsuarioGuardado._id,
+                cv: false,
+                experiencia: '',
+                especialidad: '',
+                habilidades: '',
+                educacion: '',
+                idiomas: '',
+                certificaciones: false,
+                repositorio: '',
+                status: false,
+                foto: false
+            });
+
+            const PerfilGuardado = await nuevoPerfil.save();
+
+            const nuevaFotoPerfil = new FotosPerfilUsuario({
+                id_fotoUs: PerfilGuardado._id
+            });
+            await nuevaFotoPerfil.save();
+
+
+            const token = await createAccesToken({ id: UsuarioGuardado._id })
             res.cookie('token', token)
 
-            console.log("Hola, despues de Token");
-            
             console.log(res.cookie);
 
             res.json({
@@ -86,7 +104,7 @@ class UsuarioController {
                 correo: UsuarioGuardado.correo,
                 direccion: UsuarioGuardado.direccion,
                 ciudad: UsuarioGuardado.ciudad,
-                estado: UsuarioGuardado.estado
+                estado: UsuarioGuardado.estado,
             });
         } catch (error) {
             res.status(400).json(jsonResponse(400, {
@@ -94,25 +112,117 @@ class UsuarioController {
             }));
         }
     }
-    public async getEstados(req: Request, res: Response): Promise<void> {
 
+    public async listUsuarios(req: Request, res: Response): Promise<void> {
+        try {
+            const usuarios = await Usuario.find();
+            const usuariosFormateados = usuarios.map(usuario => ({
+                id: usuario._id,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                id_rol: usuario.id_rol
+            }));
+            res.json(usuariosFormateados);
+        } catch (error) {
+            res.status(500).json({ mensaje: "Error al obtener los usuarios", error });
+        }
+    }
+
+
+    public async UsuarioEncontrado(req: Request, res: Response): Promise<void> {
+        try {
+            const usuarioEncontrado = await Usuario.findById(req.params.id); // Usando `req.params.id` para obtener el ID del usuario
+            if (!usuarioEncontrado) {
+                res.status(500).json({ mensaje: "Error al buscar el usuario" });
+            } else {
+                res.json({
+                    id: usuarioEncontrado._id,
+                    nombre: usuarioEncontrado.nombre,
+                    correo: usuarioEncontrado.correo,
+                    id_rol: usuarioEncontrado.id_rol
+                });
+            }
+
+        } catch (error) {
+            res.status(500).json({ mensaje: "Error al buscar el usuario", error });
+        }
+    }
+
+
+    public async getEstados(req: Request, res: Response): Promise<void> {
         const estados = await Estado.find();
         res.json(estados);
 
     }
 
-
     public async getCiudades(req: Request, res: Response): Promise<void> {
-        const clave = req.params.clave; 
-        const ciudades = await Ciudad.find({ clave: clave }); 
+        const clave = req.params.clave;
+        const ciudades = await Ciudad.find({ clave: clave });
         res.json(ciudades)
-        console.log("Ciudades encontradas:", ciudades);
-
     }
 
+    public async eliminarUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const perfilEliminado = await PerfilUsuario.findOneAndDelete({ id_usuario: req.params.id });
+            console.log(perfilEliminado);
+            if (perfilEliminado) {
+                await FotosPerfilUsuario.findOneAndDelete({ id_fotoUs: perfilEliminado._id });
+            }
 
+            const usuario = await Usuario.findByIdAndDelete(req.params.id)
+            res.json(usuario)
+        }
+        catch (error) {
+            res.status(500).json(jsonResponse(400, {
+                error: "No se pudo eliminar el usuario"
+            }));
+        }
+    }
 
+    public async getPerfilUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const id_usuario = req.params.id_usuario;
+            const perfilEncontrado = await PerfilUsuario.find({ id_usuario: id_usuario });
 
+            if (perfilEncontrado) {
+                res.json(perfilEncontrado);
+            } else {
+                res.status(404).json({ message: "Perfil de usuario no encontrado" });
+            }
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    public async actualizarPerfilUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const perfil = await PerfilUsuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            res.json(perfil)
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    public async restablecerContrasena(req: Request, res: Response): Promise<void> {
+        const { token, password } = req.body;
+
+        if (!token || !password) {
+            res.status(400).json({ message: 'Token y contraseña son requeridos.' });
+            return;
+        }
+
+        try {
+            const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET || 'prueba');
+            const email = decoded.email;
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await Usuario.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+
+            res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
+        } catch (error) {
+            res.status(400).json({ message: 'Error al actualizar la contraseña' });
+        }
+    }
 }
 
 

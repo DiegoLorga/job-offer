@@ -4,18 +4,20 @@ import { API_URL } from "./apis";
 interface AuthContextProps {
     isAuthenticated: boolean;
     setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+    loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps>({
     isAuthenticated: false,
     setIsAuthenticated: () => {},
+    loading: true,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Verificar la autenticación al cargar la aplicación
         const checkAuth = async () => {
             try {
                 const response = await fetch(`${API_URL}/login/perfil`, {
@@ -33,6 +35,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 }
             } catch (error) {
                 setIsAuthenticated(false);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -42,6 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const value = {
         isAuthenticated,
         setIsAuthenticated,
+        loading,
     };
 
     return (

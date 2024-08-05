@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "66a7f43e7ea788749b1292d5"
+  },
+  "id_usuario": {
+    "$oid": "66a7f43e7ea788749b1292d3"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T19:57:50.525Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:57:50.525Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7f4987ea788749b1292d9"
+  },
+  "id_usuario": {
+    "$oid": "66a7f4987ea788749b1292d7"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T19:59:20.450Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:59:20.450Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7f4ac7ea788749b1292dd"
+  },
+  "id_usuario": {
+    "$oid": "66a7f4ac7ea788749b1292db"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T19:59:40.572Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T19:59:40.572Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7fb5c1c4822a8a5535c76"
+  },
+  "cv": false,
+  "experiencia": "",
+  "especialidad": "",
+  "habilidades": "",
+  "educacion": "",
+  "idiomas": "",
+  "certificaciones": false,
+  "repositorio": "",
+  "status": false,
+  "foto": false,
+  "id_usuario": {
+    "$oid": "66a7fb5c1c4822a8a5535c74"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T20:28:12.214Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T20:28:12.214Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a7ff8e71f056ad26f64862"
+  },
+  "cv": false,
+  "experiencia": "",
+  "especialidad": "",
+  "habilidades": "",
+  "educacion": "",
+  "idiomas": "",
+  "certificaciones": false,
+  "repositorio": "",
+  "status": false,
+  "foto": false,
+  "id_usuario": {
+    "$oid": "66a7ff8e71f056ad26f64860"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T20:46:06.560Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T20:46:06.560Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a8037bcd8a8c6a4ce47214"
+  },
+  "cv": false,
+  "experiencia": "",
+  "especialidad": "",
+  "habilidades": "",
+  "educacion": "",
+  "idiomas": "",
+  "certificaciones": false,
+  "repositorio": "",
+  "status": false,
+  "foto": false,
+  "id_usuario": {
+    "$oid": "66a8037bcd8a8c6a4ce47212"
+  },
+  "createdAt": {
+    "$date": "2024-07-29T21:02:51.405Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-29T21:02:51.405Z"
+  },
+  "__v": 0
+}]

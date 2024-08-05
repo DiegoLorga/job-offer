@@ -7,13 +7,13 @@ import { AuthReponseRegister, AuthResponseError } from "../types/types";
 interface Estado {
     _id: string;
     nombre: string;
-    clave: string; // Añade clave si no está presente en el modelo de Estado
+    clave: string;
 }
 
 interface Ciudad {
     _id: string;
     nombre: string;
-    clave: string; // Añade claveEstado si no está presente en el modelo de Ciudad
+    clave: string;
 }
 
 export default function Registro() {
@@ -22,7 +22,7 @@ export default function Registro() {
     const [contrasena, setContrasena] = useState("");
     const [verificar, setVerificar] = useState("");
     const [direccion, setDireccion] = useState("");
-    const [ciudad, setCiudad] = useState(""); // Estado de ciudad
+    const [ciudad, setCiudad] = useState("");
     const [errorCampos, setErrorCampos] = useState("");
     const [errorContrasenas, setErrorContrasenas] = useState("");
     const [errorCorreo, setErrorCorreo] = useState("");
@@ -30,8 +30,7 @@ export default function Registro() {
     const [sucessMessage, setSuccessMessage] = useState("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [selectedEstado, setSelectedEstado] = useState<string>("");
-    const [ciudades, setCiudades] = useState<Ciudad[]>([]); // Estado para almacenar la lista de ciudades filtradas
-
+    const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const auth = useAuth();
     const goTo = useNavigate();
 
@@ -39,14 +38,14 @@ export default function Registro() {
     useEffect(() => {
         async function fetchEstados() {
             try {
-                const response = await fetch(`${API_URL}/registro/getEstados`);
+                const response = await fetch(`${API_URL}/usuario/getEstados`);
                 if (response.ok) {
                     const data = await response.json() as Estado[];
                     setEstados(data);
                     if (data.length > 0) {
                         setSelectedEstado(data[0].clave);
                     }
-                    
+
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -62,7 +61,7 @@ export default function Registro() {
     useEffect(() => {
         async function fetchCiudades() {
             try {
-                const response = await fetch(`${API_URL}/registro/getCiudades/${selectedEstado}`);
+                const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
@@ -86,7 +85,7 @@ export default function Registro() {
         e.preventDefault();
 
         try {
-            const response = await fetch(`${API_URL}/registro`, {
+            const response = await fetch(`${API_URL}/usuario`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -131,76 +130,119 @@ export default function Registro() {
     }
 
     return (
-        <form className="form" onSubmit={handleSubmit}>
-            <h1>Registro</h1>
-            {!!errorCampos && <div className="errorMessage">{errorCampos}</div>}
-            {!!sucessMessage && <div className="successMessage">{sucessMessage}</div>}
-            <br />
-            <label> Nombre </label>
-            <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                name="nombre"
-                id="nombre"
-                className={errorNombre ? 'error' : ''}
-            />
-            {!!errorNombre && <div className="errorMessage2">{errorNombre}</div>}
+        <div className="container">
+            <div className="form">
+                <form className="col s12" onSubmit={handleSubmit}>
+                    <h1>Registro</h1>
+                    {!!errorCampos && <div className="card-panel red lighten-2 white-text">{errorCampos}</div>}
+                    {!!sucessMessage && <div className="card-panel green lighten-2 white-text">{sucessMessage}</div>}
 
-            <label> Correo </label>
-            <input
-                type="text"
-                value={correo}
-                onChange={(e) => setCorreo(e.target.value)}
-                className={errorCorreo ? 'error' : ''}
-            />
-            {!!errorCorreo && <div className="errorMessage2">{errorCorreo}</div>}
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                id="nombre"
+                                type="text"
+                                className="validate"
+                                value={nombre}
+                                onChange={(e) => setNombre(e.target.value)}
+                            />
+                            <label htmlFor="nombre">Nombre</label>
+                            {!!errorNombre && <span className="helper-text red-text">{errorNombre}</span>}
+                        </div>
+                    </div>
 
-            <label> Contraseña </label>
-            <input
-                type="password"
-                value={contrasena}
-                onChange={(e) => setContrasena(e.target.value)}
-                className={errorContrasenas ? 'error' : ''}
-            />
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                id="correo"
+                                type="email"
+                                className="validate"
+                                value={correo}
+                                onChange={(e) => setCorreo(e.target.value)}
+                            />
+                            <label htmlFor="correo">Correo</label>
+                            {!!errorCorreo && <span className="helper-text red-text">{errorCorreo}</span>}
+                        </div>
+                    </div>
 
-            <label> Verificar Contraseña </label>
-            <input
-                type="password"
-                value={verificar}
-                onChange={(e) => setVerificar(e.target.value)}
-                className={errorContrasenas ? 'error' : ''}
-            />
-            {!!errorContrasenas && <div className="errorMessage2">{errorContrasenas}</div>}
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                id="contrasena"
+                                type="password"
+                                className="validate"
+                                value={contrasena}
+                                onChange={(e) => setContrasena(e.target.value)}
+                            />
+                            <label htmlFor="contrasena">Contraseña</label>
+                            {!!errorContrasenas && <span className="helper-text red-text">{errorContrasenas}</span>}
+                        </div>
+                    </div>
 
-            <label> Dirección </label>
-            <input
-                type="text"
-                value={direccion}
-                onChange={(e) => setDireccion(e.target.value)}
-            />
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                id="verificar"
+                                type="password"
+                                className="validate"
+                                value={verificar}
+                                onChange={(e) => setVerificar(e.target.value)}
+                            />
+                            <label htmlFor="verificar">Verificar Contraseña</label>
+                            {!!errorContrasenas && <span className="helper-text red-text">{errorContrasenas}</span>}
+                        </div>
+                    </div>
 
-            <label> Estado </label>
-            <select
-                value={selectedEstado}
-                onChange={(e) => setSelectedEstado(e.target.value)}
-            >
-                {estados.map(estado => (
-                    <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
-                ))}
-            </select>
+                    <div className="row">
+                        <div className="input-field col s12">
+                            <input
+                                id="direccion"
+                                type="text"
+                                className="validate"
+                                value={direccion}
+                                onChange={(e) => setDireccion(e.target.value)}
+                            />
+                            <label htmlFor="direccion">Dirección</label>
+                        </div>
+                    </div>
 
-            <label> Ciudad </label>
-            <select
-                value={ciudad} // Usar el estado de ciudad
-                onChange={(e) => setCiudad(e.target.value)}
-            >
-                {ciudades.map(ciudad => (
-                    <option key={ciudad._id} value={ciudad._id}>{ciudad.nombre}</option>
-                ))}
-            </select>
+                    <div className="row">
+                        <label>Estado</label>
+                        <div className="input-field col s12">
+                            <select
+                                value={selectedEstado}
+                                onChange={(e) => setSelectedEstado(e.target.value)}
+                                className="browser-default"
+                            >
+                                {estados.map(estado => (
+                                    <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
 
-            <button type="submit">Registrarse</button>
-        </form>
+                    <div className="row">
+                    <label>Ciudad</label>
+                        <div className="input-field col s12">
+                            <select
+                                value={ciudad}
+                                onChange={(e) => setCiudad(e.target.value)}
+                                className="browser-default"
+                            >
+                                {ciudades.map(ciudad => (
+                                    <option key={ciudad._id} value={ciudad._id}>{ciudad.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <button className="custom-btn" type="submit">
+                            Registrarse
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }

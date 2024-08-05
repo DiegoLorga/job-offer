@@ -1,0 +1,161 @@
+[{
+  "_id": {
+    "$oid": "66a970cd678274cd90d7746e"
+  },
+  "nombre": "Ventas",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a97130678274cd90d77470"
+  },
+  "nombre": "Almacén/Logística/Transporte",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9713d678274cd90d77472"
+  },
+  "nombre": "Atención a clientes",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9715a678274cd90d77474"
+  },
+  "nombre": "Administración / Oficina",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a97163678274cd90d77476"
+  },
+  "nombre": "Otros",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9717d678274cd90d77478"
+  },
+  "nombre": "Contabilidad / Finanzas",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a971a9678274cd90d7747a"
+  },
+  "nombre": "Mantenimiento y Reparaciones Técnicas",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a971b6678274cd90d7747c"
+  },
+  "nombre": "Medicina / Salud",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a971c9678274cd90d7747e"
+  },
+  "nombre": "CallCenter / Telemercado",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a971f6678274cd90d77480"
+  },
+  "nombre": "Hostelería / Turismo",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9720c678274cd90d77482"
+  },
+  "nombre": "Producción / Operarios / Manufactura",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a97243678274cd90d77484"
+  },
+  "nombre": "Informática / Telecomunicaciones",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a97260678274cd90d77486"
+  },
+  "nombre": "Servicios Generales, Aseo y Seguridad",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9728148f35edcfd910a0d"
+  },
+  "nombre": "Recursos Humanos",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9729848f35edcfd910a0f"
+  },
+  "nombre": "Construcción y obra",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a972a648f35edcfd910a11"
+  },
+  "nombre": "Ingeniería",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a972b948f35edcfd910a13"
+  },
+  "nombre": "Docencia",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a972d748f35edcfd910a15"
+  },
+  "nombre": "Mercadotecnia / Publicidad / Comunicación",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a972f048f35edcfd910a17"
+  },
+  "nombre": "Compras / Comercio Exterior",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9730b48f35edcfd910a19"
+  },
+  "nombre": "Legal / Asesoría",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9731f48f35edcfd910a1b"
+  },
+  "nombre": "Diseño / Artes gráficas",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9733c48f35edcfd910a1d"
+  },
+  "nombre": "Dirección / Gerencia",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66a9734c48f35edcfd910a1f"
+  },
+  "nombre": "Investigación y Calidad",
+  "__v": 0
+}]
