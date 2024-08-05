@@ -17,6 +17,7 @@ class UsuarioRoutes {
         this.router.delete("/eliminarUsuario/:id", usuariosController.eliminarUsuario);
         this.router.get("/getPerfilUsuario/:id_usuario", usuariosController.getPerfilUsuario);
         this.router.put("/actualizarPerfilUsuario/:id", usuariosController.actualizarPerfilUsuario);
+        this.router.post('/restablecerContrasena', usuariosController.restablecerContrasena);
 
 
     }

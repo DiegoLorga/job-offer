@@ -25,7 +25,7 @@ function enviarCorreo(body) {
     var correo = body.email;
     const token = jsonwebtoken_1.default.sign({ email: correo }, process.env.TOKEN_SECRET || 'prueba'); // Aquí corregimos el payload
     console.log(token);
-    const resetPasswordUrl = `${process.env.FRONTEND_URL}/restablecerContrasena?token=${token}`;
+    const resetPasswordUrl = `http://localhost:5173/RestablecerContrasena?token=${token}`;
     var message = {
         from: process.env.EMAIL,
         to: `<${body.email}>`,
@@ -46,7 +46,7 @@ function enviarCorreo(body) {
                         <p>Para restablecer tu contraseña, por favor haz clic en el siguiente enlace:</p>
                         <p><a href="${resetPasswordUrl}">Restablecer mi contraseña</a></p>
                         <p>Si no solicitaste el restablecimiento de contraseña, por favor ignora este correo.</p>
-                        <p>Saludos,<br>El equipo de [Tu Aplicación]</p>
+                        <p>Saludos,<br>El equipo de Devil Software</p>
                     </body>
                     </html>
                 `,

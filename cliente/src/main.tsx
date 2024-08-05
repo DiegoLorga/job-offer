@@ -8,11 +8,13 @@ import Empleado from './routes/Empleado';
 import Administrador from './routes/Administrador';
 import ProtectedRoute from './routes/ProtectedRoute';
 import RecuperarContrasena from './routes/RecuperarContrasena';
+import RestablecerContrasena from './routes/RestablecerContrasena';
 import { AuthProvider } from './auth/AuthProvider';
 import PerfilUsuario from './routes/PerfilUsuario';
 import 'materialize-css/dist/css/materialize.min.css';
-//import 'materialize-css/dist/js/materialize.min.js';
-import './index.css'; // Importa tus estilos personalizados después
+import './index.css';
+
+
 
 
 const router = createBrowserRouter([
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
     element: <RecuperarContrasena />,
   },
   {
+    path: "/RestablecerContrasena",
+    element: <RestablecerContrasena />,
+  },
+  {
     path: "/",
     element: <ProtectedRoute />,
     children: [
@@ -43,12 +49,6 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <Empleado />,
-            children: [
-              {
-                path: "PerfilUsuario",
-                element: <PerfilUsuario />,
-              },
-            ],
           },
           {
             path: "PerfilUsuario",
@@ -63,6 +63,7 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <AuthProvider>

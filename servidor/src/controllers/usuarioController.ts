@@ -205,6 +205,12 @@ class UsuarioController {
 
     public async restablecerContrasena(req: Request, res: Response): Promise<void> {
         const { token, password } = req.body;
+
+        if (!token || !password) {
+            res.status(400).json({ message: 'Token y contraseña son requeridos.' });
+            return;
+        }
+
         try {
             const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET || 'prueba');
             const email = decoded.email;
@@ -217,13 +223,6 @@ class UsuarioController {
             res.status(400).json({ message: 'Error al actualizar la contraseña' });
         }
     }
-
-
-
-
-
-
-
 }
 
 

@@ -211,6 +211,10 @@ class UsuarioController {
     restablecerContrasena(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { token, password } = req.body;
+            if (!token || !password) {
+                res.status(400).json({ message: 'Token y contraseña son requeridos.' });
+                return;
+            }
             try {
                 const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET || 'prueba');
                 const email = decoded.email;
