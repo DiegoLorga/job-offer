@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'
 import { API_URI_CORREOS } from '../auth/apis';
 import { AuthResponseError } from '../types/types'; // Asegúrate de importar tu interfaz
 import '../index.css'
@@ -7,6 +8,7 @@ export default function RecuperarContrasena() {
     const [email, setEmail] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [errorResponse, setErrorResponse] = useState('');
+    const navigate = useNavigate();
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -30,6 +32,9 @@ export default function RecuperarContrasena() {
             if (response.ok) {
                 setSuccessMessage('Se ha enviado un correo electrónico a ' + email + ' con las instrucciones para restablecer tu contraseña.');
                 setErrorResponse('');
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
             } else {
                 const json = await response.json() as AuthResponseError;
                 setErrorResponse(json.body.error || 'Error al enviar el correo electrónico.');
