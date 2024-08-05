@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { API_URI_CORREOS, API_URL } from '../auth/apis';
+import { API_URL } from '../auth/apis';
 import { AuthResponseError } from '../types/types';
+import { useNavigate } from 'react-router-dom'
 import '../index.css';
 
 export default function RestablecerContrasena() {
@@ -9,6 +10,7 @@ export default function RestablecerContrasena() {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorResponse, setErrorResponse] = useState('');
     const [token, setToken] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -18,19 +20,19 @@ export default function RestablecerContrasena() {
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-    
+
         if (!password.trim() || !confirmPassword.trim()) {
             setErrorResponse('Por favor ingresa y confirma la nueva contraseña.');
             setSuccessMessage('');
             return;
         }
-    
+
         if (password !== confirmPassword) {
             setErrorResponse('Las contraseñas no coinciden.');
             setSuccessMessage('');
             return;
         }
-    
+
         try {
             const response = await fetch(`${API_URL}/usuario/restablecerContrasena`, {
                 method: 'POST',
@@ -39,10 +41,15 @@ export default function RestablecerContrasena() {
                 },
                 body: JSON.stringify({ token, password })
             });
-    
+
             if (response.ok) {
                 setSuccessMessage('Contraseña restablecida con éxito.');
                 setErrorResponse('');
+
+                setTimeout(() => {
+                    navigate('/');
+                }, 3000);
+
             } else {
                 const json = await response.json();
                 setErrorResponse(json.message || 'Error al restablecer la contraseña.');
