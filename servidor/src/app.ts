@@ -2,6 +2,7 @@ import express, { Application, Request, Response } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { usuariosController } from './controllers/usuarioController';
 
 const correoAcceso = require('./correoAcceso');
 
@@ -37,11 +38,19 @@ class Server {
                 res.status(500).json({ message: 'Error al enviar el correo electrónico.' });
             }
         });
+        this.app.post('/restablecerContrasena', (req: Request, res: Response) => {
+            try {
+                usuariosController.restablecerContrasena(req, res);
+            } catch (error) {
+                res.status(500).json({ message: 'Error en el servidor' });
+            }
+        });
+        
     }
 
     start() {
         this.app.listen(this.app.get('port'), () => {
-            console.log('Server on pooort', this.app.get('port'));
+            console.log('Server on port', this.app.get('port'));
         });
     }
 }

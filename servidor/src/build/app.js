@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const usuarioController_1 = require("./controllers/usuarioController");
 const correoAcceso = require('./correoAcceso');
 class Server {
     constructor() {
@@ -37,10 +38,18 @@ class Server {
                 res.status(500).json({ message: 'Error al enviar el correo electrónico.' });
             }
         });
+        this.app.post('/restablecerContrasena', (req, res) => {
+            try {
+                usuarioController_1.usuariosController.restablecerContrasena(req, res);
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Error en el servidor' });
+            }
+        });
     }
     start() {
         this.app.listen(this.app.get('port'), () => {
-            console.log('Server on pooort', this.app.get('port'));
+            console.log('Server on port', this.app.get('port'));
         });
     }
 }

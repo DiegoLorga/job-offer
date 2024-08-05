@@ -21,6 +21,7 @@ const fotosPerfilUsuario_model_1 = __importDefault(require("../models/fotosPerfi
 const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = require("../libs/jwt");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -204,6 +205,21 @@ class UsuarioController {
             }
             catch (error) {
                 res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    restablecerContrasena(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { token, password } = req.body;
+            try {
+                const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET || 'prueba');
+                const email = decoded.email;
+                const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
+                yield usuario_model_1.default.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+                res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
+            }
+            catch (error) {
+                res.status(400).json({ message: 'Error al actualizar la contraseña' });
             }
         });
     }

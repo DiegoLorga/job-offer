@@ -8,6 +8,7 @@ import Empleado from './routes/Empleado';
 import Administrador from './routes/Administrador';
 import ProtectedRoute from './routes/ProtectedRoute';
 import RecuperarContrasena from './routes/RecuperarContrasena';
+import RestablecerContrasena from './routes/RestablecerContrasena'
 import { AuthProvider } from './auth/AuthProvider';
 import 'materialize-css/dist/css/materialize.min.css';
 //import 'materialize-css/dist/js/materialize.min.js';
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/Administrador",
         element: <Administrador />,
+      },
+      {
+        path: "/RestablecerContrasena",
+        element: <RestablecerContrasena/>,
       },
     ]
   },

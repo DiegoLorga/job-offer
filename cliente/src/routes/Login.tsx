@@ -61,7 +61,7 @@ export default function Login() {
                     {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
                     
                     <div className="row">
-                        <div className="input-field col s10">
+                        <div className="input-field col s12">
                             <input
                                 id="correo"
                                 type="email"
@@ -74,7 +74,7 @@ export default function Login() {
                     </div>
 
                     <div className="row">
-                        <div className="input-field col s10">
+                        <div className="input-field col s12">
                             <input
                                 id="contrasena"
                                 type="password"

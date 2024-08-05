@@ -7,6 +7,7 @@ import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
+import jwt  from 'jsonwebtoken';
 
 class UsuarioController {
 
@@ -69,7 +70,7 @@ class UsuarioController {
             });
 
             const UsuarioGuardado = await nuevoUsuario.save();
-            
+
             const nuevoPerfil = new PerfilUsuario({
                 id_usuario: UsuarioGuardado._id,
                 cv: false,
@@ -85,16 +86,16 @@ class UsuarioController {
             });
 
             const PerfilGuardado = await nuevoPerfil.save();
-            
+
             const nuevaFotoPerfil = new FotosPerfilUsuario({
-                id_fotoUs : PerfilGuardado._id
+                id_fotoUs: PerfilGuardado._id
             });
             await nuevaFotoPerfil.save();
 
 
             const token = await createAccesToken({ id: UsuarioGuardado._id })
             res.cookie('token', token)
-            
+
             console.log(res.cookie);
 
             res.json({
@@ -126,14 +127,14 @@ class UsuarioController {
             res.status(500).json({ mensaje: "Error al obtener los usuarios", error });
         }
     }
-    
+
 
     public async UsuarioEncontrado(req: Request, res: Response): Promise<void> {
         try {
             const usuarioEncontrado = await Usuario.findById(req.params.id); // Usando `req.params.id` para obtener el ID del usuario
             if (!usuarioEncontrado) {
-                res.status(500).json({ mensaje: "Error al buscar el usuario"});
-            }else{
+                res.status(500).json({ mensaje: "Error al buscar el usuario" });
+            } else {
                 res.json({
                     id: usuarioEncontrado._id,
                     nombre: usuarioEncontrado.nombre,
@@ -141,12 +142,12 @@ class UsuarioController {
                     id_rol: usuarioEncontrado.id_rol
                 });
             }
-            
+
         } catch (error) {
             res.status(500).json({ mensaje: "Error al buscar el usuario", error });
         }
     }
-    
+
 
     public async getEstados(req: Request, res: Response): Promise<void> {
         const estados = await Estado.find();
@@ -155,8 +156,8 @@ class UsuarioController {
     }
 
     public async getCiudades(req: Request, res: Response): Promise<void> {
-        const clave = req.params.clave; 
-        const ciudades = await Ciudad.find({ clave: clave }); 
+        const clave = req.params.clave;
+        const ciudades = await Ciudad.find({ clave: clave });
         res.json(ciudades)
     }
 
@@ -164,25 +165,25 @@ class UsuarioController {
         try {
             const perfilEliminado = await PerfilUsuario.findOneAndDelete({ id_usuario: req.params.id });
             console.log(perfilEliminado);
-            if(perfilEliminado){
-                await FotosPerfilUsuario.findOneAndDelete({ id_fotoUs: perfilEliminado._id});
+            if (perfilEliminado) {
+                await FotosPerfilUsuario.findOneAndDelete({ id_fotoUs: perfilEliminado._id });
             }
-            
+
             const usuario = await Usuario.findByIdAndDelete(req.params.id)
             res.json(usuario)
         }
-       catch (error) {
+        catch (error) {
             res.status(500).json(jsonResponse(400, {
                 error: "No se pudo eliminar el usuario"
             }));
-       }
+        }
     }
 
     public async getPerfilUsuario(req: Request, res: Response): Promise<void> {
         try {
             const id_usuario = req.params.id_usuario;
             const perfilEncontrado = await PerfilUsuario.find({ id_usuario: id_usuario });
-            
+
             if (perfilEncontrado) {
                 res.json(perfilEncontrado);
             } else {
@@ -192,15 +193,31 @@ class UsuarioController {
             res.status(500).json({ message: error.message });
         }
     }
-    
+
     public async actualizarPerfilUsuario(req: Request, res: Response): Promise<void> {
-        try{
+        try {
             const perfil = await PerfilUsuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
             res.json(perfil)
         } catch (error: any) {
             res.status(500).json({ message: error.message });
         }
     }
+
+    public async restablecerContrasena(req: Request, res: Response): Promise<void> {
+        const { token, password } = req.body;
+        try {
+            const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET || 'prueba');
+            const email = decoded.email;
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await Usuario.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+
+            res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
+        } catch (error) {
+            res.status(400).json({ message: 'Error al actualizar la contraseña' });
+        }
+    }
+
 
 
 

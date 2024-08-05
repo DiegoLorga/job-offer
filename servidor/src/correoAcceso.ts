@@ -24,6 +24,8 @@ function enviarCorreo(body: any) {
     var correo = body.email;
     const token: string = jwt.sign({ email: correo }, process.env.TOKEN_SECRET || 'prueba');  // Aquí corregimos el payload
     console.log(token);
+    const resetPasswordUrl = `${process.env.FRONTEND_URL}/restablecerContrasena?token=${token}`;
+
 
     var message = {
         from: process.env.EMAIL,
@@ -31,9 +33,29 @@ function enviarCorreo(body: any) {
         bbc: "",
         subject: "Testing!",
         attachment: [
-            { data: `Hola, te estoy enviando un correo de prueba`, alternative: true }
+            { data: `
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Restablecimiento de Contraseña</title>
+                    </head>
+                    <body>
+                        <p>Hola,</p>
+                        <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>
+                        <p>Para restablecer tu contraseña, por favor haz clic en el siguiente enlace:</p>
+                        <p><a href="${resetPasswordUrl}">Restablecer mi contraseña</a></p>
+                        <p>Si no solicitaste el restablecimiento de contraseña, por favor ignora este correo.</p>
+                        <p>Saludos,<br>El equipo de [Tu Aplicación]</p>
+                    </body>
+                    </html>
+                `,
+                alternative: true
+            }
         ]
     };
+
 
     server.send(message, function(err: any, message: any) {
         if (err) {
