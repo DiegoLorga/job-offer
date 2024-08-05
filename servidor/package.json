@@ -8,7 +8,7 @@
     "build": "tsc -w",
     "dev": "nodemon src/build/index.js",
     "correo": "nodemon src/build/app.js",
-    "imagen": "nodemon src/build/imagen.js"
+    "imagen": "nodemon src/build/imagenes.js"
   },
   "keywords": [],
   "author": "",

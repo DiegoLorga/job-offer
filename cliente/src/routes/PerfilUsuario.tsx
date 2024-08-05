@@ -5,16 +5,33 @@ import DefaultLayout from "../layout/DefaultLayout";
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 
-
-export default function Empleados() {
+export default function PerfilUsuarios() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
     const auth = useAuth();
 
     useEffect(() => {
-        M.Sidenav.init(document.querySelectorAll('.sidenav'));
-        M.Tabs.init(document.querySelectorAll('.tabs'));
-        console.log("Pestañas inicializadas");
+        // Verifica que el DOM está completamente cargado
+        const sidenavElems = document.querySelectorAll('.sidenav');
+        const tabsElems = document.querySelectorAll('.tabs');
+
+        // Inicializa los componentes solo si existen
+        if (sidenavElems.length) {
+            M.Sidenav.init(sidenavElems);
+        }
+        if (tabsElems.length) {
+            M.Tabs.init(tabsElems);
+        }
+
+        return () => {
+            // Limpieza para evitar efectos secundarios
+            if (sidenavElems.length) {
+                M.Sidenav.getInstance(sidenavElems[0])?.destroy();
+            }
+            if (tabsElems.length) {
+                M.Tabs.getInstance(tabsElems[0])?.destroy();
+            }
+        };
     }, []);
 
     if (!auth.isAuthenticated) {
@@ -22,16 +39,16 @@ export default function Empleados() {
     }
 
     return (
-
         <DefaultLayout showNav={true}>
-            <div className="container"> <br /><br />
+            <div className="container"> 
+                <br /><br />
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
                 <div className="row">
                     <div className="col s12">
                         <ul className="tabs center">
                             <li className="tab col s6"><a className="active" href="#test1">Para ti</a></li>
-                            <li className="tab col s6"><a  href="#test2">Buscar</a></li>
+                            <li className="tab col s6"><a href="#test2">Buscar</a></li>
                         </ul>
                     </div>
                     <div id="test1" className="col s12">Test 1</div>
@@ -39,6 +56,5 @@ export default function Empleados() {
                 </div>
             </div>
         </DefaultLayout>
-        
     );
 }
