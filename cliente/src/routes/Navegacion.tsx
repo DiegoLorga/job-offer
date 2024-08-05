@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Link, useLocation } from 'react-router-dom';
 import M from 'materialize-css';
+import { API_URL } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
 import '../index.css'; // Importa tus estilos personalizados después
 
@@ -10,8 +11,26 @@ export default function Navigation() {
     const location = useLocation();
 
     async function handleLogout() {
+        try {
+            const response = await fetch(`${ API_URL }/login/logout`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include'
+            });
 
+            if (response.ok) {
+                console.log("El usuario cerró sesión");
+                auth.setIsAuthenticated(false);
+            } else {
+                console.log("Algo va mal");
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+
 
     useEffect(() => {
         const sidenavElems = document.querySelectorAll('.sidenav');
