@@ -10,7 +10,7 @@ export default function Navigation() {
     const location = useLocation();
 
     async function handleLogout() {
-      
+
     }
 
     useEffect(() => {
