@@ -31,7 +31,7 @@ class Server {
         this.app.post('/uploadImagen', async (req: Request, res: Response) => {
             console.log("upload image");
             const file = req.body.src;
-            const name = req.body.tipo;
+            const name = 'peerfilUsuario';
             const id = req.body.id;
             const binaryData = Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""), 'base64').toString('binary');
 
@@ -57,6 +57,39 @@ class Server {
                 res.status(500).json({ message: "Error al procesar la imagen", error: writeError });
             }
         });
+
+        this.app.delete('/deleteImagen/:tipo/:id', async (req: Request, res: Response) => {
+            const { tipo, id } = req.params;
+            const imagePath = `${__dirname}/img/${tipo}/${id}.jpg`;
+        
+            try {
+                // Elimina el archivo de imagen
+                fs.unlink(imagePath, async (err) => {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).json({ message: "Error al eliminar la imagen", error: err });
+                    }
+                    
+                    try {
+                        // Actualiza el perfil del usuario para establecer el campo 'foto' a false
+                        const perfil = await PerfilUsuario.findByIdAndUpdate(id, { foto: false }, { new: true });
+                        if (!perfil) {
+                            return res.status(404).json({ message: "Perfil no encontrado" });
+                        }
+                        
+                        // Responde con un mensaje de éxito y el perfil actualizado
+                        res.json({ message: "Imagen eliminada exitosamente", perfil });
+                    } catch (updateError) {
+                        console.log(updateError);
+                        res.status(500).json({ message: "Error al actualizar el perfil", error: updateError });
+                    }
+                });
+            } catch (deleteError) {
+                console.log(deleteError);
+                res.status(500).json({ message: "Error al procesar la eliminación", error: deleteError });
+            }
+        });
+        
     }
 
     start(): void {

@@ -10,10 +10,10 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import RecuperarContrasena from './routes/RecuperarContrasena';
 import RestablecerContrasena from './routes/RestablecerContrasena'
 import { AuthProvider } from './auth/AuthProvider';
+import PerfilUsuario from './routes/PerfilUsuario';
 import 'materialize-css/dist/css/materialize.min.css';
 //import 'materialize-css/dist/js/materialize.min.js';
 import './index.css'; // Importa tus estilos personalizados después
-
 
 
 const router = createBrowserRouter([
@@ -27,29 +27,35 @@ const router = createBrowserRouter([
   },
   {
     path: "/RecuperarContrasena",
-    element: <RecuperarContrasena/>,
+    element: <RecuperarContrasena />,
   },
   {
     path: "/",
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/Empresa",
+        path: "Empresa",
         element: <Empresa />,
       },
       {
-        path: "/Empleado",
-        element: <Empleado />,
+        path: "Empleado",
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "",
+            element: <Empleado />,
+          },
+          {
+            path: "PerfilUsuario",
+            element: <PerfilUsuario />,
+          },
+        ],
       },
       {
-        path: "/Administrador",
+        path: "Administrador",
         element: <Administrador />,
       },
-      {
-        path: "/RestablecerContrasena",
-        element: <RestablecerContrasena/>,
-      },
-    ]
+    ],
   },
 ]);
 

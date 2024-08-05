@@ -28,8 +28,7 @@ class Server {
         this.app.use(morgan('dev')); //que ejecutamos y que tiempo
         this .app.use(cors({origin:  " http://localhost:5173" , credentials:  true })); 
         this.app.use(express.json()); //permite que utilicemos json
-        this.app.use(express.urlencoded({ extended: false })); //decodifca las url
-        this.app.use(express.static(path.join(__dirname, 'img/perfilUsuario')));
+        this.app.use(express.urlencoded({ extended: false })); //decodifca las ur
     }
     routes(): void {
         this.app.use('/api/usuario', usuarioRoutes);
@@ -39,8 +38,7 @@ class Server {
         this.app.use('/api/login', loginRoutes);
         this.app.use('/api/rol',rolRoutes);
         this.app.use('/api/perfilEmpresa',PerfilEmpresaRoutes);
-        this.app.use('/api/OfertaLaboral',ofertaLaboralRoutes)
-
+        this.app.use('/api/OfertaLaboral',ofertaLaboralRoutes);
     }
     start(): void {
         this.app.listen(this.app.get('port'), () => {
