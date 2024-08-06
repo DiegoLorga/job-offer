@@ -12,7 +12,7 @@ export default function Navigation() {
 
     async function handleLogout() {
         try {
-            const response = await fetch(`${ API_URL }/login/logout`, {
+            const response = await fetch(`${API_URL}/login/logout`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -31,7 +31,6 @@ export default function Navigation() {
         }
     }
 
-
     useEffect(() => {
         const sidenavElems = document.querySelectorAll('.sidenav');
         const tabsElems = document.querySelectorAll('.tabs');
@@ -47,8 +46,6 @@ export default function Navigation() {
             M.Dropdown.getInstance(dropdownElems[0])?.destroy();
         };
     }, []);
-
-    const isPerfilUsuario = location.pathname.includes('/Empleado/PerfilUsuario');
 
     return (
         <>
@@ -87,16 +84,10 @@ export default function Navigation() {
                         </li>
                     </ul>
                 </div>
-                <div className="nav-content">
-                    <ul id="tabs-swipe-demo" className="tabs">
-                        <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'perfil' : 'Empleos'}</Link></li>
-                        <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'información' : 'Empresas'}</Link></li>
-                    </ul>
-                </div>
             </nav>
 
             <ul className="sidenav" id="mobile-demo">
-                <li><Link to="/Empleado">{isPerfilUsuario ? 'Mi cuenta' : 'Empleos'}</Link></li>
+                <li><Link to="/Empleado">Empleos</Link></li>
                 <li><Link to="http://localhost:5173/Administrador">Administrador</Link></li>
             </ul>
         </>

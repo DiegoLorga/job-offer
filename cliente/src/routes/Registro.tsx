@@ -4,17 +4,20 @@ import { useAuth } from "../auth/AuthProvider";
 import { API_URL } from "../auth/apis";
 import { AuthReponseRegister, AuthResponseError } from "../types/types";
 
+
 interface Estado {
     _id: string;
     nombre: string;
     clave: string;
 }
 
+
 interface Ciudad {
     _id: string;
     nombre: string;
     clave: string;
 }
+
 
 export default function Registro() {
     const [nombre, setNombre] = useState("");
@@ -34,6 +37,7 @@ export default function Registro() {
     const auth = useAuth();
     const goTo = useNavigate();
 
+
     // Obtener la lista de estados al cargar el componente
     useEffect(() => {
         async function fetchEstados() {
@@ -46,6 +50,7 @@ export default function Registro() {
                         setSelectedEstado(data[0].clave);
                     }
 
+
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -54,8 +59,10 @@ export default function Registro() {
             }
         }
 
+
         fetchEstados();
     }, []);
+
 
     // Cargar ciudades al cambiar el estado seleccionado
     useEffect(() => {
@@ -76,13 +83,16 @@ export default function Registro() {
             }
         }
 
+
         if (selectedEstado) {
             fetchCiudades();
         }
     }, [selectedEstado]);
 
+
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
 
         try {
             const response = await fetch(`${API_URL}/usuario`, {
@@ -100,6 +110,7 @@ export default function Registro() {
                     estado: selectedEstado
                 })
             });
+
 
             if (response.ok) {
                 const json = await response.json() as AuthReponseRegister;
@@ -125,9 +136,11 @@ export default function Registro() {
         }
     }
 
+
     if (auth.isAuthenticated) {
         return <Navigate to="/Empresa" />;
     }
+
 
     return (
         <div className="container">
@@ -136,6 +149,7 @@ export default function Registro() {
                     <h1>Registro</h1>
                     {!!errorCampos && <div className="card-panel red lighten-2 white-text">{errorCampos}</div>}
                     {!!sucessMessage && <div className="card-panel green lighten-2 white-text">{sucessMessage}</div>}
+
 
                     <div className="row">
                         <div className="input-field col s12">
@@ -151,6 +165,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+
                     <div className="row">
                         <div className="input-field col s12">
                             <input
@@ -164,6 +179,7 @@ export default function Registro() {
                             {!!errorCorreo && <span className="helper-text red-text">{errorCorreo}</span>}
                         </div>
                     </div>
+
 
                     <div className="row">
                         <div className="input-field col s12">
@@ -179,6 +195,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+
                     <div className="row">
                         <div className="input-field col s12">
                             <input
@@ -193,6 +210,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+
                     <div className="row">
                         <div className="input-field col s12">
                             <input
@@ -205,6 +223,7 @@ export default function Registro() {
                             <label htmlFor="direccion">Dirección</label>
                         </div>
                     </div>
+
 
                     <div className="row">
                         <label>Estado</label>
@@ -221,6 +240,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+
                     <div className="row">
                     <label>Ciudad</label>
                         <div className="input-field col s12">
@@ -236,6 +256,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+
                     <div className="row">
                         <button className="custom-btn" type="submit">
                             Registrarse
@@ -246,3 +267,4 @@ export default function Registro() {
         </div>
     );
 }
+

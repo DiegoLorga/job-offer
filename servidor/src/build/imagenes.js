@@ -19,6 +19,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const database_1 = require("./database");
 const perfilUsuario_model_1 = __importDefault(require("./models/perfilUsuario.model"));
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 class Server {
     constructor() {
         (0, database_1.connectDB)();
@@ -26,7 +27,7 @@ class Server {
         this.app = (0, express_1.default)();
         this.config();
         this.routes();
-        this.app.use(express_1.default.static(__dirname + "/img/perfilUsuario"));
+        this.app.use('/img', express_1.default.static(path_1.default.join(__dirname, 'img')));
     }
     config() {
         this.app.use(express_1.default.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));

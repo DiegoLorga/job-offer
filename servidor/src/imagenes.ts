@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import { connectDB } from './database';
 import PerfilUsuario from './models/perfilUsuario.model';
 import fs from 'fs';
+import path from 'path';
 
 class Server {
     public app: Application;
@@ -15,7 +16,7 @@ class Server {
         this.app = express();
         this.config();
         this.routes();
-        this.app.use(express.static(__dirname + "/img/perfilUsuario"));
+        this.app.use('/img', express.static(path.join(__dirname, 'img')));
     }
 
     config(): void {
