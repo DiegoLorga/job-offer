@@ -8,6 +8,8 @@ import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
 import jwt from 'jsonwebtoken';
+import Empresa from '../models/empresa.model';
+import Administrador from '../models/administrador.model';
 
 class UsuarioController {
 
@@ -211,22 +213,48 @@ class UsuarioController {
 
     public async restablecerContrasena(req: Request, res: Response): Promise<void> {
         const { token, password } = req.body;
-
+    
         if (!token || !password) {
             res.status(400).json({ message: 'Token y contraseña son requeridos.' });
             return;
         }
-
+    
         try {
+            // Verifica el token y obtiene el correo
             const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET || 'prueba');
             const email = decoded.email;
-
+    
+            // Encuentra el usuario en las tres colecciones posibles
+            let user: any = await Usuario.findOne({ correo: email });
+            if (!user) {
+                user = await Empresa.findOne({ correo: email });
+            }
+            if (!user) {
+                user = await Administrador.findOne({ correo: email });
+            }
+    
+            // Si no se encontró el usuario en ninguna colección
+            if (!user) {
+                res.status(404).json({ message: 'Usuario no encontrado.' });
+                return;
+            }
+    
+            // Hashea la nueva contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
-            await Usuario.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
-
+    
+            // Actualiza la contraseña en la colección correspondiente
+            if (user instanceof Usuario) {
+                await Usuario.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+            } else if (user instanceof Empresa) {
+                await Empresa.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+            } else if (user instanceof Administrador) {
+                await Administrador.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+            }
+    
             res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
         } catch (error) {
-            res.status(400).json({ message: 'Error al actualizar la contraseña' });
+            console.error(error); // Imprime el error para depuración
+            res.status(400).json({ message: 'Error al actualizar la contraseña.' });
         }
     }
 }
