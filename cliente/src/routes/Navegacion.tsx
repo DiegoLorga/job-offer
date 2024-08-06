@@ -12,7 +12,7 @@ export default function Navigation() {
 
     async function handleLogout() {
         try {
-            const response = await fetch(`${ API_URL }/login/logout`, {
+            const response = await fetch(`${API_URL}/login/logout`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,7 +30,6 @@ export default function Navigation() {
             console.log(error);
         }
     }
-
 
     useEffect(() => {
         const sidenavElems = document.querySelectorAll('.sidenav');
@@ -74,7 +73,7 @@ export default function Navigation() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#!">Postulaciones
+                                    <Link to="/Empresa">Postulaciones
                                         <i className="tiny material-icons">content_paste</i>
                                     </Link>
                                 </li>
@@ -90,14 +89,15 @@ export default function Navigation() {
                 <div className="nav-content">
                     <ul id="tabs-swipe-demo" className="tabs">
                         <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'perfil' : 'Empleos'}</Link></li>
-                        <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'información' : 'Empresas'}</Link></li>
+                        <li className="tab col s3"><Link to="/Empresa">{isPerfilUsuario ? 'información' : 'Empresas'}</Link></li>
                     </ul>
                 </div>
             </nav>
 
             <ul className="sidenav" id="mobile-demo">
                 <li><Link to="/Empleado">{isPerfilUsuario ? 'Mi cuenta' : 'Empleos'}</Link></li>
-                <li><Link to="http://localhost:5173/Administrador">Administrador</Link></li>
+                <li><Link to="/Empresa">Empresa</Link></li>
+                <li><Link to="/Administrador">Administrador</Link></li>
             </ul>
         </>
     );

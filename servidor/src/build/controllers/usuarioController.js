@@ -172,6 +172,10 @@ class UsuarioController {
                 }
                 const usuario = yield usuario_model_1.default.findByIdAndDelete(req.params.id);
                 res.json(usuario);
+                console.log("Usuario eliminado correctamente");
+                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
+                    message: "Uusuario eliminado correctamente"
+                }));
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {

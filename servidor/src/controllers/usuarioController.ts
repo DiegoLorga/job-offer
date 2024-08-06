@@ -7,7 +7,7 @@ import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
-import jwt  from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 class UsuarioController {
 
@@ -171,6 +171,12 @@ class UsuarioController {
 
             const usuario = await Usuario.findByIdAndDelete(req.params.id)
             res.json(usuario)
+
+
+            console.log("Usuario eliminado correctamente");
+            res.status(200).json(jsonResponse(200, {
+                message: "Uusuario eliminado correctamente"
+            }));
         }
         catch (error) {
             res.status(500).json(jsonResponse(400, {
