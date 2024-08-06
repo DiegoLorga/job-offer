@@ -3,6 +3,7 @@ import { jsonResponse } from '../lib/jsonResponse';
 import Administrador from '../models/administrador.model';
 import Rol from '../models/rol.model';
 import bcrypt from 'bcryptjs';
+import { createAccesToken } from '../libs/jwt';
 
 
 class adminController {
@@ -34,6 +35,11 @@ class adminController {
                 id_rol: tipoRol
             })
             const AdministradorGuardado = await nuevoAdministrador.save();
+
+            const token = await createAccesToken({ id: AdministradorGuardado._id });
+            res.cookie('token', token)
+
+            console.log(res.cookie);
 
             res.json({
                 nombre: AdministradorGuardado.nombre,

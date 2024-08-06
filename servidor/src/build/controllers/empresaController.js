@@ -66,6 +66,8 @@ class EmpresaController {
                 });
                 const PerfilGuardado = yield nuevoPerfilEmpresa.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: EmpresaGuardado._id });
+                res.cookie('token', token);
+                console.log(res.cookie);
                 const nuevaFotoPerfil = new fotosPerfilEmpresa_model_1.default({
                     id_fotoEm: PerfilGuardado._id
                 });

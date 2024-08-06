@@ -17,6 +17,7 @@ const jsonResponse_1 = require("../lib/jsonResponse");
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 const rol_model_1 = __importDefault(require("../models/rol.model"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const jwt_1 = require("../libs/jwt");
 class adminController {
     constructor() {
     }
@@ -41,6 +42,9 @@ class adminController {
                     id_rol: tipoRol
                 });
                 const AdministradorGuardado = yield nuevoAdministrador.save();
+                const token = yield (0, jwt_1.createAccesToken)({ id: AdministradorGuardado._id });
+                res.cookie('token', token);
+                console.log(res.cookie);
                 res.json({
                     nombre: AdministradorGuardado.nombre,
                     correo: AdministradorGuardado.correo,
