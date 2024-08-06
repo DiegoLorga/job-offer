@@ -3,7 +3,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../auth/apis";
-import { AuthResponseError, AuthReponseRegister,User } from '../types/types';
+import { AuthResponseError, AuthReponseRegister } from '../types/types';
 //import 'materialize-css/dist/css/materialize.min.css';
 import '../index.css'
 
