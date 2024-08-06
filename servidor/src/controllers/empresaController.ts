@@ -64,6 +64,9 @@ class EmpresaController {
             const PerfilGuardado = await nuevoPerfilEmpresa.save();
 
             const token = await createAccesToken({ id: EmpresaGuardado._id });
+            res.cookie('token', token)
+
+            console.log(res.cookie);
 
             const nuevaFotoPerfil = new FotosPerfilEmpresa({
                 id_fotoEm : PerfilGuardado._id

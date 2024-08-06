@@ -112,6 +112,10 @@ class ofertaLaboralController {
                 if (!oferta) {
                     console.log("Perfil no encontrado o ya eliminado");
                 }
+                console.log("Oferta eliminada correctamente");
+                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
+                    message: "Oferta eliminada correctamente"
+                }));
             }
             catch (error) {
                 console.error(error); // Log the specific error for debugging

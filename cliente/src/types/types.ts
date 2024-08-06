@@ -26,11 +26,21 @@ export interface User {
         direccion: string;
         ciudad: string;
         estado: string;
+        id_rol: string;
     }
 }
 export interface AuthReponseRegister {
     body: {
         message: string;
+        usuario: {
+            _id: string;
+            nombre: string;
+            correo: string;
+            direccion: string;
+            ciudad: string;
+            estado: string;
+            id_rol: string;
+        };
     }
     token: string; // Aquí se define la propiedad token
 }

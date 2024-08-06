@@ -34,10 +34,17 @@ export default function Login() {
                 console.log("El usuario ingresó");
                 const json = await response.json() as AuthReponseRegister;
                 console.log(json);
+                console.log("El id_rol",json.body.usuario.id_rol);
                 setSuccessMessage(json.body.message);
                 setErrorResponse("");
                 auth.setIsAuthenticated(true); // Establecer el estado de autenticación aquí
-                navigate("/Empleado");
+                if(json.body.usuario.id_rol === "6690640c24eacbffd867f333"){
+                    navigate("/Empleado");
+                }else if(json.body.usuario.id_rol === "6690637124eacbffd867f32f"){
+                    navigate("/Empresa");
+                }else{
+                    navigate("/Administrador");
+                }
             } else {
                 console.log("Algo va mal");
                 const json = await response.json() as AuthResponseError;

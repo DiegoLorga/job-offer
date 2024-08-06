@@ -1,18 +1,18 @@
 import { Router } from 'express';
-
+import { AdminController } from '../controllers/adminController';
 class AdministradorRoutes {
     public router: Router = Router();
     constructor() {
         this.config();
     }
     config(): void {
-        this.router.get("/",(req,res)=>{
-            res.send("Administrador")
-        });
-        /*this.router.get('/obtenerUsuario/:id',empresaController.listOne);
-        this.router.post('/', empresaController.createUsuario);
-        this.router.delete('/:id',empresaController.borrarUsuario);
-        this.router.put('/:id',empresaController.actualizarUsuario);*/
+        this.router.post("/", AdminController.createAdministrador)
+        this.router.get("/listaAdmins", AdminController.listAdmins);
+        this.router.delete("/eliminarAdmin/:id_admin", AdminController.eliminarAdmin);
+        this.router.get("/listAdmin/:id_admin", AdminController.listOne);
+        this.router.put("/actualizarAdmin/:id_admin", AdminController.actualizarAdministrador);
+
+
     }
 }
 const administradorRoutes = new AdministradorRoutes();

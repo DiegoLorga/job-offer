@@ -22,6 +22,8 @@ const jsonResponse_1 = require("../lib/jsonResponse");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = require("../libs/jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const empresa_model_1 = __importDefault(require("../models/empresa.model"));
+const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -172,6 +174,10 @@ class UsuarioController {
                 }
                 const usuario = yield usuario_model_1.default.findByIdAndDelete(req.params.id);
                 res.json(usuario);
+                console.log("Usuario eliminado correctamente");
+                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
+                    message: "Uusuario eliminado correctamente"
+                }));
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
@@ -216,14 +222,39 @@ class UsuarioController {
                 return;
             }
             try {
+                // Verifica el token y obtiene el correo
                 const decoded = jsonwebtoken_1.default.verify(token, process.env.TOKEN_SECRET || 'prueba');
                 const email = decoded.email;
+                // Encuentra el usuario en las tres colecciones posibles
+                let user = yield usuario_model_1.default.findOne({ correo: email });
+                if (!user) {
+                    user = yield empresa_model_1.default.findOne({ correo: email });
+                }
+                if (!user) {
+                    user = yield administrador_model_1.default.findOne({ correo: email });
+                }
+                // Si no se encontró el usuario en ninguna colección
+                if (!user) {
+                    res.status(404).json({ message: 'Usuario no encontrado.' });
+                    return;
+                }
+                // Hashea la nueva contraseña
                 const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-                yield usuario_model_1.default.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+                // Actualiza la contraseña en la colección correspondiente
+                if (user instanceof usuario_model_1.default) {
+                    yield usuario_model_1.default.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+                }
+                else if (user instanceof empresa_model_1.default) {
+                    yield empresa_model_1.default.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+                }
+                else if (user instanceof administrador_model_1.default) {
+                    yield administrador_model_1.default.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
+                }
                 res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
             }
             catch (error) {
-                res.status(400).json({ message: 'Error al actualizar la contraseña' });
+                console.error(error); // Imprime el error para depuración
+                res.status(400).json({ message: 'Error al actualizar la contraseña.' });
             }
         });
     }

@@ -71,7 +71,7 @@ export default function Navigation() {
                                     </Link>
                                 </li>
                                 <li>
-                                    <Link to="#!">Postulaciones
+                                    <Link to="/Empresa">Postulaciones
                                         <i className="tiny material-icons">content_paste</i>
                                     </Link>
                                 </li>
