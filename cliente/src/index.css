@@ -323,3 +323,12 @@ input[readonly] {
   transform: translateY(-5px); /* Movimiento hacia arriba */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el mouse */
 }
+
+.card-image {
+  overflow: hidden; /* Asegura que la imagen no se desborde fuera del contenedor */
+}
+.card-image img {
+  width: 100%; /* La imagen ocupará todo el ancho del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  object-fit: cover; /* Ajusta la imagen para cubrir el área del contenedor sin distorsionar */
+}
