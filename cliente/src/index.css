@@ -313,3 +313,13 @@ input[readonly] {
 .overlay i {
   margin-right: 10px; /* Espacio entre el ícono y el texto */
 }
+
+.card {
+  transition: transform 2s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Sombra por defecto */
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Movimiento hacia arriba */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el mouse */
+}

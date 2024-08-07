@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Navigate, Link, useLocation } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from "../auth/AuthProvider";
 import DefaultLayout from "../layout/DefaultLayout";
 import M from 'materialize-css';
@@ -32,7 +32,6 @@ export default function PerfilUsuarios() {
     const [estados, setEstados] = useState<Estado[]>([]);
     const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const auth = useAuth();
-    const location = useLocation();
 
     useEffect(() => {
         async function fetchEstados() {
@@ -88,12 +87,17 @@ export default function PerfilUsuarios() {
         return <Navigate to="/" />;
     }
 
-    const isPerfilUsuario = location.pathname.includes('/Empleado/PerfilUsuario');
-
     return (
         <DefaultLayout showNav={true}>
-            <div className="container">
+            <div className="nav-content">
+                <ul id="tabs-swipe-demo" className="tabs">
+                <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
+                <li className="tab col s6"><a href="#info">Información</a></li>
+                </ul>
+            </div>
+            <div id="perfil" className="container" >
                 <br /><br />
+
                 <div className="profile-container">
                     <div className="profile-picture-container">
                         <img
@@ -136,16 +140,37 @@ export default function PerfilUsuarios() {
                         <input type="text" id="ciudad" name="ciudad" value="ciudad Ejemplo" readOnly />
                     </div>
 
-                    <div className="input-field1">
+                    <div className="button-container1">
                         <button type="button" className="btn">Actualizar</button>
                     </div>
                 </form>
+            </div>
 
-                <div className="nav-content">
-                    <ul id="tabs-swipe-demo" className="tabs">
-                        <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'perfil' : 'Empleos'}</Link></li>
-                        <li className="tab col s3"><Link to="/Empleado">{isPerfilUsuario ? 'información' : 'Empresas'}</Link></li>
-                    </ul>
+            <div id="info" className="container">
+                <h2>Información Adicional</h2>
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Experiencia</span>
+                        <p>Aquí va la información sobre experiencia.</p>
+                    </div>
+                </div>
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Especialidad</span>
+                        <p>Aquí va la información sobre especialidad.</p>
+                    </div>
+                </div>
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Habilidades</span>
+                        <p>Aquí va la información sobre habilidades.</p>
+                    </div>
+                </div>
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Educación</span>
+                        <p>Aquí va la información sobre educación.</p>
+                    </div>
                 </div>
             </div>
         </DefaultLayout>

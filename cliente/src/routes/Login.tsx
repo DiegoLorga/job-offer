@@ -80,7 +80,7 @@ export default function Login() {
         <div className="container">
             <div className="form">
                 <form className="col s12" onSubmit={handleSubmit}>
-                    <h1>Login</h1>
+                    <h1>Iniciar sesión</h1>
                     {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                     {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
 
