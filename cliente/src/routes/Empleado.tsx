@@ -11,6 +11,7 @@ export default function Empleados() {
     const auth = useAuth();
     const location = useLocation();
 
+    
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
@@ -21,7 +22,6 @@ export default function Empleados() {
         return <Navigate to="/" />;
     }
 
-    const isPerfilUsuario = location.pathname.includes('/Empleado/PerfilUsuario');
 
     return (
         <DefaultLayout showNav={true}>
