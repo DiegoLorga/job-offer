@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../auth/AuthProvider";
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import M from 'materialize-css';
 import { API_URL } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
@@ -9,6 +9,7 @@ import '../index.css'; // Importa tus estilos personalizados después
 export default function Navigation() {
     const auth = useAuth();
     const location = useLocation();
+    const navigate = useNavigate();
 
     async function handleLogout() {
         try {
@@ -23,6 +24,8 @@ export default function Navigation() {
             if (response.ok) {
                 console.log("El usuario cerró sesión");
                 auth.setIsAuthenticated(false);
+                localStorage.removeItem('usuario'); // Eliminar información del usuario de localStorage
+                navigate("/"); // Navegar a la página de login u otra página adecuada
             } else {
                 console.log("Algo va mal");
             }

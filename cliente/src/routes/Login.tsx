@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../auth/apis";
 import { AuthResponseError, AuthReponseRegister } from '../types/types';
-//import 'materialize-css/dist/css/materialize.min.css';
 import '../index.css'
 
 export default function Login() {
@@ -14,6 +13,26 @@ export default function Login() {
     const [successMessage, setSuccessMessage] = useState("");
     const auth = useAuth();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Verificar si hay datos de usuario almacenados en localStorage
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            auth.setIsAuthenticated(true);
+            navigateBasedOnRole(usuario.id_rol);
+        }
+    }, []);
+
+    const navigateBasedOnRole = (id_rol: string) => {
+        if (id_rol === "6690640c24eacbffd867f333") {
+            navigate("/Empleado");
+        } else if (id_rol === "6690637124eacbffd867f32f") {
+            navigate("/Empresa");
+        } else {
+            navigate("/Administrador");
+        }
+    };
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
@@ -34,17 +53,15 @@ export default function Login() {
                 console.log("El usuario ingresó");
                 const json = await response.json() as AuthReponseRegister;
                 console.log(json);
-                console.log("El id_rol",json.body.usuario.id_rol);
+                console.log("El id_rol", json.body.usuario.id_rol);
                 setSuccessMessage(json.body.message);
                 setErrorResponse("");
                 auth.setIsAuthenticated(true); // Establecer el estado de autenticación aquí
-                if(json.body.usuario.id_rol === "6690640c24eacbffd867f333"){
-                    navigate("/Empleado");
-                }else if(json.body.usuario.id_rol === "6690637124eacbffd867f32f"){
-                    navigate("/Empresa");
-                }else{
-                    navigate("/Administrador");
-                }
+
+                // Almacenar la información del usuario en localStorage
+                localStorage.setItem('usuario', JSON.stringify(json.body.usuario));
+
+                navigateBasedOnRole(json.body.usuario.id_rol);
             } else {
                 console.log("Algo va mal");
                 const json = await response.json() as AuthResponseError;
@@ -66,7 +83,7 @@ export default function Login() {
                     <h1>Login</h1>
                     {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                     {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
-                    
+
                     <div className="row">
                         <div className="input-field col s12">
                             <input
