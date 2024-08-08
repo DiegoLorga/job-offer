@@ -7,7 +7,7 @@ class EmpresaRoutes {
     }
     config(): void {
         this.router.get('/obtenerEmpresa/:id',empresaController.listOne);
-        this.router.get('/', empresaController.list)
+        this.router.get('/listarEmpresa', empresaController.list)
         this.router.post('/', empresaController.createEmpresa);
         this.router.delete('/:id',empresaController.borrarEmpresa);
         this.router.put('/:id',empresaController.actualizarEmpresa);

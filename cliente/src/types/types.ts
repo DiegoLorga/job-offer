@@ -56,3 +56,16 @@ export interface ProfileError {
     };
 }
 
+// src/types.ts
+
+export interface Empresa {
+    id: string;
+    nombre: string;
+    //correo:string;
+    direccion: string;
+    //ciudad: string;
+    //estado: string;
+    giro: string;
+    foto: string;
+  }
+  
