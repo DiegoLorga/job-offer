@@ -59,7 +59,7 @@ export interface ProfileError {
 // src/types.ts
 
 export interface Empresa {
-    id: string;
+    _id: string;
     nombre: string;
     //correo:string;
     direccion: string;
@@ -67,5 +67,33 @@ export interface Empresa {
     //estado: string;
     giro: string;
     foto: string;
-  }
-  
+}
+
+export interface Oferta1{
+    _id: string;
+    titulo: string;
+    puesto: string;
+    direccion: string;
+    sueldo: number;
+}
+
+export interface OfertaCompleta{
+    id_empresa: string;
+    titulo:string;
+    puesto: string;
+    sueldo: number;
+    horario: string;
+    modalidad:string;
+    direccion:string;
+    ciudad: string;
+    estado:string;
+    status:number;
+    descripcion: string;
+    requisitos:string;
+    telefono:number;
+    correo: string;
+    educacion:string;
+    idioma:string;
+    experienciaLaboral:string;
+    categoria: string
+}

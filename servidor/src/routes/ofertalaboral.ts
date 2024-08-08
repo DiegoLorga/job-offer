@@ -8,7 +8,7 @@ class OfertaLaboralRoutes {
     }
     config(): void {
         this.router.get('/obtenerOfertas/:id',OfertaLaboralController.listOne);
-        this.router.get('/', OfertaLaboralController.listOfertas)
+        this.router.get('/listarOfertas', OfertaLaboralController.listOfertas)
         this.router.post('/', OfertaLaboralController.createOfertaLaboral);
         this.router.put('/:id',OfertaLaboralController.actualizarOfertaLaboral);
         this.router.post('/crearCategoria',OfertaLaboralController.createCategoria)
