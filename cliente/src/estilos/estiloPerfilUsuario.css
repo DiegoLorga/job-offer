@@ -1,0 +1,18 @@
+
+/* Custom modal styles */
+.modal-contentperfil {
+    max-width: 600px; /* Establece el ancho del contenido del modal */
+    margin: 0 auto; /* Centra el contenido del modal */
+    padding: 20px;
+  }
+  
+  .input-fieldperfil input {
+    max-width: 1000px; /* Limita el ancho de los campos de entrada */
+    width: 100%; /* Asegura que respondan al diseño responsive */
+    margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+  }
+  
+  .custom-modal {
+    width: 10% !important; /* Ajusta el valor según lo necesites */
+    max-width: 200px; /* Limita el ancho máximo del modal */
+  }

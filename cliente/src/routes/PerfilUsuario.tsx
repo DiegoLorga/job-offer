@@ -1,11 +1,14 @@
-import { useState, useEffect } from "react";
-import { Navigate, Link } from 'react-router-dom';
+import { useState, useEffect, useRef } from "react";
+import { Navigate } from 'react-router-dom';
 import { useAuth } from "../auth/AuthProvider";
 import DefaultLayout from "../layout/DefaultLayout";
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import '../index.css'; // Asegúrate de tener los estilos personalizados aquí
 import { API_URL, API_URI_IMAGENES } from "../auth/apis";
+import Swal from 'sweetalert2';
+import '../estilos/estiloPerfilUsuario.css';
+
 
 interface Estado {
     _id: string;
@@ -19,20 +22,48 @@ interface Ciudad {
     clave: string;
 }
 
+interface Usuario {
+    _id: string;
+    nombre: string;
+    correo: string;
+    direccion: string;
+    estado: string;
+    ciudad: string;
+}
+
+interface perfilUsuario {
+    _id: string;
+    cv: false,
+    experiencia: string,
+    especialidad: string,
+    habilidades: string,
+    educacion: string,
+    idiomas: string,
+    certificaciones: false,
+    repositorio: string,
+    status: false,
+    foto: false
+}
+
 export default function PerfilUsuarios() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
-    const [nombre, setNombre] = useState("Gizelle de Lorga");
-    const [correo, setCorreo] = useState("");
-    const [direccion, setDireccion] = useState("");
+    const [nombre, setNombre] = useState<string>("");
+    const [correo, setCorreo] = useState<string>("");
+    const [direccion, setDireccion] = useState<string>("");
     const [estadoSeleccionado, setEstadoSeleccionado] = useState<string>("");
     const [ciudadSeleccionada, setCiudadSeleccionada] = useState<string>("");
-    const [contrasena, setContrasena] = useState("");
-    const [verificarContrasena, setVerificarContrasena] = useState("");
+    const [ciudad, setCiudad] = useState<string>("");
+    const [estado, setEstado] = useState<string>("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null); // Para manejar la imagen
+    const [previewImage, setPreviewImage] = useState<string | null>(null); // Asegurarse de que solo sea string o null
+    const fileInputRef = useRef<HTMLInputElement>(null); // Referencia al input de archivo
+    const [foto, setFoto] = useState<boolean>(false);
     const auth = useAuth();
 
+    //para obtener estados
     useEffect(() => {
         async function fetchEstados() {
             try {
@@ -54,6 +85,7 @@ export default function PerfilUsuarios() {
         fetchEstados();
     }, []);
 
+    //para obtener ciudades
     useEffect(() => {
         async function fetchCiudades() {
             try {
@@ -77,31 +109,166 @@ export default function PerfilUsuarios() {
         }
     }, [estadoSeleccionado]);
 
+    //para consultas
     useEffect(() => {
+        M.Modal.init(document.querySelectorAll('.modal'));
+
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
-        console.log("Pestañas inicializadas");
-    }, []);
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            auth.setIsAuthenticated(true);
+
+            async function fetchUsuario() {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getUsuario/${usuario.id}`);
+                    if (response.ok) {
+                        const data = await response.json() as Usuario;
+                        setNombre(data.nombre);
+                        setCorreo(data.correo);
+                        setDireccion(data.direccion);
+                        setEstado(data.estado);
+                        setCiudad(data.ciudad);
+                        //console.log("Datos del usuario en perfil ", data);
+                    } else {
+                    }
+                } catch (error) {
+                    console.error('Error al obtener el usuario:', error);
+                }
+            }
+
+            async function fetchPerfilUsuario() {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
+                    if (response.ok) {
+                        const data = await response.json() as perfilUsuario;
+                        setFoto(data.foto);
+                        console.log("Datos del usuario en perfil ", data);
+                    } else {
+                    }
+                } catch (error) {
+                    console.error('Error al obtener el perfil del usuario:', error);
+                }
+            }
+            fetchUsuario();
+            fetchPerfilUsuario();
+        }
+
+    }, [auth]);
+
+
+    //para obtener imágenes 
+    const storedUser = localStorage.getItem('usuario');
+    let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
+    if (storedUser) {
+        const usuario = JSON.parse(storedUser);
+        auth.setIsAuthenticated(true);
+        console.log(foto);
+        imageSrc = previewImage
+            ? previewImage
+            : foto
+                ? `${API_URI_IMAGENES}/img/perfilUsuario/${usuario.id}.jpg`
+                : `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
+    }
+
+
+
+    //para cargar la imagen 
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    //para cargar la imagen
+    const handleUploadImage = async () => {
+        if (!selectedFile) {
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = async () => {
+            const base64Image = reader.result?.toString();
+            const storedUser = localStorage.getItem('usuario');
+            if (storedUser) {
+                const usuario = JSON.parse(storedUser);
+                const userId = usuario.id;
+
+                try {
+                    const response = await fetch(`${API_URI_IMAGENES}/uploadImagen`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            src: base64Image,
+                            id: userId
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        Swal.fire({
+                            title: "¡Éxito!",
+                            text: "Imagen actualizada exitosamente.",
+                            icon: "success"
+                        });
+                        console.log(data);
+                    } else {
+                        const errorData = await response.json();
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            text: 'Error al caragar la imagen'
+                        })
+
+                    }
+                } catch (error) {
+                    console.error('Error al cargar la imagen:', error);
+                    setErrorResponse("Error al cargar la imagen");
+                }
+            }
+        };
+
+        reader.readAsDataURL(selectedFile);
+    };
+
+    const handleImageClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click(); // Activa el input de archivo
+        }
+    };
 
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
 
+
     return (
         <DefaultLayout showNav={true}>
+
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs">
-                <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
-                <li className="tab col s6"><a href="#info">Información</a></li>
+                    <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
+                    <li className="tab col s6"><a href="#info">Información</a></li>
                 </ul>
             </div>
-            <div id="perfil" className="container" >
+
+            {/* para perfil  */}
+            <div id="perfil" className="container2">
                 <br /><br />
 
                 <div className="profile-container">
-                    <div className="profile-picture-container">
+                    <div className="profile-picture-container" onClick={handleImageClick}>
                         <img
-                            src={`${API_URI_IMAGENES}/img/auxiliares/perfil.png`} // Reemplaza esto con la URL de la imagen del perfil
+                            src={imageSrc} // Convertir a string
                             alt="Foto de perfil"
                             className="profile-picture"
                         />
@@ -110,9 +277,28 @@ export default function PerfilUsuarios() {
                             <span>Cambiar foto</span>
                         </div>
                     </div>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange}
+                    />
                 </div>
+
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
+
+                <div className="button-containerSave">
+                    <button
+                        type="button"
+                        className="btn"
+                        onClick={handleUploadImage}
+                        disabled={!previewImage} // Desactiva si no hay imagen precargada ni seleccionada
+                    >
+                        Guardar
+                    </button>
+                </div>
+
 
                 <div className="nombre-contenedor">
                     <h1 className="nombre-titulo">{nombre}</h1>
@@ -121,43 +307,78 @@ export default function PerfilUsuarios() {
                 <form className="form-horizontal">
                     <label htmlFor="correo">Correo</label>
                     <div className="input-field1">
-                        <input type="email" id="correo" name="correo" value="ejemplo@dominio.com" readOnly />
-                    </div>
-                    <label htmlFor="contraseña">Contraseña</label>
-                    <div className="input-field1">
-                        <input type="password" id="contraseña" name="contraseña" value="********" readOnly />
+                        <input type="email" id="correo" name="correo" value={correo} readOnly />
                     </div>
                     <label htmlFor="direccion">Dirección</label>
                     <div className="input-field1">
-                        <input type="text" id="direccion" name="direccion" value="Dirección Ejemplo" readOnly />
+                        <input type="text" id="direccion" name="direccion" value={direccion} readOnly />
                     </div>
                     <label htmlFor="estado">Estado</label>
                     <div className="input-field1">
-                        <input type="text" id="estado" name="estado" value="estado Ejemplo" readOnly />
+                        <input type="text" id="estado" name="estado" value={estado} readOnly />
                     </div>
                     <label htmlFor="ciudad">Ciudad</label>
                     <div className="input-field1">
-                        <input type="text" id="ciudad" name="ciudad" value="ciudad Ejemplo" readOnly />
+                        <input type="text" id="ciudad" name="ciudad" value={ciudad} readOnly />
                     </div>
 
                     <div className="button-container1">
-                        <button type="button" className="btn">Actualizar</button>
+                        <a className="waves-effect waves-light btn modal-trigger" href="#modal1">Actualizar</a>
                     </div>
+
                 </form>
+
+                {/* Modal Structure */}
+<div id="modal1" className="modal">
+    <div className="modal-contentperfil">
+        <h4>Actualizar Información</h4>
+        <form className="col s12">
+            <div className="row">
+                <div className="input-fieldperfil col s12">
+                    <input id="nombre" type="text" className="validate" />
+                    <label htmlFor="nombre">Nombre</label>
+                </div>
+            </div>
+            <div className="row">
+                <div className="input-fieldperfil col s12">
+                    <input id="direccion" type="text" className="validate" />
+                    <label htmlFor="direccion">Dirección</label>
+                </div>
+            </div>
+            <div className="row">
+                <div className="input-fieldperfil col s12">
+                    <input id="correo" type="email" className="validate" />
+                    <label htmlFor="correo">Correo</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div className="modal-footer">
+        <button type="submit" className="waves-effect waves-light btn modal-trigger"
+            style={{ marginRight: '15px' }}>Enviar
+            <i className="material-icons right">send</i>
+        </button>
+        <a href="#!" className="modal-close waves-effect waves-light btn modal-trigger" 
+        style={{ marginRight: '30px' }}>Cerrar</a>
+    </div>
+</div>
+
+
             </div>
 
+            {/* para informacion  */}
             <div id="info" className="container">
                 <h2>Información Adicional</h2>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Experiencia</span>
-                        <p>Aquí va la información sobre experiencia.</p>
+                        <p>Experiencia laboral adquirida hasta ahora.</p>
                     </div>
                 </div>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Especialidad</span>
-                        <p>Aquí va la información sobre especialidad.</p>
+                        <p>Especialidad .</p>
                     </div>
                 </div>
                 <div className="card">

@@ -13,6 +13,8 @@ body {
 }
 
 
+
+
 label {
   display: block;
 }
@@ -101,7 +103,8 @@ a {
 
 
 .error {
-  border: 2px solid  #a94442;
+  border: 2px solid  #f7f7f700;
+  
 }
 n/* Navigation.css */
 
@@ -225,7 +228,16 @@ button:hover {
 
 .input-field {
   margin-bottom: 15px; /* Espacio entre campos */
+  position: relative;
 }
+
+
+.input-field input.validate:not(.error) {
+  border-bottom: 1px solid #9e9e9e; /* Gris para campos válidos */
+}
+
+
+
 
 input[readonly] {
   width: 100%; /* Hace que el campo ocupe todo el ancho disponible */
@@ -237,9 +249,7 @@ input[readonly] {
   margin: 50px; /* Espacio superior si es necesario */
 }
 
-.input-field1 {
-  position: relative;
-}
+
 
 .input-field1 .material-icons {
   position: absolute;
@@ -303,7 +313,7 @@ input[readonly] {
   color: white; /* Color del texto */
   font-size: 1.2em; /* Tamaño del texto */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out; /* Transición suave para el efecto hover */
+  transition: opacity 0.10s ease-in-out; /* Transición suave para el efecto hover */
 }
 
 .profile-picture-container:hover .overlay {
@@ -314,12 +324,18 @@ input[readonly] {
   margin-right: 10px; /* Espacio entre el ícono y el texto */
 }
 
-.card {
-  transition: transform 2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Sombra por defecto */
-}
-
 .card:hover {
   transform: translateY(-5px); /* Movimiento hacia arriba */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el mouse */
 }
+
+.container2{
+  background: #f8f8f8;
+}
+
+.button-containerSave {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
