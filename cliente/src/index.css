@@ -17,7 +17,7 @@ label {
   display: block;
 }
 
-select{
+select {
   display: block;
   padding: 10px;
   box-sizing: border-box;
@@ -86,66 +86,91 @@ a {
   color: #a94442;
   padding: 10px;
 }
+
 .successMessage {
   background-color: #c5e6cf;
-  color: green; /* Color verde para mensajes de éxito */
-  padding: 10px; /* Espacio inferior */
+  color: green;
+  /* Color verde para mensajes de éxito */
+  padding: 10px;
+  /* Espacio inferior */
 }
 
 
 .errorMessage2 {
   color: #a94442;
-  font-size: 14px; /* Tamaño de letra más pequeño */
+  font-size: 14px;
+  /* Tamaño de letra más pequeño */
   padding: 10px;
 }
 
 
 .error {
-  border: 2px solid  #a94442;
+  border: 2px solid #a94442;
 }
-n/* Navigation.css */
+
+n
+/* Navigation.css */
 
 /* Navigation.css */
 
 .navigation {
-  position: fixed; /* Fija la barra de navegación en la pantalla */
+  position: fixed;
+  /* Fija la barra de navegación en la pantalla */
   top: 0;
-  width: 100%; /* Ancho completo de la barra de navegación */
-  background-color: #256d27; /* Cambia este valor al color que desees */
-  box-shadow: 0 2px 5px rgba(4, 255, 200, 0.1); /* Sombra para dar profundidad */
+  width: 100%;
+  /* Ancho completo de la barra de navegación */
+  background-color: #256d27;
+  /* Cambia este valor al color que desees */
+  box-shadow: 0 2px 5px rgba(4, 255, 200, 0.1);
+  /* Sombra para dar profundidad */
   display: flex;
-  align-items: center; /* Alinea los elementos verticalmente */
-  padding: 10px 20px; /* Espaciado interno */
+  align-items: center;
+  /* Alinea los elementos verticalmente */
+  padding: 10px 20px;
+  /* Espaciado interno */
 }
 
 .navigation ul {
-  list-style: none; /* Elimina las viñetas de la lista */
+  list-style: none;
+  /* Elimina las viñetas de la lista */
   padding: 0;
   margin: 0;
-  display: flex; /* Alinea los elementos en fila */
-  width: 100%; /* Ocupa todo el ancho disponible */
+  display: flex;
+  /* Alinea los elementos en fila */
+  width: 100%;
+  /* Ocupa todo el ancho disponible */
 }
 
 .navigation ul li {
-  margin-right: 20px; /* Espaciado entre los elementos de la lista */
+  margin-right: 20px;
+  /* Espaciado entre los elementos de la lista */
 }
 
 .navigation ul li.logout {
-  margin-left: auto; /* Empuja el botón de Logout a la orilla derecha */
+  margin-left: auto;
+  /* Empuja el botón de Logout a la orilla derecha */
 }
 
 button {
-  background-color: #007bff; /* Color de fondo del botón */
-  color: white; /* Color del texto del botón */
-  border: none; /* Sin borde */
-  padding: 10px 20px; /* Espaciado interno del botón */
-  cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-  border-radius: 5px; /* Esquinas redondeadas */
+  background-color: #007bff;
+  /* Color de fondo del botón */
+  color: white;
+  /* Color del texto del botón */
+  border: none;
+  /* Sin borde */
+  padding: 10px 20px;
+  /* Espaciado interno del botón */
+  cursor: pointer;
+  /* Cambia el cursor al pasar sobre el botón */
+  border-radius: 5px;
+  /* Esquinas redondeadas */
 }
 
 button:hover {
-  background-color: #0056b3; /* Color de fondo al pasar el ratón */
+  background-color: #0056b3;
+  /* Color de fondo al pasar el ratón */
 }
+
 /* Mueve esto al principio del archivo */
 
 /* Asegúrate de que las pestañas estén centradas */
@@ -165,19 +190,23 @@ button:hover {
 /* Estilo para el dropdown para hacerlo más largo y ajustar el texto */
 /* Asegúrate de que el dropdown tenga el ancho deseado */
 .dropdown-content {
-  width: 200px !important; /* Ajusta el ancho según tus necesidades */
+  width: 200px !important;
+  /* Ajusta el ancho según tus necesidades */
 }
 
 /* Asegúrate de que los elementos dentro del dropdown no se corten */
 .dropdown-content li {
-  white-space: nowrap; /* Evita el ajuste de línea del texto */
+  white-space: nowrap;
+  /* Evita el ajuste de línea del texto */
   overflow: hidden;
-  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
+  text-overflow: ellipsis;
+  /* Agrega puntos suspensivos si el texto es demasiado largo */
 }
 
 /* Ajusta el padding para una mejor apariencia */
 .dropdown-content li a {
-  padding: 10px 20px; /* Ajusta el padding según sea necesario */
+  padding: 10px 20px;
+  /* Ajusta el padding según sea necesario */
 }
 
 .form-container {
@@ -219,22 +248,28 @@ button:hover {
 }
 
 .form-horizontal {
-  max-width: 500px; /* Ajusta el ancho máximo según sea necesario */
-  margin: 0 auto; /* Centra el formulario horizontalmente */
+  max-width: 500px;
+  /* Ajusta el ancho máximo según sea necesario */
+  margin: 0 auto;
+  /* Centra el formulario horizontalmente */
 }
 
 .input-field {
-  margin-bottom: 15px; /* Espacio entre campos */
+  margin-bottom: 15px;
+  /* Espacio entre campos */
 }
 
 input[readonly] {
-  width: 100%; /* Hace que el campo ocupe todo el ancho disponible */
+  width: 100%;
+  /* Hace que el campo ocupe todo el ancho disponible */
 }
 
 .button-container1 {
   display: flex;
-  justify-content: center; /* Centra el botón horizontalmente */
-  margin: 50px; /* Espacio superior si es necesario */
+  justify-content: center;
+  /* Centra el botón horizontalmente */
+  margin: 50px;
+  /* Espacio superior si es necesario */
 }
 
 .input-field1 {
@@ -253,14 +288,17 @@ input[readonly] {
 
 .nombre-contenedor {
   display: flex;
-  justify-content: center; /* Centra el botón horizontalmente */
-  margin: 30px; /* Espacio superior si es necesario */
+  justify-content: center;
+  /* Centra el botón horizontalmente */
+  margin: 30px;
+  /* Espacio superior si es necesario */
 }
 
 
 .nombre-titulo {
   font-size: 2.5em;
-  font-family: 'Arial', sans-serif; /* Cambia 'Arial' por la fuente que prefieras */
+  font-family: 'Arial', sans-serif;
+  /* Cambia 'Arial' por la fuente que prefieras */
   font-weight: bold;
 }
 
@@ -268,42 +306,58 @@ input[readonly] {
 /* Contenedor padre para centrar horizontalmente */
 .profile-container {
   display: flex;
-  justify-content: center; /* Centra horizontalmente */
+  justify-content: center;
+  /* Centra horizontalmente */
 }
 
 /* Configuración para la imagen de perfil */
 .profile-picture-container {
-  border-radius: 50%; /* Hace que la imagen sea circular */
+  border-radius: 50%;
+  /* Hace que la imagen sea circular */
   position: relative;
-  width: 220px; /* Tamaño de la imagen */
-  height: 220px; /* Tamaño de la imagen */
+  width: 220px;
+  /* Tamaño de la imagen */
+  height: 220px;
+  /* Tamaño de la imagen */
   display: flex;
   justify-content: center;
 }
 
 .profile-picture {
-  border-radius: 50%; /* Hace que la imagen sea circular */
-  width: 100%; /* Ajusta al tamaño del contenedor */
-  height: 100%; /* Ajusta al tamaño del contenedor */
-  object-fit: cover; /* Mantiene la proporción de la imagen */
-  transition: all 0.3s ease-in-out; /* Transición suave para el efecto hover */
+  border-radius: 50%;
+  /* Hace que la imagen sea circular */
+  width: 100%;
+  /* Ajusta al tamaño del contenedor */
+  height: 100%;
+  /* Ajusta al tamaño del contenedor */
+  object-fit: cover;
+  /* Mantiene la proporción de la imagen */
+  transition: all 0.3s ease-in-out;
+  /* Transición suave para el efecto hover */
 }
 
 .profile-picture-container .overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Ajusta al tamaño del contenedor */
-  height: 100%; /* Ajusta al tamaño del contenedor */
-  border-radius: 50%; /* Hace que el overlay siga siendo circular */
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
+  width: 100%;
+  /* Ajusta al tamaño del contenedor */
+  height: 100%;
+  /* Ajusta al tamaño del contenedor */
+  border-radius: 50%;
+  /* Hace que el overlay siga siendo circular */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Fondo negro semi-transparente */
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white; /* Color del texto */
-  font-size: 1.2em; /* Tamaño del texto */
+  color: white;
+  /* Color del texto */
+  font-size: 1.2em;
+  /* Tamaño del texto */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out; /* Transición suave para el efecto hover */
+  transition: opacity 0.3s ease-in-out;
+  /* Transición suave para el efecto hover */
 }
 
 .profile-picture-container:hover .overlay {
@@ -311,24 +365,102 @@ input[readonly] {
 }
 
 .overlay i {
-  margin-right: 10px; /* Espacio entre el ícono y el texto */
+  margin-right: 10px;
+  /* Espacio entre el ícono y el texto */
 }
 
 .card {
   transition: transform 2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Sombra por defecto */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  /* Sombra por defecto */
 }
 
 .card:hover {
-  transform: translateY(-5px); /* Movimiento hacia arriba */
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Sombra más intensa al pasar el mouse */
+  transform: translateY(-5px);
+  /* Movimiento hacia arriba */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  /* Sombra más intensa al pasar el mouse */
 }
 
 .card-image {
-  overflow: hidden; /* Asegura que la imagen no se desborde fuera del contenedor */
+  overflow: hidden;
+  /* Asegura que la imagen no se desborde fuera del contenedor */
 }
+
 .card-image img {
-  width: 100%; /* La imagen ocupará todo el ancho del contenedor */
-  height: auto; /* Mantiene la proporción de la imagen */
-  object-fit: cover; /* Ajusta la imagen para cubrir el área del contenedor sin distorsionar */
+  width: 100%;
+  /* La imagen ocupará todo el ancho del contenedor */
+  height: auto;
+  /* Mantiene la proporción de la imagen */
+  object-fit: cover;
+  /* Ajusta la imagen para cubrir el área del contenedor sin distorsionar */
+}
+
+.main-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left-side {
+  flex: 1;
+  padding-right: 10px; /* Ajusta el espacio entre el contenedor izquierdo y el derecho */
+}
+
+.right-side {
+  flex: 2; /* O cualquier valor que haga que el contenedor derecho sea más ancho si es necesario */
+}
+
+.left-side-content {
+  margin-bottom: 20px;
+}
+
+.additional-container {
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+
+
+.card.horizontal {
+  display: flex;
+  align-items: center;
+}
+
+.card-image {
+  flex: 1;
+  max-width: 150px;
+  height: auto;
+}
+
+.card-stacked {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.oferta-card {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.card-image {
+  width: 120px; /* Ajusta el tamaño de la imagen */
+  height: 120px; /* Ajusta el tamaño de la imagen */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px; /* Espacio entre la imagen y el contenido */
+}
+
+.circle-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%; /* Hacer la imagen circular */
+}
+
+.card-stacked {
+  flex: 1; /* Permite que el contenido ocupe el espacio disponible */
 }
