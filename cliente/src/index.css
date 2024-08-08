@@ -13,6 +13,8 @@ body {
 }
 
 
+
+
 label {
   display: block;
 }
@@ -105,7 +107,8 @@ a {
 
 
 .error {
-  border: 2px solid #a94442;
+  border: 2px solid  #f7f7f700;
+  
 }
 
 n
@@ -255,9 +258,17 @@ button:hover {
 }
 
 .input-field {
-  margin-bottom: 15px;
-  /* Espacio entre campos */
+  margin-bottom: 15px; /* Espacio entre campos */
+  position: relative;
 }
+
+
+.input-field input.validate:not(.error) {
+  border-bottom: 1px solid #9e9e9e; /* Gris para campos válidos */
+}
+
+
+
 
 input[readonly] {
   width: 100%;
@@ -272,9 +283,7 @@ input[readonly] {
   /* Espacio superior si es necesario */
 }
 
-.input-field1 {
-  position: relative;
-}
+
 
 .input-field1 .material-icons {
   position: absolute;
@@ -356,8 +365,7 @@ input[readonly] {
   font-size: 1.2em;
   /* Tamaño del texto */
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  /* Transición suave para el efecto hover */
+  transition: opacity 0.10s ease-in-out; /* Transición suave para el efecto hover */
 }
 
 .profile-picture-container:hover .overlay {
@@ -369,98 +377,29 @@ input[readonly] {
   /* Espacio entre el ícono y el texto */
 }
 
-.card {
-  transition: transform 2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  /* Sombra por defecto */
-}
-
 .card:hover {
   transform: translateY(-5px);
   /* Movimiento hacia arriba */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   /* Sombra más intensa al pasar el mouse */
 }
-
 .card-image {
   overflow: hidden;
   /* Asegura que la imagen no se desborde fuera del contenedor */
 }
 
 .card-image img {
-  width: 100%;
-  /* La imagen ocupará todo el ancho del contenedor */
-  height: auto;
-  /* Mantiene la proporción de la imagen */
-  object-fit: cover;
-  /* Ajusta la imagen para cubrir el área del contenedor sin distorsionar */
+  width: 100%; /* La imagen ocupará todo el ancho del contenedor */
+  height: auto; /* Mantiene la proporción de la imagen */
+  object-fit: cover; /* Ajusta la imagen para cubrir el área del contenedor sin distorsionar */
 }
 
-.main-container {
+.container2{
+  background: #f8f8f8;
+}
+
+.button-containerSave {
   display: flex;
-  gap: 20px; /* Espacio entre las columnas */
-}
-
-.left-side {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.right-side {
-  flex: 2;
-}
-
-.additional-container {
-  background-color: #f0f0f0;
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px; /* Espacio inferior para separar de las ofertas */
-}
-
-
-
-
-
-.card.horizontal {
-  display: flex;
-  align-items: center;
-}
-
-.card-image {
-  flex: 1;
-  max-width: 150px;
-  height: auto;
-}
-
-.card-stacked {
-  flex: 2;
-  padding-left: 20px;
-}
-
-.oferta-card {
-  display: flex;
-  align-items: center;
-  padding: 0;
-}
-
-.card-image {
-  width: 120px; /* Ajusta el tamaño de la imagen */
-  height: 120px; /* Ajusta el tamaño de la imagen */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  margin-right: 20px; /* Espacio entre la imagen y el contenido */
-}
-
-.circle-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%; /* Hacer la imagen circular */
-}
-
-.card-stacked {
-  flex: 1; /* Permite que el contenido ocupe el espacio disponible */
+  margin-top: 1rem;
 }

@@ -30,26 +30,24 @@ class Server {
 
     routes(): void {
         this.app.post('/uploadImagen', async (req: Request, res: Response) => {
-            console.log("upload image");
             const file = req.body.src;
-            const name = 'peerfilUsuario';
+            const name = 'perfilUsuario';
             const id = req.body.id;
             const binaryData = Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""), 'base64').toString('binary');
 
             try {
                 fs.writeFile(`${__dirname}/img/` + name + '/' + id + '.jpg', binaryData, "binary", async (err) => {
                     if (err) {
-                        console.log(err);
                         return res.status(500).json({ message: "Error al guardar la imagen ", error: err });
                     }
                     try {
-                        const perfil = await PerfilUsuario.findByIdAndUpdate(id, { foto: true }, { new: true });
+                        // Buscar el perfil basado en id_usuario y actualizar el campo foto a true
+                        const perfil = await PerfilUsuario.findOneAndUpdate({ id_usuario: id }, { foto: true }, { new: true });
                         if (!perfil) {
                             return res.status(404).json({ message: "Perfil no encontrado" });
                         }
                         res.json({ fileName: id + '.jpg', perfil });
                     } catch (updateError) {
-                        console.log(updateError);
                         res.status(500).json({ message: "Error al guardar la imagen ", error: updateError });
                     }
                 });
@@ -81,12 +79,11 @@ class Server {
                         // Responde con un mensaje de éxito y el perfil actualizado
                         res.json({ message: "Imagen eliminada exitosamente", perfil });
                     } catch (updateError) {
-                        console.log(updateError);
+
                         res.status(500).json({ message: "Error al actualizar el perfil", error: updateError });
                     }
                 });
             } catch (deleteError) {
-                console.log(deleteError);
                 res.status(500).json({ message: "Error al procesar la eliminación", error: deleteError });
             }
         });

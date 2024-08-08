@@ -54,6 +54,15 @@ class UsuarioController {
                     correoError = "Correo no válido";
                 }
             }
+            const usuarioExistente = yield usuario_model_1.default.findOne({ correo });
+            if (usuarioExistente) {
+                correoError = "El correo electrónico ya está en uso";
+            }
+            const estadoName = yield estado_model_1.default.findOne({ clave: estado });
+            let estadoNom = estado; // Definir la variable con el tipo correcto
+            if (estadoName) {
+                estadoNom = estadoName.nombre;
+            }
             if (camposError || contrasenasError || nombreError || correoError) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     camposError,
@@ -72,7 +81,7 @@ class UsuarioController {
                     contrasena: hashedPassword,
                     direccion,
                     ciudad,
-                    estado,
+                    estado: estadoNom,
                     id_rol: tipoRol
                 });
                 const UsuarioGuardado = yield nuevoUsuario.save();
@@ -98,6 +107,7 @@ class UsuarioController {
                 res.cookie('token', token);
                 console.log(res.cookie);
                 res.json({
+                    id: UsuarioGuardado._id,
                     idRol: UsuarioGuardado.id_rol,
                     nombre: UsuarioGuardado.nombre,
                     correo: UsuarioGuardado.correo,
@@ -142,7 +152,10 @@ class UsuarioController {
                         id: usuarioEncontrado._id,
                         nombre: usuarioEncontrado.nombre,
                         correo: usuarioEncontrado.correo,
-                        id_rol: usuarioEncontrado.id_rol
+                        ciudad: usuarioEncontrado.ciudad,
+                        estado: usuarioEncontrado.estado,
+                        id_rol: usuarioEncontrado.id_rol,
+                        direccion: usuarioEncontrado.direccion
                     });
                 }
             }
@@ -162,6 +175,25 @@ class UsuarioController {
             const clave = req.params.clave;
             const ciudades = yield ciudad_model_1.default.find({ clave: clave });
             res.json(ciudades);
+        });
+    }
+    getEstado(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const clave = req.params.clave;
+                // Buscar el estado en la colección adecuada
+                const estado = yield estado_model_1.default.findOne({ clave: clave });
+                if (estado) {
+                    res.json({ nombre: estado.nombre });
+                }
+                else {
+                    res.status(404).json({ error: "Estado no encontrado" });
+                }
+            }
+            catch (error) {
+                console.error("Error al obtener el estado:", error);
+                res.status(500).json({ error: "Error interno del servidor" });
+            }
         });
     }
     eliminarUsuario(req, res) {
@@ -190,7 +222,7 @@ class UsuarioController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id_usuario = req.params.id_usuario;
-                const perfilEncontrado = yield perfilUsuario_model_1.default.find({ id_usuario: id_usuario });
+                const perfilEncontrado = yield perfilUsuario_model_1.default.findOne({ id_usuario: id_usuario });
                 if (perfilEncontrado) {
                     res.json(perfilEncontrado);
                 }
@@ -208,6 +240,17 @@ class UsuarioController {
             try {
                 const perfil = yield perfilUsuario_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
                 res.json(perfil);
+            }
+            catch (error) {
+                res.status(500).json({ message: error.message });
+            }
+        });
+    }
+    actualizarUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const usuario = yield usuario_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
+                res.json(usuario);
             }
             catch (error) {
                 res.status(500).json({ message: error.message });

@@ -18,7 +18,8 @@ class UsuarioRoutes {
         this.router.get("/getPerfilUsuario/:id_usuario", usuariosController.getPerfilUsuario);
         this.router.put("/actualizarPerfilUsuario/:id", usuariosController.actualizarPerfilUsuario);
         this.router.post('/restablecerContrasena', usuariosController.restablecerContrasena);
-
+        this.router.get("/getEstado/:clave", usuariosController.getEstado);
+        this.router.put("/actualizarUsuario/:id", usuariosController.actualizarUsuario);
 
     }
 }

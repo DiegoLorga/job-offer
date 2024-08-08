@@ -45,6 +45,17 @@ class UsuarioController {
             }
         }
 
+        const usuarioExistente = await Usuario.findOne({ correo });
+        if (usuarioExistente) {
+           correoError = "El correo electrónico ya está en uso"
+        }
+
+        const estadoName = await Estado.findOne({ clave: estado });
+        let estadoNom: string = estado; // Definir la variable con el tipo correcto
+
+        if (estadoName) {
+            estadoNom = estadoName.nombre;
+        }
 
         if (camposError || contrasenasError || nombreError || correoError) {
             res.status(400).json(jsonResponse(400, {
@@ -67,7 +78,7 @@ class UsuarioController {
                 contrasena: hashedPassword,
                 direccion,
                 ciudad,
-                estado,
+                estado: estadoNom,
                 id_rol: tipoRol
             });
 
@@ -101,6 +112,7 @@ class UsuarioController {
             console.log(res.cookie);
 
             res.json({
+                id: UsuarioGuardado._id,
                 idRol: UsuarioGuardado.id_rol,
                 nombre: UsuarioGuardado.nombre,
                 correo: UsuarioGuardado.correo,
@@ -141,7 +153,10 @@ class UsuarioController {
                     id: usuarioEncontrado._id,
                     nombre: usuarioEncontrado.nombre,
                     correo: usuarioEncontrado.correo,
-                    id_rol: usuarioEncontrado.id_rol
+                    ciudad: usuarioEncontrado.ciudad,
+                    estado: usuarioEncontrado.estado,
+                    id_rol: usuarioEncontrado.id_rol,
+                    direccion: usuarioEncontrado.direccion
                 });
             }
 
@@ -162,6 +177,25 @@ class UsuarioController {
         const ciudades = await Ciudad.find({ clave: clave });
         res.json(ciudades)
     }
+
+    public async getEstado(req: Request, res: Response): Promise<void> {
+        try {
+            const clave = req.params.clave;
+    
+            // Buscar el estado en la colección adecuada
+            const estado = await Estado.findOne({ clave: clave });
+    
+            if (estado) {
+                res.json({ nombre: estado.nombre });
+            } else {
+                res.status(404).json({ error: "Estado no encontrado" });
+            }
+        } catch (error) {
+            console.error("Error al obtener el estado:", error);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    }
+    
 
     public async eliminarUsuario(req: Request, res: Response): Promise<void> {
         try {
@@ -190,7 +224,7 @@ class UsuarioController {
     public async getPerfilUsuario(req: Request, res: Response): Promise<void> {
         try {
             const id_usuario = req.params.id_usuario;
-            const perfilEncontrado = await PerfilUsuario.find({ id_usuario: id_usuario });
+            const perfilEncontrado = await PerfilUsuario.findOne({ id_usuario: id_usuario });
 
             if (perfilEncontrado) {
                 res.json(perfilEncontrado);
@@ -206,6 +240,15 @@ class UsuarioController {
         try {
             const perfil = await PerfilUsuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
             res.json(perfil)
+        } catch (error: any) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    public async actualizarUsuario(req: Request, res: Response): Promise<void> {
+        try {
+            const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            res.json(usuario)
         } catch (error: any) {
             res.status(500).json({ message: error.message });
         }

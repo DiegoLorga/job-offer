@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
 import { API_URL } from "../auth/apis";
 import { AuthReponseRegister, AuthResponseError } from "../types/types";
-
+import Swal from 'sweetalert2';
 
 interface Estado {
     _id: string;
@@ -11,13 +11,11 @@ interface Estado {
     clave: string;
 }
 
-
 interface Ciudad {
     _id: string;
     nombre: string;
     clave: string;
 }
-
 
 export default function Registro() {
     const [nombre, setNombre] = useState("");
@@ -37,7 +35,6 @@ export default function Registro() {
     const auth = useAuth();
     const goTo = useNavigate();
 
-
     // Obtener la lista de estados al cargar el componente
     useEffect(() => {
         async function fetchEstados() {
@@ -49,8 +46,6 @@ export default function Registro() {
                     if (data.length > 0) {
                         setSelectedEstado(data[0].clave);
                     }
-
-
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -59,10 +54,8 @@ export default function Registro() {
             }
         }
 
-
         fetchEstados();
     }, []);
-
 
     // Cargar ciudades al cambiar el estado seleccionado
     useEffect(() => {
@@ -73,7 +66,7 @@ export default function Registro() {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
                     if (data.length > 0) {
-                        setCiudad(data[0].clave);
+                        setCiudad(data[0].nombre);
                     }
                 } else {
                     console.error('Error al obtener las ciudades:', response.statusText);
@@ -83,16 +76,13 @@ export default function Registro() {
             }
         }
 
-
         if (selectedEstado) {
             fetchCiudades();
         }
     }, [selectedEstado]);
 
-
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
 
         try {
             const response = await fetch(`${API_URL}/usuario`, {
@@ -106,16 +96,18 @@ export default function Registro() {
                     contrasena,
                     verificar,
                     direccion,
-                    ciudad, // Usar estado de ciudad
+                    ciudad,
                     estado: selectedEstado
                 })
             });
 
-
             if (response.ok) {
                 const json = await response.json() as AuthReponseRegister;
-                console.log(json);
-                setSuccessMessage("Usuario creado exitosamente");
+                Swal.fire({
+                    title: "Éxito",
+                    text: "Usuario creado exitosamente",
+                    icon: "success"
+                });
                 setErrorCampos("");
                 setErrorContrasenas("");
                 setErrorCorreo("");
@@ -125,6 +117,13 @@ export default function Registro() {
                 }, 2000);
             } else {
                 const json = await response.json() as AuthResponseError;
+                if (json.body.camposError) {
+                    Swal.fire({
+                        title: "Error",
+                        text: json.body.camposError,
+                        icon: "error"
+                    });
+                }
                 setErrorCampos(json.body.camposError || "");
                 setErrorCorreo(json.body.correoError || "");
                 setErrorNombre(json.body.nombreError || "");
@@ -136,27 +135,22 @@ export default function Registro() {
         }
     }
 
-
     if (auth.isAuthenticated) {
         return <Navigate to="/Empresa" />;
     }
-
 
     return (
         <div className="container">
             <div className="form">
                 <form className="col s12" onSubmit={handleSubmit}>
                     <h1>Registro</h1>
-                    {!!errorCampos && <div className="card-panel red lighten-2 white-text">{errorCampos}</div>}
-                    {!!sucessMessage && <div className="card-panel green lighten-2 white-text">{sucessMessage}</div>}
-
 
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className={`input-field col s12 ${errorNombre ? 'error' : ''}`}>
                             <input
                                 id="nombre"
                                 type="text"
-                                className="validate"
+                                className={`validate ${errorNombre ? 'error' : ''}`}
                                 value={nombre}
                                 onChange={(e) => setNombre(e.target.value)}
                             />
@@ -165,13 +159,12 @@ export default function Registro() {
                         </div>
                     </div>
 
-
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className={`input-field col s12 ${errorCorreo ? 'error' : ''}`}>
                             <input
                                 id="correo"
                                 type="email"
-                                className="validate"
+                                className={`validate ${errorCorreo ? 'error' : ''}`}
                                 value={correo}
                                 onChange={(e) => setCorreo(e.target.value)}
                             />
@@ -180,13 +173,12 @@ export default function Registro() {
                         </div>
                     </div>
 
-
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className={`input-field col s12 ${errorContrasenas ? 'error' : ''}`}>
                             <input
                                 id="contrasena"
                                 type="password"
-                                className="validate"
+                                className={`validate ${errorContrasenas ? 'error' : ''}`}
                                 value={contrasena}
                                 onChange={(e) => setContrasena(e.target.value)}
                             />
@@ -195,13 +187,12 @@ export default function Registro() {
                         </div>
                     </div>
 
-
                     <div className="row">
-                        <div className="input-field col s12">
+                        <div className={`input-field col s12 ${errorContrasenas ? 'error' : ''}`}>
                             <input
                                 id="verificar"
                                 type="password"
-                                className="validate"
+                                className={`validate ${errorContrasenas ? 'error' : ''}`}
                                 value={verificar}
                                 onChange={(e) => setVerificar(e.target.value)}
                             />
@@ -209,7 +200,6 @@ export default function Registro() {
                             {!!errorContrasenas && <span className="helper-text red-text">{errorContrasenas}</span>}
                         </div>
                     </div>
-
 
                     <div className="row">
                         <div className="input-field col s12">
@@ -223,7 +213,6 @@ export default function Registro() {
                             <label htmlFor="direccion">Dirección</label>
                         </div>
                     </div>
-
 
                     <div className="row">
                         <label>Estado</label>
@@ -240,9 +229,8 @@ export default function Registro() {
                         </div>
                     </div>
 
-
                     <div className="row">
-                    <label>Ciudad</label>
+                        <label>Ciudad</label>
                         <div className="input-field col s12">
                             <select
                                 value={ciudad}
@@ -256,7 +244,6 @@ export default function Registro() {
                         </div>
                     </div>
 
-
                     <div className="row">
                         <button className="custom-btn" type="submit">
                             Registrarse
@@ -267,4 +254,3 @@ export default function Registro() {
         </div>
     );
 }
-

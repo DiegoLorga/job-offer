@@ -17,6 +17,8 @@ class UsuarioRoutes {
         this.router.get("/getPerfilUsuario/:id_usuario", usuarioController_1.usuariosController.getPerfilUsuario);
         this.router.put("/actualizarPerfilUsuario/:id", usuarioController_1.usuariosController.actualizarPerfilUsuario);
         this.router.post('/restablecerContrasena', usuarioController_1.usuariosController.restablecerContrasena);
+        this.router.get("/getEstado/:clave", usuarioController_1.usuariosController.getEstado);
+        this.router.put("/actualizarUsuario/:id", usuarioController_1.usuariosController.actualizarUsuario);
     }
 }
 const usuaioRoutes = new UsuarioRoutes();
