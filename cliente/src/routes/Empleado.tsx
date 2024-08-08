@@ -83,91 +83,86 @@ export default function Empleados() {
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
                 <div className="row">
-                    <div className="card-container">
-                        <div id="Empleos" className="card-container">
-                            <ul className="tabs center">
-                                <li className="tab col s6"><a className="active" href="#test1">Para ti</a></li>
-                                <li className="tab col s6"><a href="#test2">Buscar</a></li>
-                            </ul>
-                            <div id="test1" className="card-container">
-                                <div className="main-container">
-                                    <div className="left-side">
-                                        <div className="left-side-content">
-                                            {/* Agrega el nuevo contenedor aquí */}
-                                            <div className="additional-container">
-                                                <h4>Contenido Adicional</h4>
-                                                {/* Aquí puedes agregar más contenido según lo necesites */}
-                                            </div>
-                                        </div>
-                                        <div className="section">
-                                            <div className="cards-container">
-                                                {ofertas.length > 0 ? (
-                                                    ofertas.map(oferta => (
-                                                        <div className="col s12" key={oferta._id}>
-                                                            <Oferta
-                                                                _id={oferta._id}
-                                                                titulo={oferta.titulo}
-                                                                direccion={oferta.direccion}
-                                                                puesto={oferta.puesto}
-                                                                sueldo={oferta.sueldo}
-                                                                onClick={() => handleVerDetalles(oferta._id)}
-                                                            />
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <p>No se encontraron ofertas.</p>
-                                                )}
-                                            </div>
-                                        </div>
+                    <div id="Empleos" className="col s12">
+                        <ul className="tabs center">
+                            <li className="tab col s6"><a className="active" href="#test1">Para ti</a></li>
+                            <li className="tab col s6"><a href="#test2">Buscar</a></li>
+                        </ul>
+                        <div id="test1" className="card-container">
+                            <div className="main-container">
+                                <div className="left-side">
+                                    <div className="additional-container">
+                                        <h4>Contenido Adicional</h4>
+                                        {/* Agrega más contenido aquí */}
                                     </div>
-                                    <div className="right-side">
-                                        {ofertaSeleccionada ? (
-                                            <div>
-                                                <h5>{ofertaSeleccionada.titulo}</h5>
-                                                <p><strong>Puesto:</strong> {ofertaSeleccionada.puesto}</p>
-                                                <p><strong>Sueldo:</strong> {ofertaSeleccionada.sueldo}</p>
-                                                <p><strong>Horario:</strong> {ofertaSeleccionada.horario}</p>
-                                                <p><strong>Modalidad:</strong> {ofertaSeleccionada.modalidad}</p>
-                                                <p><strong>Dirección:</strong> {ofertaSeleccionada.direccion}</p>
-                                                <p><strong>Ciudad:</strong> {ofertaSeleccionada.ciudad}</p>
-                                                <p><strong>Estado:</strong> {ofertaSeleccionada.estado}</p>
-                                                <p><strong>Descripción:</strong> {ofertaSeleccionada.descripcion}</p>
-                                                <p><strong>Requisitos:</strong> {ofertaSeleccionada.requisitos}</p>
-                                                <p><strong>Teléfono:</strong> {ofertaSeleccionada.telefono}</p>
-                                                <p><strong>Correo:</strong> {ofertaSeleccionada.correo}</p>
-                                                <p><strong>Educación:</strong> {ofertaSeleccionada.educacion}</p>
-                                                <p><strong>Idioma:</strong> {ofertaSeleccionada.idioma}</p>
-                                                <p><strong>Experiencia Laboral:</strong> {ofertaSeleccionada.experienciaLaboral}</p>
-                                                <p><strong>Categoría:</strong> {ofertaSeleccionada.categoria}</p>
-                                            </div>
-                                        ) : (
-                                            <p>Seleccione una oferta para ver los detalles.</p>
-                                        )}
+                                    <div className="section">
+                                        <div className="cards-container">
+                                            {ofertas.length > 0 ? (
+                                                ofertas.map(oferta => (
+                                                    <div className="col s12" key={oferta._id}>
+                                                        <Oferta
+                                                            _id={oferta._id}
+                                                            titulo={oferta.titulo}
+                                                            direccion={oferta.direccion}
+                                                            puesto={oferta.puesto}
+                                                            sueldo={oferta.sueldo}
+                                                            onClick={() => handleVerDetalles(oferta._id)}
+                                                        />
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p>No se encontraron ofertas.</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
+                                <div className="right-side">
+                                    {ofertaSeleccionada ? (
+                                        <div>
+                                            <h5>{ofertaSeleccionada.titulo}</h5>
+                                            <p><strong>Puesto:</strong> {ofertaSeleccionada.puesto}</p>
+                                            <p><strong>Sueldo:</strong> {ofertaSeleccionada.sueldo}</p>
+                                            <p><strong>Horario:</strong> {ofertaSeleccionada.horario}</p>
+                                            <p><strong>Modalidad:</strong> {ofertaSeleccionada.modalidad}</p>
+                                            <p><strong>Dirección:</strong> {ofertaSeleccionada.direccion}</p>
+                                            <p><strong>Ciudad:</strong> {ofertaSeleccionada.ciudad}</p>
+                                            <p><strong>Estado:</strong> {ofertaSeleccionada.estado}</p>
+                                            <p><strong>Descripción:</strong> {ofertaSeleccionada.descripcion}</p>
+                                            <p><strong>Requisitos:</strong> {ofertaSeleccionada.requisitos}</p>
+                                            <p><strong>Teléfono:</strong> {ofertaSeleccionada.telefono}</p>
+                                            <p><strong>Correo:</strong> {ofertaSeleccionada.correo}</p>
+                                            <p><strong>Educación:</strong> {ofertaSeleccionada.educacion}</p>
+                                            <p><strong>Idioma:</strong> {ofertaSeleccionada.idioma}</p>
+                                            <p><strong>Experiencia Laboral:</strong> {ofertaSeleccionada.experienciaLaboral}</p>
+                                            <p><strong>Categoría:</strong> {ofertaSeleccionada.categoria}</p>
+                                        </div>
+                                    ) : (
+                                        <p>Seleccione una oferta para ver los detalles.</p>
+                                    )}
+                                </div>
                             </div>
-                            <div id="test2" className="col s12">Contenido Buscar</div>
                         </div>
-                        <div id="Empresas" className="col s12">
-                            <div className="container">
-                                <div className="section">
-                                    <div className="cards-container">
-                                        {empresas.length > 0 ? (
-                                            empresas.map(empresa => (
-                                                <div className="card-content" key={empresa._id}>
-                                                    <EmpresaCard
-                                                        _id={empresa._id}
-                                                        nombre={empresa.nombre}
-                                                        direccion={empresa.direccion}
-                                                        giro={empresa.giro}
-                                                        foto={empresa.foto}
-                                                    />
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <p>No se encontraron empresas.</p>
-                                        )}
-                                    </div>
+                        <div id="test2" className="col s12">Contenido Buscar</div>
+                    </div>
+                    <div id="Empresas" className="col s12">
+                        <div className="container">
+                            <div className="section">
+                                <div className="cards-container">
+                                    {empresas.length > 0 ? (
+                                        empresas.map(empresa => (
+                                            <div className="card-content" key={empresa._id}>
+                                                <EmpresaCard
+                                                    _id={empresa._id}
+                                                    nombre={empresa.nombre}
+                                                    direccion={empresa.direccion}
+                                                    giro={empresa.giro}
+                                                    foto={empresa.foto}
+                                                />
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No se encontraron empresas.</p>
+                                    )}
                                 </div>
                             </div>
                         </div>

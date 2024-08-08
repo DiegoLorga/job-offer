@@ -398,27 +398,27 @@ input[readonly] {
 
 .main-container {
   display: flex;
-  justify-content: space-between;
+  gap: 20px; /* Espacio entre las columnas */
 }
 
 .left-side {
   flex: 1;
-  padding-right: 10px; /* Ajusta el espacio entre el contenedor izquierdo y el derecho */
+  display: flex;
+  flex-direction: column;
 }
 
 .right-side {
-  flex: 2; /* O cualquier valor que haga que el contenedor derecho sea más ancho si es necesario */
-}
-
-.left-side-content {
-  margin-bottom: 20px;
+  flex: 2;
 }
 
 .additional-container {
   background-color: #f0f0f0;
   padding: 20px;
   border-radius: 5px;
+  margin-bottom: 20px; /* Espacio inferior para separar de las ofertas */
 }
+
+
 
 
 
