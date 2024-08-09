@@ -2,6 +2,7 @@ import { json, Request, Response } from 'express';
 import { jsonResponse } from '../lib/jsonResponse';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import Categoria from '../models/categoria.model';
+import Empresa from '../models/empresa.model';
 
 class ofertaLaboralController {
 
@@ -180,6 +181,45 @@ class ofertaLaboralController {
             res.status(500).json({
                 error: "Hubo un error al buscar las ofertas laborales"
             });
+        }
+    }
+
+    public async ObtenerNombreEmpresa(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Obteniendo el nombre de la empresa");
+
+            // 1. Buscar la oferta laboral por su ID
+            const oferta = await OfertaLaboral.findById(req.params.id);
+
+            // 2. Verificar si la oferta fue encontrada y obtener el id_empresa
+            if (!oferta) {
+                res.status(404).json(jsonResponse(404, {
+                    error: "Oferta laboral no encontrada"
+                }));
+                return; // Termina la ejecución de la función
+            }
+
+            const idEmpresa = oferta.id_empresa;
+
+            // 3. Buscar la empresa por el id_empresa
+            const empresa = await Empresa.findById(idEmpresa);
+
+            // 4. Verificar si la empresa fue encontrada
+            if (!empresa) {
+                res.status(404).json(jsonResponse(404, {
+                    error: "Empresa no encontrada"
+                }));
+                return; // Termina la ejecución de la función
+            }
+
+            // 5. Retornar el nombre de la empresa
+            res.json({ nombre: empresa.nombre });
+            
+        } catch (error) {
+            console.error("Error al obtener el nombre de la empresa:", error);
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un error"
+            }));
         }
     }
 
