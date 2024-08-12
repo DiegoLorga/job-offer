@@ -6,7 +6,7 @@ import '../index.css'; // Asegúrate de tener los estilos personalizados aquí
 
 const EmpresaCard: React.FC<Empresa> = ({ _id, nombre, direccion, giro, foto }) => {
     return (
-        <div className="card horizontal oferta-card">
+        <div className="card horizontal">
             <div className="card-image circle-image-container">
                 <img 
                     src={foto || "https://www.elfinanciero.com.mx/resizer/iKgpfAJUixbWsAh5wTbC98O2sVA=/1440x810/filters:format(jpg):quality(70)/cloudfront-us-east-1.images.arcpublishing.com/elfinanciero/WEBXETUXNJFRTILA7F3UNAIIXY.jpg"} 

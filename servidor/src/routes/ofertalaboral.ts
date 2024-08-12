@@ -14,6 +14,7 @@ class OfertaLaboralRoutes {
         this.router.post('/crearCategoria',OfertaLaboralController.createCategoria)
         this.router.get('/categorias', OfertaLaboralController.list)
         this.router.get('/buscar',OfertaLaboralController.buscarOfertas);
+        this.router.get('/buscarNombreEmpresa/:id',OfertaLaboralController.ObtenerNombreEmpresa);
     }
 
     }

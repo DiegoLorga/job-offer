@@ -1,0 +1,188 @@
+.main-container {
+    display: flex;
+    gap: 20px;
+    /* Espacio entre las columnas, si es necesario */
+}
+
+.left-side {
+    flex: 5;
+    /* Ocupará el 40% del contenedor principal */
+}
+
+.right-side {
+    flex: 6;
+    /* Ocupará el 60% del contenedor principal */
+}
+
+
+
+
+.card.horizontal {
+    display: flex;
+    align-items: center;
+}
+
+.card-image {
+    flex: 1;
+    max-width: 150px;
+    height: auto;
+}
+
+.card-stacked {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.oferta-card {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
+
+.card-image {
+    width: 120px;
+    /* Ajusta el tamaño de la imagen */
+    height: 120px;
+    /* Ajusta el tamaño de la imagen */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    /* Espacio entre la imagen y el contenido */
+}
+
+.circle-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    /* Hacer la imagen circular */
+}
+
+.card-stacked {
+    flex: 1;
+    /* Permite que el contenido ocupe el espacio disponible */
+}
+
+/* Asegúrate de que el contenedor principal ocupe el ancho completo */
+.container {
+    width: 100%;
+    max-width: auto;
+    /* O el valor máximo que desees */
+    margin: 0 auto;
+    /* Centra el contenedor */
+}
+
+/* Para asegurarte de que el contenedor ocupe todo el ancho */
+
+
+/* Asegúrate de que los elementos hijos en .row también ocupen el ancho completo */
+
+
+body .container {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+body #Empleos {
+    width: 90% !important;
+}
+
+body #Empresas {
+    width: 50% !important;
+    max-width: auto !important;
+}
+
+/* Asegúrate de que el contenedor de la tarjeta tenga posición relativa */
+/* Asegúrate de que el contenedor de la tarjeta tenga posición relativa */
+.card {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    /* Cambia esto al color de fondo de tu tarjeta */
+}
+
+
+/* Estilo para el div en la parte superior derecha */
+/* Estilo para el div en la parte superior derecha */
+.top-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Estilo para el botón flotante con ícono negro */
+.btn-floating {
+    background-color: rgb(255, 255, 255);
+    /* Cambia esto al color de fondo de tu tarjeta */
+    border-radius: 10%;
+    /* Hacer el botón redondo */
+}
+
+/* Estilo para el ícono dentro del botón */
+.btn-floating .material-icons {
+    font-size: 24px;
+    /* Ajusta el tamaño del ícono si es necesario */
+    color: black;
+    /* Establece el color del ícono a negro */
+}
+
+.btn-color {
+    background-color: rgb(255, 255, 255);
+    /* Cambia esto al color de fondo de tu tarjeta */
+    border-radius: 10%;
+    /* Hacer el botón redondo */
+    color: black;
+    /* Establece el color del ícono a negro */
+    box-shadow: none;
+    /* Elimina la sombra que Materialize aplica al botón */
+    border: none;
+    /* Elimina cualquier borde que Materialize pueda aplicar */
+}
+
+/* Estilo para el ícono dentro del botón */
+.btn-color .material-icons {
+    font-size: 24px;
+    transition: color 0.3s ease;
+    /* Ajusta el tamaño del ícono si es necesario */
+}
+
+/* Asegúrate de que el color del botón no cambie al estar activo o enfocado */
+.btn-custom {
+    background-color: rgb(255, 255, 255);
+    border-radius: 10%; /* Hacer el botón redondo */
+    color: black; /* Color del ícono */
+    box-shadow: none; /* Eliminar la sombra predeterminada del botón */
+    border: none; /* Eliminar el borde del botón */
+    padding: 0; /* Eliminar el padding predeterminado */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    position: relative;
+    cursor: pointer; /* Apunta a mano */
+}
+
+/* Estilo del ícono dentro del botón */
+.btn-custom .material-icons {
+    font-size: 24px; /* Tamaño del ícono */
+}
+
+/* Evitar el cambio de color al pasar el ratón */
+.btn-custom:hover,
+.btn-custom:focus {
+    background-color: rgb(255, 255, 255);
+    color: black; /* Mantener el color del ícono en el estado hover y focus */
+    box-shadow: none; /* Eliminar la sombra de enfoque */
+}
+
+/* Evitar el cambio de color de la onda en estado hover */
+.btn-custom .waves-ripple {
+    background-color: rgba(0, 0, 0, 0.3); /* Mismo color del efecto de onda para el estado hover */
+}
+.btn-custom:hover .material-icons {
+    color: green; /* Color del ícono al pasar el cursor */
+}
+.btn-custom:active .material-icons {
+    color: purple; /* Color del ícono al hacer clic */
+}
+.btn-custom.clicked .material-icons {
+    color: purple; /* Color del ícono a morado cuando el botón ha sido clickeado */
+}
