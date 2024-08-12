@@ -10,6 +10,7 @@ import { API_URL } from "../auth/apis";
 import '../index.css';
 import '../estilos/estilosOfertas.css';
 import Oferta from "./Ofertas";
+import '../estilos/OfertaDetalles.css'
 
 export default function Empleados() {
     const [errorResponse, setErrorResponse] = useState<string>("");
@@ -17,6 +18,8 @@ export default function Empleados() {
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [ofertas, setOfertas] = useState<Oferta1[]>([]);
     const [ofertaSeleccionada, setOfertaSeleccionada] = useState<OfertaCompleta | null>(null);
+    const [empresaNombre, setEmpresaNombre] = useState<string | null>(null);
+
     const auth = useAuth();
     const location = useLocation();
 
@@ -60,6 +63,11 @@ export default function Empleados() {
             const response = await fetch(`${API_URL}/ofertaLaboral/obtenerOfertas/${id}`);
             const data = await response.json();
             setOfertaSeleccionada(data);
+
+            const empresaResponse = await fetch(`${API_URL}/ofertaLaboral/buscarNombreEmpresa/${id}`);
+            const empresaData = await empresaResponse.json();
+            setEmpresaNombre(empresaData.nombre);
+
         } catch (error) {
             console.error('Error al obtener detalles de la oferta:', error);
         }
@@ -117,7 +125,7 @@ export default function Empleados() {
                                     {ofertaSeleccionada ? (
                                         <div className="oferta-detalles-card">
                                             <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
-                                            <p className="subtitulo-oferta"><strong>{ofertaSeleccionada.puesto}</strong></p>
+                                            <p><strong>Empresa:</strong> {empresaNombre}</p> 
                                             <p><strong>Sueldo:</strong> {ofertaSeleccionada.sueldo}</p>
                                             <p><strong>Horario:</strong> {ofertaSeleccionada.horario}</p>
                                             <p><strong>Modalidad:</strong> {ofertaSeleccionada.modalidad}</p>

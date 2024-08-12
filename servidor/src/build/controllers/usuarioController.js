@@ -271,7 +271,7 @@ class UsuarioController {
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
-                    nombreError: "Error al actualizar al usuario"
+                    camposError: "Error al actualizar al usuario"
                 }));
             }
         });

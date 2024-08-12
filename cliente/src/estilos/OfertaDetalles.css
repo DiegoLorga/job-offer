@@ -1,0 +1,57 @@
+.right-side {
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: auto;
+}
+
+.oferta-detalles-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.titulo-oferta {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.subtitulo-oferta {
+    font-size: 18px;
+    font-weight: 600;
+    color: #555;
+}
+
+.oferta-detalles-card p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #444;
+}
+
+.oferta-detalles-card p strong {
+    color: #000;
+}
+
+.postularme-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.postularme-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.postularme-btn:hover {
+    background-color: #0056b3;
+}
