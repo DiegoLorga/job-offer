@@ -246,14 +246,47 @@ class UsuarioController {
     }
 
     public async actualizarUsuario(req: Request, res: Response): Promise<void> {
+        const { nombre, direccion, ciudad, estado } = req.body;
+    
+        let nombreError: string | null = null;
+    
+        const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
+        if (!nameRegex.test(nombre)) {
+            nombreError = "Nombre no válido";
+        }
+        
+    
+      
+        const estadoName = await Estado.findOne({ clave: estado });
+        let estadoNom: string = estado;
+    
+        if (estadoName) {
+            estadoNom = estadoName.nombre;
+        }
+    
+        if (nombreError) {
+            res.status(400).json(jsonResponse(400, {
+                nombreError
+            }));
+            return;
+        }
+
+       
+    
         try {
-            const usuario = await Usuario.findByIdAndUpdate(req.params.id, req.body, { new: true })
-            res.json(usuario)
+            const perfil = await Usuario.findByIdAndUpdate(
+                req.params.id, 
+                { nombre, direccion, ciudad, estado: estadoNom }, 
+                { new: true }
+            );
+            res.json(perfil);
         } catch (error: any) {
-            res.status(500).json({ message: error.message });
+            res.status(500).json(jsonResponse(400, {
+                camposError: "Error al actualizar al usuario"
+            }));
         }
     }
-
+    
     public async restablecerContrasena(req: Request, res: Response): Promise<void> {
         const { token, password } = req.body;
     

@@ -214,7 +214,7 @@ export default function Registro() {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="input-fieldregis2">
                         <label>Estado</label>
                         <div className="input-field col s12">
                             <select
@@ -229,7 +229,7 @@ export default function Registro() {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="input-fieldregis2">
                         <label>Ciudad</label>
                         <div className="input-field col s12">
                             <select
@@ -244,6 +244,7 @@ export default function Registro() {
                         </div>
                     </div>
 
+                    <br/>
                     <div className="row">
                         <button className="custom-btn" type="submit">
                             Registrarse

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Navigate } from 'react-router-dom';
 import { useAuth } from "../auth/AuthProvider";
 import DefaultLayout from "../layout/DefaultLayout";
 import M from 'materialize-css';
@@ -8,6 +7,8 @@ import '../index.css'; // Asegúrate de tener los estilos personalizados aquí
 import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import Swal from 'sweetalert2';
 import '../estilos/estiloPerfilUsuario.css';
+import { Navigate, useNavigate } from "react-router-dom";
+import { AuthReponseRegister, AuthResponseError } from "../types/types";
 
 
 interface Estado {
@@ -51,8 +52,10 @@ export default function PerfilUsuarios() {
     const [nombre, setNombre] = useState<string>("");
     const [correo, setCorreo] = useState<string>("");
     const [direccion, setDireccion] = useState<string>("");
-    const [estadoSeleccionado, setEstadoSeleccionado] = useState<string>("");
-    const [ciudadSeleccionada, setCiudadSeleccionada] = useState<string>("");
+    const [selectedEstado, setSelectedEstado] = useState<string>("");
+    const [selectedCiudad, setSelectedCiudad] = useState("");
+    const [selectedNombre, setSelectedNombre] = useState<string>("");
+    const [selectedDireccion, setSelectedDireccion] = useState<string>("");
     const [ciudad, setCiudad] = useState<string>("");
     const [estado, setEstado] = useState<string>("");
     const [estados, setEstados] = useState<Estado[]>([]);
@@ -61,9 +64,12 @@ export default function PerfilUsuarios() {
     const [previewImage, setPreviewImage] = useState<string | null>(null); // Asegurarse de que solo sea string o null
     const fileInputRef = useRef<HTMLInputElement>(null); // Referencia al input de archivo
     const [foto, setFoto] = useState<boolean>(false);
+    const [errorNombre, setErrorNombre] = useState("");
     const auth = useAuth();
+    const goTo = useNavigate();
 
-    //para obtener estados
+
+    // Obtener la lista de estados al cargar el componente
     useEffect(() => {
         async function fetchEstados() {
             try {
@@ -71,9 +77,9 @@ export default function PerfilUsuarios() {
                 if (response.ok) {
                     const data = await response.json() as Estado[];
                     setEstados(data);
-                    if (data.length > 0) {
-                        setEstadoSeleccionado(data[0].clave);
-                    }
+                    /*if (data.length > 0) {
+                        setSelectedEstado(data[0].clave);
+                    } */
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -85,33 +91,57 @@ export default function PerfilUsuarios() {
         fetchEstados();
     }, []);
 
-    //para obtener ciudades
+    //setSelectedCiudad(ciudad);
     useEffect(() => {
         async function fetchCiudades() {
-            try {
-                const response = await fetch(`${API_URL}/usuario/getCiudades/${estadoSeleccionado}`);
-                if (response.ok) {
-                    const data = await response.json() as Ciudad[];
-                    setCiudades(data);
-                    if (data.length > 0) {
-                        setCiudadSeleccionada(data[0].clave);
+            if (selectedEstado) {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
+                    if (response.ok) {
+                        const data = await response.json() as Ciudad[];
+                        setCiudades(data);
+                        if (data.length > 0) {
+                            setSelectedCiudad(data[0].nombre);
+                        }
+                    } else {
+                        console.error('Error al obtener las ciudades:', response.statusText);
                     }
-                } else {
-                    console.error('Error al obtener las ciudades:', response.statusText);
+                } catch (error) {
+                    console.error('Error al obtener las ciudades:', error);
                 }
-            } catch (error) {
-                console.error('Error al obtener las ciudades:', error);
+            } else {
+                setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
             }
+
         }
 
-        if (estadoSeleccionado) {
-            fetchCiudades();
+        fetchCiudades();
+    }, [selectedEstado]);
+
+
+    useEffect(() => {
+        const modalElement = document.getElementById('modal1');
+        if (modalElement) {
+            // Asegúrate de que `modalElement` no sea `null` antes de inicializar el modal
+            const modalInstance = M.Modal.init(modalElement);
+
+            // Asegúrate de actualizar el modal con la información correcta cuando se abre
+            modalInstance.options.onOpenStart = () => {
+                setSelectedNombre(nombre);
+                setSelectedDireccion(direccion);
+                setSelectedEstado(estado);
+                setSelectedCiudad(ciudad);
+            };
+
+            return () => {
+                modalInstance.destroy();
+            };
         }
-    }, [estadoSeleccionado]);
+    }, [nombre, direccion, estado, ciudad]);
 
     //para consultas
     useEffect(() => {
-        M.Modal.init(document.querySelectorAll('.modal'));
+
 
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
@@ -163,7 +193,7 @@ export default function PerfilUsuarios() {
     let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
     if (storedUser) {
         const usuario = JSON.parse(storedUser);
-        auth.setIsAuthenticated(true);
+        //auth.setIsAuthenticated(true);
         console.log(foto);
         imageSrc = previewImage
             ? previewImage
@@ -245,6 +275,102 @@ export default function PerfilUsuarios() {
             fileInputRef.current.click(); // Activa el input de archivo
         }
     };
+
+    // Función de manejo del envío del formulario
+    async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        // Mostrar una alerta de confirmación antes de proceder
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Deseas actualizar la información?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, actualizar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        // Si el usuario confirma, continuar con la actualización
+        if (result.isConfirmed) {
+            const storedUser = localStorage.getItem('usuario');
+            if (storedUser) {
+                const usuario = JSON.parse(storedUser);
+
+                // Crear el objeto de actualización solo con los campos que tienen valor
+                const updatedFields: Record<string, string> = {};
+
+                if (selectedNombre) updatedFields.nombre = selectedNombre;
+                if (selectedDireccion) updatedFields.direccion = selectedDireccion;
+                if (selectedEstado) updatedFields.estado = selectedEstado;
+                if (selectedCiudad) updatedFields.ciudad = selectedCiudad;
+
+                try {
+                    const response = await fetch(`${API_URL}/usuario/actualizarUsuario/${usuario.id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(updatedFields) // Solo los campos con valor
+                    });
+
+                    if (response.ok) {
+                        const updatedUser = await response.json(); // Obtener la respuesta actualizada
+
+                        // Actualizar el estado del formulario principal con los nuevos valores
+                        setNombre(updatedUser.nombre || nombre);
+                        setDireccion(updatedUser.direccion || direccion);
+                        setEstado(updatedUser.estado || estado);
+                        setCiudad(updatedUser.ciudad || ciudad);
+
+                        Swal.fire({
+                            title: "Éxito",
+                            text: "Usuario actualizado exitosamente",
+                            icon: "success"
+                        });
+
+                        const modalElement = document.getElementById('modal1');
+                        if (modalElement) {
+                            const modalInstance = M.Modal.getInstance(modalElement);
+                            if (modalInstance) {
+                                modalInstance.close();
+                            }
+                        }
+                        setSelectedNombre('');
+                        setSelectedDireccion('');
+                        setSelectedEstado('');
+                        setSelectedCiudad('');
+                        setErrorNombre("");
+
+                    } else {
+                        const json = await response.json() as AuthResponseError;
+                        if (json.body.nombreError) {
+                            Swal.fire({
+                                title: "Error",
+                                text: json.body.nombreError,
+                                icon: "error"
+                            });
+                        } else {
+                            if (json.body.camposError) {
+                                Swal.fire({
+                                    title: "Error",
+                                    text: json.body.camposError,
+                                    icon: "error"
+                                });
+                            }
+                        }
+                        setErrorNombre(json.body.nombreError || "");
+                        setSuccessMessage("");
+                    }
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        }
+    }
+
+
 
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
@@ -329,43 +455,85 @@ export default function PerfilUsuarios() {
                 </form>
 
                 {/* Modal Structure */}
-<div id="modal1" className="modal">
-    <div className="modal-contentperfil">
-        <h4>Actualizar Información</h4>
-        <form className="col s12">
-            <div className="row">
-                <div className="input-fieldperfil col s12">
-                    <input id="nombre" type="text" className="validate" />
-                    <label htmlFor="nombre">Nombre</label>
-                </div>
-            </div>
-            <div className="row">
-                <div className="input-fieldperfil col s12">
-                    <input id="direccion" type="text" className="validate" />
-                    <label htmlFor="direccion">Dirección</label>
-                </div>
-            </div>
-            <div className="row">
-                <div className="input-fieldperfil col s12">
-                    <input id="correo" type="email" className="validate" />
-                    <label htmlFor="correo">Correo</label>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div className="modal-footer">
-        <button type="submit" className="waves-effect waves-light btn modal-trigger"
-            style={{ marginRight: '15px' }}>Enviar
-            <i className="material-icons right">send</i>
-        </button>
-        <a href="#!" className="modal-close waves-effect waves-light btn modal-trigger" 
-        style={{ marginRight: '30px' }}>Cerrar</a>
-    </div>
-</div>
+                <div id="modal1" className="modal">
+                    <div className="modal-contentperfil">
+                        <h4 style={{ textAlign: 'center' }}>Actualizar Información</h4>
+
+                        <form className="col s12" onSubmit={handleSubmit}>
+                            <div className="row">
+                                <div className="input-fieldperfil col s12">
+                                    <input
+                                        id="nombre"
+                                        type="text"
+                                        className="validate"
+                                        value={selectedNombre}
+                                        onChange={(e) => setSelectedNombre(e.target.value)}
+                                    />
+                                    <label htmlFor="nombre">Nombre</label>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="input-fieldperfil col s12">
+                                    <input
+                                        id="direccion"
+                                        type="text"
+                                        className="validate"
+                                        value={selectedDireccion}
+                                        onChange={(e) => setSelectedDireccion(e.target.value)}
+                                    />
+                                    <label htmlFor="direccion">Dirección</label>
+                                </div>
+                            </div>
+
+                            <div className="input-fieldperfil2">
+                                <label>Estado</label>
+                                <div className="input-fieldperfil2 col s12">
+                                    <select
+                                        value={selectedEstado}
+                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                        className="browser-default"
+                                    >
+                                        <option value="">Seleccione un estado</option> {/* Opción por defecto */}
+                                        {estados.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div className="input-fieldperfil2">
+                                <label>Ciudad</label>
+                                <div className="input-fieldperfil2 col s12">
+                                    <select
+                                        value={selectedCiudad}
+                                        onChange={(e) => setSelectedCiudad(e.target.value)}
+                                        className="browser-default"
+                                    >
+
+                                        {ciudades.map(ciudad => (
+                                            <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
 
 
-            </div>
 
+                            <div className="modal-footer">
+                                <button type="submit" className="waves-effect waves-light btn modal-trigger"
+                                    style={{ marginRight: '15px' }}>Enviar
+                                    <i className="material-icons right">send</i>
+                                </button>
+                                <a href="#!" className="modal-close waves-effect waves-light btn modal-trigger"
+                                    style={{ marginRight: '30px' }}>Cerrar</a>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
             {/* para informacion  */}
             <div id="info" className="container">
                 <h2>Información Adicional</h2>

@@ -248,12 +248,31 @@ class UsuarioController {
     }
     actualizarUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            const { nombre, direccion, ciudad, estado } = req.body;
+            let nombreError = null;
+            const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
+            if (!nameRegex.test(nombre)) {
+                nombreError = "Nombre no válido";
+            }
+            const estadoName = yield estado_model_1.default.findOne({ clave: estado });
+            let estadoNom = estado;
+            if (estadoName) {
+                estadoNom = estadoName.nombre;
+            }
+            if (nombreError) {
+                res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
+                    nombreError
+                }));
+                return;
+            }
             try {
-                const usuario = yield usuario_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
-                res.json(usuario);
+                const perfil = yield usuario_model_1.default.findByIdAndUpdate(req.params.id, { nombre, direccion, ciudad, estado: estadoNom }, { new: true });
+                res.json(perfil);
             }
             catch (error) {
-                res.status(500).json({ message: error.message });
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
+                    nombreError: "Error al actualizar al usuario"
+                }));
             }
         });
     }

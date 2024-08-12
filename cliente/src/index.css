@@ -395,11 +395,18 @@ input[readonly] {
 }
 
 .container2{
-  background: #f8f8f8;
+  background: #ffffff;
 }
 
 .button-containerSave {
   display: flex;
   justify-content: center;
   margin-top: 1rem;
+}
+
+
+.input-fieldregis2 select {
+  font-family: 'Roboto', sans-serif; /* Reemplaza 'Roboto' con tu tipografía */
+  font-size: 15px; /* Ajusta el tamaño de la fuente si es necesario */
+  color: rgb(129, 129, 129);
 }
