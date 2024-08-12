@@ -383,7 +383,7 @@ export default function PerfilUsuarios() {
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs">
                     <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
-                    <li className="tab col s6"><a href="#info">Información</a></li>
+                    <li className="tab col s6"><a href="#info">Competencias</a></li>
                 </ul>
             </div>
 
@@ -535,30 +535,50 @@ export default function PerfilUsuarios() {
 
             </div>
             {/* para informacion  */}
-            <div id="info" className="container">
-                <h2>Información Adicional</h2>
+            <div id="info" className="containerinfo">
+            <h2>Información Adicional</h2><br/>
+
+
                 <div className="card">
                     <div className="card-content">
-                        <span className="card-title">Experiencia</span>
-                        <p>Experiencia laboral adquirida hasta ahora.</p>
+                        <span className="card-title">CV</span>
+                        <p></p>
                     </div>
-                </div>
+                </div><br/>
                 <div className="card">
                     <div className="card-content">
-                        <span className="card-title">Especialidad</span>
-                        <p>Especialidad .</p>
+                    <br/><span className="card-title">Experiencia laboral reciente</span>
+                        <p>Experiencia laboral adquirida de su último trabajo.</p><br/>
                     </div>
-                </div>
+                </div><br/>
                 <div className="card">
                     <div className="card-content">
-                        <span className="card-title">Habilidades</span>
-                        <p>Aquí va la información sobre habilidades.</p>
+                    <br/><span className="card-title">Especialidad</span>
+                        <p>Áreas en donde tiene mayor conocimiento.</p><br/>
                     </div>
-                </div>
+                </div><br/>
                 <div className="card">
                     <div className="card-content">
-                        <span className="card-title">Educación</span>
-                        <p>Aquí va la información sobre educación.</p>
+                    <br/><span className="card-title">Habilidades</span>
+                        <p>Habilidades con las que cuenta. Ej: Trabajo en equipo, adaptabilidad, etc.  </p><br/>
+                    </div>
+                </div><br/>
+                <div className="card">
+                    <div className="card-content">
+                    <br/><span className="card-title">Educación</span>
+                        <p>Último nivel de estudios. </p><br/>
+                    </div>
+                </div><br/>
+                <div className="card">
+                    <div className="card-content">
+                    <br/><span className="card-title">Idioma</span>
+                        <p>Idiomas y nivel de conocimiento </p><br/>
+                    </div>
+                </div><br/>
+                <div className="card">
+                    <div className="card-content">
+                    <br/><span className="card-title">Cursos y certificaciones</span>
+                        <p>Cursos adicionales o certificados que respalden sus conocimientos. </p><br/>
                     </div>
                 </div>
             </div>

@@ -40,3 +40,14 @@
 .input-fieldperfil2 input.validate:not(.error) {
   border-bottom: 1px solid #9e9e9e; /* Gris para campos válidos */
 }
+
+.containerinfo {
+  max-width: 1000px; /* Puedes ajustar este valor según lo necesites */
+  margin: 0 auto;
+  padding: 20px; /* Espacio en las orillas */
+}
+
+.card {
+  margin-bottom: 40px; /* Espacio entre las tarjetas */
+}
+
