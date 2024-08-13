@@ -13,7 +13,7 @@ const Oferta: React.FC<OfertaProps> = ({ _id, titulo, direccion, puesto, sueldo,
     const handleClick = () => {
         setIsClicked(true);
         onClick(_id);
-        M.toast({ html: 'Guardado', displayLength: 3000 });
+        M.toast({ html: 'Guardado', displayLength: 2000 });
     };
 
     

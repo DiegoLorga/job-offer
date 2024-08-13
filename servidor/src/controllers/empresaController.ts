@@ -114,17 +114,32 @@ class EmpresaController {
         }
     }
 
-    public async listOne(req: Request, res: Response): Promise<void> {
-        try {
-            console.log("Mostrando una empresa");
-            const OneEmpresa = await Empresa.findById(req.params.id)
-            res.json(OneEmpresa);
-        } catch (error) {
-            res.status(500).json(jsonResponse(500, {
-                error: "Hubo un error"
-            }));
+    // Controllers/empresaController.ts
+public async listOne(req: Request, res: Response): Promise<void> {
+    try {
+        console.log("Mostrando una empresa");
+        const empresa = await Empresa.findById(req.params.id);
+        if (!empresa) {
+            res.status(404).json(jsonResponse(404, { error: "Empresa no encontrada" }));
+            return;
         }
+
+        // Obtener el perfil de la empresa
+        const perfil = await PerfilEmpresa.findOne({ id_empresa: empresa._id });
+
+        res.json({
+            empresa,
+            perfil
+        });
+        console.log("Empresa: ",empresa);
+        console.log("Perfil: ",perfil);
+        
+        
+    } catch (error) {
+        res.status(500).json(jsonResponse(500, { error: "Hubo un error" }));
     }
+}
+
 
     public async borrarEmpresa(req: Request, res: Response): Promise<void> {
         console.log("Borrando una empresa");
@@ -190,6 +205,20 @@ class EmpresaController {
             }));
         }
     }
+
+    public async  obtenerPerfilEmpresa (req: Request, res: Response): Promise<void> {
+        const { id } = req.params;
+        try {
+            const perfil = await PerfilEmpresa.findOne({ id_empresa: id });
+            if (perfil) {
+                res.json(perfil);
+            } else {
+                res.status(404).json({ message: 'Perfil de empresa no encontrado' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener el perfil de la empresa', error });
+        }
+    };
 
     
 

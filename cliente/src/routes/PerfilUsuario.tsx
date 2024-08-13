@@ -11,17 +11,21 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { AuthReponseRegister, AuthResponseError } from "../types/types";
 
 
+
+
 interface Estado {
     _id: string;
     nombre: string;
     clave: string;
 }
 
+
 interface Ciudad {
     _id: string;
     nombre: string;
     clave: string;
 }
+
 
 interface Usuario {
     _id: string;
@@ -31,6 +35,7 @@ interface Usuario {
     estado: string;
     ciudad: string;
 }
+
 
 interface perfilUsuario {
     _id: string;
@@ -45,6 +50,7 @@ interface perfilUsuario {
     status: false,
     foto: false
 }
+
 
 export default function PerfilUsuarios() {
     const [errorResponse, setErrorResponse] = useState<string>("");
@@ -69,6 +75,8 @@ export default function PerfilUsuarios() {
     const goTo = useNavigate();
 
 
+
+
     // Obtener la lista de estados al cargar el componente
     useEffect(() => {
         async function fetchEstados() {
@@ -88,8 +96,10 @@ export default function PerfilUsuarios() {
             }
         }
 
+
         fetchEstados();
     }, []);
+
 
     //setSelectedCiudad(ciudad);
     useEffect(() => {
@@ -113,10 +123,14 @@ export default function PerfilUsuarios() {
                 setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
             }
 
+
         }
+
 
         fetchCiudades();
     }, [selectedEstado]);
+
+
 
 
     useEffect(() => {
@@ -124,6 +138,7 @@ export default function PerfilUsuarios() {
         if (modalElement) {
             // Asegúrate de que `modalElement` no sea `null` antes de inicializar el modal
             const modalInstance = M.Modal.init(modalElement);
+
 
             // Asegúrate de actualizar el modal con la información correcta cuando se abre
             modalInstance.options.onOpenStart = () => {
@@ -133,14 +148,18 @@ export default function PerfilUsuarios() {
                 setSelectedCiudad(ciudad);
             };
 
+
             return () => {
                 modalInstance.destroy();
             };
         }
     }, [nombre, direccion, estado, ciudad]);
 
+
     //para consultas
     useEffect(() => {
+
+
 
 
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
@@ -149,6 +168,7 @@ export default function PerfilUsuarios() {
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
             auth.setIsAuthenticated(true);
+
 
             async function fetchUsuario() {
                 try {
@@ -168,6 +188,7 @@ export default function PerfilUsuarios() {
                 }
             }
 
+
             async function fetchPerfilUsuario() {
                 try {
                     const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
@@ -185,10 +206,13 @@ export default function PerfilUsuarios() {
             fetchPerfilUsuario();
         }
 
+
     }, [auth]);
 
 
-    //para obtener imágenes 
+
+
+    //para obtener imágenes
     const storedUser = localStorage.getItem('usuario');
     let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
     if (storedUser) {
@@ -204,7 +228,10 @@ export default function PerfilUsuarios() {
 
 
 
-    //para cargar la imagen 
+
+
+
+    //para cargar la imagen
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
@@ -217,11 +244,13 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     //para cargar la imagen
     const handleUploadImage = async () => {
         if (!selectedFile) {
             return;
         }
+
 
         const reader = new FileReader();
         reader.onloadend = async () => {
@@ -230,6 +259,7 @@ export default function PerfilUsuarios() {
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
                 const userId = usuario.id;
+
 
                 try {
                     const response = await fetch(`${API_URI_IMAGENES}/uploadImagen`, {
@@ -242,6 +272,7 @@ export default function PerfilUsuarios() {
                             id: userId
                         })
                     });
+
 
                     if (response.ok) {
                         const data = await response.json();
@@ -259,6 +290,7 @@ export default function PerfilUsuarios() {
                             text: 'Error al caragar la imagen'
                         })
 
+
                     }
                 } catch (error) {
                     console.error('Error al cargar la imagen:', error);
@@ -267,8 +299,10 @@ export default function PerfilUsuarios() {
             }
         };
 
+
         reader.readAsDataURL(selectedFile);
     };
+
 
     const handleImageClick = () => {
         if (fileInputRef.current) {
@@ -276,9 +310,11 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     // Función de manejo del envío del formulario
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
 
         // Mostrar una alerta de confirmación antes de proceder
         const result = await Swal.fire({
@@ -292,19 +328,23 @@ export default function PerfilUsuarios() {
             cancelButtonText: 'Cancelar'
         });
 
+
         // Si el usuario confirma, continuar con la actualización
         if (result.isConfirmed) {
             const storedUser = localStorage.getItem('usuario');
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
 
+
                 // Crear el objeto de actualización solo con los campos que tienen valor
                 const updatedFields: Record<string, string> = {};
+
 
                 if (selectedNombre) updatedFields.nombre = selectedNombre;
                 if (selectedDireccion) updatedFields.direccion = selectedDireccion;
                 if (selectedEstado) updatedFields.estado = selectedEstado;
                 if (selectedCiudad) updatedFields.ciudad = selectedCiudad;
+
 
                 try {
                     const response = await fetch(`${API_URL}/usuario/actualizarUsuario/${usuario.id}`, {
@@ -315,8 +355,10 @@ export default function PerfilUsuarios() {
                         body: JSON.stringify(updatedFields) // Solo los campos con valor
                     });
 
+
                     if (response.ok) {
                         const updatedUser = await response.json(); // Obtener la respuesta actualizada
+
 
                         // Actualizar el estado del formulario principal con los nuevos valores
                         setNombre(updatedUser.nombre || nombre);
@@ -324,11 +366,13 @@ export default function PerfilUsuarios() {
                         setEstado(updatedUser.estado || estado);
                         setCiudad(updatedUser.ciudad || ciudad);
 
+
                         Swal.fire({
                             title: "Éxito",
                             text: "Usuario actualizado exitosamente",
                             icon: "success"
                         });
+
 
                         const modalElement = document.getElementById('modal1');
                         if (modalElement) {
@@ -342,6 +386,7 @@ export default function PerfilUsuarios() {
                         setSelectedEstado('');
                         setSelectedCiudad('');
                         setErrorNombre("");
+
 
                     } else {
                         const json = await response.json() as AuthResponseError;
@@ -372,13 +417,19 @@ export default function PerfilUsuarios() {
 
 
 
+
+
+
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
 
 
+
+
     return (
         <DefaultLayout showNav={true}>
+
 
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs">
@@ -387,9 +438,11 @@ export default function PerfilUsuarios() {
                 </ul>
             </div>
 
+
             {/* para perfil  */}
             <div id="perfil" className="container2">
                 <br /><br />
+
 
                 <div className="profile-container">
                     <div className="profile-picture-container" onClick={handleImageClick}>
@@ -411,8 +464,10 @@ export default function PerfilUsuarios() {
                     />
                 </div>
 
+
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
+
 
                 <div className="button-containerSave">
                     <button
@@ -426,9 +481,12 @@ export default function PerfilUsuarios() {
                 </div>
 
 
+
+
                 <div className="nombre-contenedor">
                     <h1 className="nombre-titulo">{nombre}</h1>
                 </div>
+
 
                 <form className="form-horizontal">
                     <label htmlFor="correo">Correo</label>
@@ -448,16 +506,20 @@ export default function PerfilUsuarios() {
                         <input type="text" id="ciudad" name="ciudad" value={ciudad} readOnly />
                     </div>
 
+
                     <div className="button-container1">
                         <a className="waves-effect waves-light btn modal-trigger" href="#modal1">Actualizar</a>
                     </div>
 
+
                 </form>
+
 
                 {/* Modal Structure */}
                 <div id="modal1" className="modal">
                     <div className="modal-contentperfil">
                         <h4 style={{ textAlign: 'center' }}>Actualizar Información</h4>
+
 
                         <form className="col s12" onSubmit={handleSubmit}>
                             <div className="row">
@@ -485,6 +547,7 @@ export default function PerfilUsuarios() {
                                 </div>
                             </div>
 
+
                             <div className="input-fieldperfil2">
                                 <label>Estado</label>
                                 <div className="input-fieldperfil2 col s12">
@@ -501,6 +564,7 @@ export default function PerfilUsuarios() {
                                 </div>
                             </div>
 
+
                             <div className="input-fieldperfil2">
                                 <label>Ciudad</label>
                                 <div className="input-fieldperfil2 col s12">
@@ -510,12 +574,16 @@ export default function PerfilUsuarios() {
                                         className="browser-default"
                                     >
 
+
                                         {ciudades.map(ciudad => (
                                             <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
+
+
+
 
 
 
@@ -528,10 +596,13 @@ export default function PerfilUsuarios() {
                                     style={{ marginRight: '30px' }}>Cerrar</a>
                             </div>
 
+
                         </form>
                     </div>
 
+
                 </div>
+
 
             </div>
             {/* para informacion  */}
@@ -539,24 +610,26 @@ export default function PerfilUsuarios() {
             <h2>Información Adicional</h2><br/>
 
 
+
+
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">CV</span>
                         <p></p>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Experiencia laboral reciente</span>
                         <p>Experiencia laboral adquirida de su último trabajo.</p><br/>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Especialidad</span>
                         <p>Áreas en donde tiene mayor conocimiento.</p><br/>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Habilidades</span>
@@ -585,3 +658,6 @@ export default function PerfilUsuarios() {
         </DefaultLayout>
     );
 }
+
+
+

@@ -1,0 +1,138 @@
+.collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgb(255, 255, 255);
+}
+
+.collapsible-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.collapsible-header .empresa-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.collapsible-header .empresa-info .location-email-giro {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.collapsible-header .empresa-info span {
+    margin: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collapsible-header .empresa-info .location-email-giro span {
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.collapsible-header .empresa-info .empresa-nombre {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px; /* Espacio adicional entre el nombre y los otros datos */
+}
+
+.location-email-giro span,
+.location-email-giro i {
+    margin-right: 10px;
+}
+
+.location-email-giro .icon-location {
+    color: #3498db; /* Color del ícono de ubicación */
+}
+
+.location-email-giro .icon-briefcase {
+    color: #e67e22; /* Color del ícono de giro */
+}
+
+.location-email-giro .icon-mail {
+    color: #e74c3c; /* Color del ícono de correo */
+}
+
+.profile-picture-container {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.profile-picture-container img {
+    width: 100%;
+    height: auto;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.info-container p {
+    margin: 2px 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.empresa-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.empresa-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.empresa-details p {
+    margin: 3px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.nombre-empresa {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: black;
+}
+
+.ubicacion-giro-correo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ubicacion-giro-correo span {
+    font-size: 0.9rem;
+    color: #555;
+}
+.info-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #333;
+}
+.info-title i {
+    margin-right: 8px; /* Espacio entre el ícono y el texto */
+    color: #007bff; /* Color del ícono */
+}

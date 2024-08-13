@@ -112,17 +112,27 @@ class EmpresaController {
             }
         });
     }
+    // Controllers/empresaController.ts
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("Mostrando una empresa");
-                const OneEmpresa = yield empresa_model_1.default.findById(req.params.id);
-                res.json(OneEmpresa);
+                const empresa = yield empresa_model_1.default.findById(req.params.id);
+                if (!empresa) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, { error: "Empresa no encontrada" }));
+                    return;
+                }
+                // Obtener el perfil de la empresa
+                const perfil = yield perfilEmpresa_model_1.default.findOne({ id_empresa: empresa._id });
+                res.json({
+                    empresa,
+                    perfil
+                });
+                console.log("Empresa: ", empresa);
+                console.log("Perfil: ", perfil);
             }
             catch (error) {
-                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
-                    error: "Hubo un error"
-                }));
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, { error: "Hubo un error" }));
             }
         });
     }
@@ -189,5 +199,23 @@ class EmpresaController {
             }
         });
     }
+    obtenerPerfilEmpresa(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const perfil = yield perfilEmpresa_model_1.default.findOne({ id_empresa: id });
+                if (perfil) {
+                    res.json(perfil);
+                }
+                else {
+                    res.status(404).json({ message: 'Perfil de empresa no encontrado' });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Error al obtener el perfil de la empresa', error });
+            }
+        });
+    }
+    ;
 }
 exports.empresaController = new EmpresaController();

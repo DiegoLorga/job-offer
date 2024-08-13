@@ -60,10 +60,12 @@ export default function Empleados() {
 
     const handleVerDetalles = async (id: string) => {
         try {
+            // Cargar detalles de la oferta seleccionada
             const response = await fetch(`${API_URL}/ofertaLaboral/obtenerOfertas/${id}`);
             const data = await response.json();
             setOfertaSeleccionada(data);
 
+            // Cargar nombre de la empresa de la oferta seleccionada
             const empresaResponse = await fetch(`${API_URL}/ofertaLaboral/buscarNombreEmpresa/${id}`);
             const empresaData = await empresaResponse.json();
             setEmpresaNombre(empresaData.nombre);
@@ -123,50 +125,84 @@ export default function Empleados() {
                                 </div>
                                 <div className="right-side">
                                     {ofertaSeleccionada ? (
-                                        <div className="oferta-detalles-card">
-                                            <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
-                                            <p><strong>Empresa:</strong> {empresaNombre}</p> 
-                                            <p><strong>Sueldo:</strong> {ofertaSeleccionada.sueldo}</p>
-                                            <p><strong>Horario:</strong> {ofertaSeleccionada.horario}</p>
-                                            <p><strong>Modalidad:</strong> {ofertaSeleccionada.modalidad}</p>
-                                            <p><strong>Dirección:</strong> {ofertaSeleccionada.direccion}</p>
-                                            <p><strong>Ciudad:</strong> {ofertaSeleccionada.ciudad}</p>
-                                            <p><strong>Estado:</strong> {ofertaSeleccionada.estado}</p>
-                                            <p><strong>Descripción:</strong> {ofertaSeleccionada.descripcion}</p>
-                                            <p><strong>Requisitos:</strong> {ofertaSeleccionada.requisitos}</p>
-                                            <p><strong>Teléfono:</strong> {ofertaSeleccionada.telefono}</p>
-                                            <p><strong>Correo:</strong> {ofertaSeleccionada.correo}</p>
-                                            <p><strong>Educación:</strong> {ofertaSeleccionada.educacion}</p>
-                                            <p><strong>Idioma:</strong> {ofertaSeleccionada.idioma}</p>
-                                            <p><strong>Experiencia Laboral:</strong> {ofertaSeleccionada.experienciaLaboral}</p>
-                                            <p><strong>Categoría:</strong> {ofertaSeleccionada.categoria}</p>
-                                            <div className="postularme-btn-container">
+                                        <div className="oferta-detalles-container">
+                                            {/* Primer Contenedor: Título, Nombre de la Empresa y Botón */}
+                                            <div className="oferta-header">
+                                                <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
+                                                <p className="empresa-nombre">{empresaNombre}</p>
                                                 <button className="btn waves-effect waves-light postularme-btn" type="button">
                                                     Postularme
                                                 </button>
                                             </div>
+
+                                            {/* Segundo Contenedor: Horario, Modalidad, Sueldo, Educación, Dirección */}
+                                            <div className="oferta-info-grid">
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">access_time</i> Horario</p>
+                                                    <p>{ofertaSeleccionada.horario}</p>
+                                                    <p>{ofertaSeleccionada.modalidad}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">attach_money</i> Sueldo</p>
+                                                    <p>{ofertaSeleccionada.sueldo}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">school</i> Educación</p>
+                                                    <p>{ofertaSeleccionada.educacion}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">location_on</i> Dirección</p>
+                                                    <p><strong>Calle:</strong> {ofertaSeleccionada.direccion}</p>
+
+                                                    <div className="ciudad-estado-container">
+                                                        <p><strong>Ciudad:</strong> {ofertaSeleccionada.ciudad}</p>
+                                                        <p><strong>Estado:</strong> {ofertaSeleccionada.estado}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Tercer Contenedor: Información restante */}
+                                            <div className="oferta-detalles-resto">
+                                                <p className='info-title'><i className="material-icons">description</i> Descrpción</p>
+                                                <p> {ofertaSeleccionada.descripcion}</p>
+                                                <p className='info-title'><i className="material-icons">contacts</i> Contacto</p>
+                                                <p><strong>Teléfono:</strong> {ofertaSeleccionada.telefono}</p>
+                                                <p><strong>Correo:</strong> {ofertaSeleccionada.correo}</p>
+                                                <p className='info-title'><i className="material-icons">check</i> Requisitos</p>
+                                                <p>{ofertaSeleccionada.requisitos}</p>
+                                                <p><strong>Idioma:</strong> {ofertaSeleccionada.idioma}</p>
+                                                <p><strong>Experiencia Laboral:</strong> {ofertaSeleccionada.experienciaLaboral}</p>
+                                                <p className='info-title'><i className="material-icons">work</i> Categoria</p>
+                                                <p> {ofertaSeleccionada.categoria}</p>
+                                            </div>
                                         </div>
                                     ) : (
-                                        <p>Seleccione una oferta para ver los detalles.</p>
+                                        <p>Seleccione una oferta para ver detalles.</p>
                                     )}
                                 </div>
                             </div>
                         </div>
-                        <div id="test2" className="card-container">Contenido Buscar</div>
+                        <div id="test2">
+                            {/* Aquí puedes agregar componentes o lógica para la búsqueda de ofertas */}
+                        </div>
                     </div>
+
                     <div id="Empresas" className="container">
-                        <div className="container">
-                            <div className="section">
-                                <div className="cards-container">
+                        <div className="main-container">
+                            <div className="left-side">
+                                <div className="row">
                                     {empresas.length > 0 ? (
-                                        empresas.map(empresa => (
-                                            <div className="card-content" key={empresa._id}>
+                                        empresas.map((empresa) => (
+                                            <div className="container" key={empresa._id}>
                                                 <EmpresaCard
                                                     _id={empresa._id}
                                                     nombre={empresa.nombre}
                                                     direccion={empresa.direccion}
                                                     giro={empresa.giro}
                                                     foto={empresa.foto}
+                                                    correo={empresa.correo}
+                                                    ciudad={empresa.ciudad}
+                                                    estado={empresa.estado}
                                                 />
                                             </div>
                                         ))
@@ -174,6 +210,8 @@ export default function Empleados() {
                                         <p>No se encontraron empresas.</p>
                                     )}
                                 </div>
+                            </div>
+                            <div className="right-side">
                             </div>
                         </div>
                     </div>
