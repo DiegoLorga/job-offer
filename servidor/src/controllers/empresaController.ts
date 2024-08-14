@@ -9,6 +9,7 @@ import PerfilEmpresa from '../models/perfilEmpresa.model';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import fotosEmpresa from '../models/fotosEmpresa.model';
 import FotosPerfilEmpresa from '../models/fotosPerfilEmpresa.model';
+import Giro from '../models/giro.model';
 
 class EmpresaController {
 
@@ -106,6 +107,19 @@ class EmpresaController {
             console.log("Mostrando todas las empresas");
             const empresa = await Empresa.find();
             res.json(empresa)
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un problema"
+            }));
+
+        }
+    }
+
+    public async getGiro(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Mostrando todos los giros");
+            const giro = await Giro.find();
+            res.json(giro)
         } catch (error) {
             res.status(500).json(jsonResponse(500, {
                 error: "Hubo un problema"

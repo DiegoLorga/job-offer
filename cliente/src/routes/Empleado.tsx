@@ -12,11 +12,18 @@ import '../estilos/estilosOfertas.css';
 import Oferta from "./Ofertas";
 import '../estilos/OfertaDetalles.css'
 
+interface Giro {
+    _id: string;
+    giro: string;
+}
+
 export default function Empleados() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [ofertas, setOfertas] = useState<Oferta1[]>([]);
+    const [giros, setGiros] = useState<Giro[]>([]);
+    const [selectedGiro, setSelectedGiro] = useState<string>("");
     const [ofertaSeleccionada, setOfertaSeleccionada] = useState<OfertaCompleta | null>(null);
     const [empresaNombre, setEmpresaNombre] = useState<string | null>(null);
 
@@ -27,8 +34,30 @@ export default function Empleados() {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
         console.log("Pestañas inicializadas");
+        const elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+
+
+        return () => {
+            M.FormSelect.getInstance(elems[0])?.destroy();
+        };
+
     }, []);
 
+    async function fetchGiros() {
+        try {
+            const response = await fetch(`${API_URL}/empresa/getGiros`);
+            if (response.ok) {
+                const data = await response.json() as Giro[];
+                console.log('Datos de giros:', data); // Verifica la estructura aquí
+                setGiros(data);
+            } else {
+                console.error('Error al obtener los giros:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al obtener los giros:', error);
+        }
+    }
     useEffect(() => {
         async function fetchEmpresas() {
             try {
@@ -188,8 +217,31 @@ export default function Empleados() {
                     </div>
 
                     <div id="Empresas" className="container">
-                        <div className="main-container">
-                            <div className="left-side">
+                        <div className="main-container2">
+                            <div className="izquierdo-side">
+                                <div className="oferta-detalles-container2">
+                                    <div className="oferta-header2">
+                                        <p className='info-title2'>Filtrar empresas</p>
+                                    </div>
+                                    <div className="oferta-header3">
+                                        <p className='info-title3'>Ciudad</p>
+                                    </div>
+                                    <div className="oferta-header3">
+                                        <p className='info-title3'>Estado</p>
+
+                                    </div>
+                                    <div className="oferta-header3">
+                                        <p className='info-title3'>Giro</p>
+                                        <select onFocus={fetchGiros} onChange={(e) => setSelectedGiro(e.target.value)} value={selectedGiro}>
+                                            <option value="" disabled>Seleccionar Giro</option>
+                                            {giros.map(giro => (
+                                                <option key={giro._id} value={giro._id}>{giro.giro}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="derecho-side">
                                 <div className="row">
                                     {empresas.length > 0 ? (
                                         empresas.map((empresa) => (
@@ -210,8 +262,6 @@ export default function Empleados() {
                                         <p>No se encontraron empresas.</p>
                                     )}
                                 </div>
-                            </div>
-                            <div className="right-side">
                             </div>
                         </div>
                     </div>

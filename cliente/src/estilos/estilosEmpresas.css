@@ -132,7 +132,67 @@
     margin-bottom: 2px;
     color: #333;
 }
+
+.info-title2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-top: 0px;
+    color: #333;
+}
+
+.info-title3 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0; /* Remueve cualquier margen */
+    color: #333;
+    position: absolute;
+    top: 0; /* Posiciona en la parte superior */
+    left: 0; /* Posiciona en la esquina izquierda */
+    padding: 5px; /* Añade un pequeño padding para separarlo del borde */
+}
+
 .info-title i {
     margin-right: 8px; /* Espacio entre el ícono y el texto */
     color: #007bff; /* Color del ícono */
+}
+
+.main-container2 {
+    display: flex;
+    gap: 10px;
+    /* Espacio entre las columnas, si es necesario */
+}
+
+.izquierdo-side {
+    flex: 2;
+    /* Ocupará el 40% del contenedor principal */
+}
+
+.derecho-side {
+    flex: 7;
+    /* Ocupará el 60% del contenedor principal */
+}
+
+.oferta-detalles-container2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 8px;
+}
+
+.oferta-header2 {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+.oferta-header3 {
+    background: #ffffff;
+    padding: 40px; /* Conserva el padding original */
+    border-radius: 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    position: relative; /* Necesario para posicionar el texto dentro del contenedor */
 }

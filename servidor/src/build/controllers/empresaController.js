@@ -22,6 +22,7 @@ const perfilEmpresa_model_1 = __importDefault(require("../models/perfilEmpresa.m
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 const fotosEmpresa_model_1 = __importDefault(require("../models/fotosEmpresa.model"));
 const fotosPerfilEmpresa_model_1 = __importDefault(require("../models/fotosPerfilEmpresa.model"));
+const giro_model_1 = __importDefault(require("../models/giro.model"));
 class EmpresaController {
     constructor() {
     }
@@ -104,6 +105,20 @@ class EmpresaController {
                 console.log("Mostrando todas las empresas");
                 const empresa = yield empresa_model_1.default.find();
                 res.json(empresa);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    error: "Hubo un problema"
+                }));
+            }
+        });
+    }
+    getGiro(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Mostrando todos los giros");
+                const giro = yield giro_model_1.default.find();
+                res.json(giro);
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {

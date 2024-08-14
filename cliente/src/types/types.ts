@@ -66,7 +66,7 @@ export interface Empresa {
     ciudad: string;
     estado: string;
     giro: string;
-    foto: string;
+    foto: boolean;
 }
 
 export interface PerfilEmpresa {

@@ -5,6 +5,7 @@ import { API_URL } from '../auth/apis';
 import M from 'materialize-css';
 import '../index.css';
 import '../estilos/estilosEmpresas.css';
+import '../estilos/estilosEmpresas.css'
 
 const EmpresaCollapsibleItem: React.FC<Empresa> = ({ _id, nombre, direccion, giro, foto, correo, ciudad, estado }) => {
     const [perfil, setPerfil] = useState<PerfilEmpresa | null>(null);
@@ -31,7 +32,7 @@ const EmpresaCollapsibleItem: React.FC<Empresa> = ({ _id, nombre, direccion, gir
             <li>
                 <div className="collapsible-header" onClick={fetchPerfil}>
                     <div className="profile-picture-container">
-                        <img src={foto} alt={`Perfil de ${nombre}`} />
+                        <img alt={nombre} />
                     </div>
                     <div className="empresa-info">
                         <span className="nombre-empresa">{nombre}</span>
@@ -45,7 +46,7 @@ const EmpresaCollapsibleItem: React.FC<Empresa> = ({ _id, nombre, direccion, gir
                                 <span>{giro}</span>
                             </div>
                             <div className="info-item">
-                                <p  className='info-title'><i className="material-icons">mail</i>Correo</p>
+                                <p className='info-title'><i className="material-icons">mail</i>Correo</p>
                                 <span>{correo}</span>
                             </div>
                         </div>
@@ -54,11 +55,14 @@ const EmpresaCollapsibleItem: React.FC<Empresa> = ({ _id, nombre, direccion, gir
                 <div className="collapsible-body">
                     {perfil ? (
                         <>
-                            <p>Descripción: {perfil.descripcion}</p>
-                            <p>Misión: {perfil.mision}</p>
-                            <p>Empleos: {perfil.empleos}</p>
-                            <p>Página Oficial: <a href={perfil.paginaoficial} target="_blank" rel="noopener noreferrer">{perfil.paginaoficial}</a></p>
-                            <p>Redes Sociales: {perfil.redesSociales}</p>
+                            <p className="info-title">Descripción</p>
+                            <p>{perfil.descripcion}</p>
+                            <p className="info-title">Misión</p>
+                            <p>{perfil.mision}</p>
+                            <p className="info-title">Página oficial</p>
+                            <p><a href={perfil.paginaoficial} target="_blank" rel="noopener noreferrer">{perfil.paginaoficial}</a></p>
+                            <p className="info-title">Redes sociales</p>
+                            <p>{perfil.redesSociales}</p>
                         </>
                     ) : (
                         <p>Cargando perfil...</p>
