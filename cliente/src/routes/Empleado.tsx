@@ -448,7 +448,7 @@ export default function Empleados() {
                                 <div className="select-container">
                                     <p className='info-title4'>Fecha</p>                            
                                         <input type="text" className="datepicker" />
-                                        <label htmlFor="date">Fecha</label>
+                                       
                                 </div>
                             </div>
                             <div className="button-container">
