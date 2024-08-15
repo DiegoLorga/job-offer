@@ -313,14 +313,15 @@ input[readonly] {
 
 
 /* Contenedor padre para centrar horizontalmente */
-.profile-container {
+.profile-container2 {
   display: flex;
   justify-content: center;
+  height: 220px;
   /* Centra horizontalmente */
 }
 
 /* Configuración para la imagen de perfil */
-.profile-picture-container {
+.profile-picture-container2 {
   border-radius: 50%;
   /* Hace que la imagen sea circular */
   position: relative;
@@ -332,7 +333,7 @@ input[readonly] {
   justify-content: center;
 }
 
-.profile-picture {
+.profile-picture2 {
   border-radius: 50%;
   /* Hace que la imagen sea circular */
   width: 100%;
@@ -345,7 +346,7 @@ input[readonly] {
   /* Transición suave para el efecto hover */
 }
 
-.profile-picture-container .overlay {
+.profile-picture-container2 .overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -368,7 +369,7 @@ input[readonly] {
   transition: opacity 0.10s ease-in-out; /* Transición suave para el efecto hover */
 }
 
-.profile-picture-container:hover .overlay {
+.profile-picture-container2:hover .overlay {
   opacity: 1;
 }
 

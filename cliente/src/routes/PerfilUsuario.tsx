@@ -653,12 +653,12 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
             <div id="perfil" className="container2">
                 <br /><br />
 
-                <div className="profile-container">
-                    <div className="profile-picture-container" onClick={handleImageClick}>
+                <div className="profile-container2">
+                    <div className="profile-picture-container2" onClick={handleImageClick}>
                         <img
                             src={imageSrc} // Convertir a string
                             alt="Foto de perfil"
-                            className="profile-picture"
+                            className="profile-picture2"
                         />
                         <div className="overlay">
                             <i className="material-icons">edit</i>
