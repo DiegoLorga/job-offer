@@ -7,8 +7,10 @@ import PerfilUsuario from './models/perfilUsuario.model';
 import fs from 'fs';
 import path from 'path';
 
+
 class Server {
     public app: Application;
+
 
     constructor() {
         connectDB();
@@ -20,6 +22,7 @@ class Server {
         this.app.use('/doc', express.static(path.join(__dirname, 'doc'))); 
     }
 
+
     config(): void {
         this.app.use(express.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
         this.app.use(express.json({ limit: '50mb' }));
@@ -29,12 +32,14 @@ class Server {
         this.app.use(express.urlencoded({ extended: false }));
     }
 
+
     routes(): void {
         this.app.post('/uploadImagen', async (req: Request, res: Response) => {
             const file = req.body.src;
             const name = 'perfilUsuario';
             const id = req.body.id;
             const binaryData = Buffer.from(file.replace(/^data:image\/[a-z]+;base64,/, ""), 'base64').toString('binary');
+
 
             try {
                 fs.writeFile(`${__dirname}/img/` + name + '/' + id + '.jpg', binaryData, "binary", async (err) => {
@@ -89,7 +94,7 @@ class Server {
         this.app.delete('/deleteImagen/:tipo/:id', async (req: Request, res: Response) => {
             const { tipo, id } = req.params;
             const imagePath = `${__dirname}/img/${tipo}/${id}.jpg`;
-        
+
             try {
                 // Elimina el archivo de imagen
                 fs.unlink(imagePath, async (err) => {
@@ -97,17 +102,18 @@ class Server {
                         console.log(err);
                         return res.status(500).json({ message: "Error al eliminar la imagen", error: err });
                     }
-                    
+
                     try {
                         // Actualiza el perfil del usuario para establecer el campo 'foto' a false
                         const perfil = await PerfilUsuario.findByIdAndUpdate(id, { foto: false }, { new: true });
                         if (!perfil) {
                             return res.status(404).json({ message: "Perfil no encontrado" });
                         }
-                        
+
                         // Responde con un mensaje de éxito y el perfil actualizado
                         res.json({ message: "Imagen eliminada exitosamente", perfil });
                     } catch (updateError) {
+
 
                         res.status(500).json({ message: "Error al actualizar el perfil", error: updateError });
                     }
@@ -122,6 +128,7 @@ class Server {
         
     }
 
+
     start(): void {
         this.app.listen(this.app.get('port'), () => {
             console.log('Servidor de imágenes en el puerto', this.app.get('port'));
@@ -129,5 +136,9 @@ class Server {
     }
 }
 
+
 const server = new Server();
 server.start();
+
+
+

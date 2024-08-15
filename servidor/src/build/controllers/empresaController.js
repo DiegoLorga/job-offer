@@ -22,6 +22,7 @@ const perfilEmpresa_model_1 = __importDefault(require("../models/perfilEmpresa.m
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 const fotosEmpresa_model_1 = __importDefault(require("../models/fotosEmpresa.model"));
 const fotosPerfilEmpresa_model_1 = __importDefault(require("../models/fotosPerfilEmpresa.model"));
+const giro_model_1 = __importDefault(require("../models/giro.model"));
 class EmpresaController {
     constructor() {
     }
@@ -112,17 +113,41 @@ class EmpresaController {
             }
         });
     }
+    getGiro(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Mostrando todos los giros");
+                const giro = yield giro_model_1.default.find();
+                res.json(giro);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    error: "Hubo un problema"
+                }));
+            }
+        });
+    }
+    // Controllers/empresaController.ts
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 console.log("Mostrando una empresa");
-                const OneEmpresa = yield empresa_model_1.default.findById(req.params.id);
-                res.json(OneEmpresa);
+                const empresa = yield empresa_model_1.default.findById(req.params.id);
+                if (!empresa) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, { error: "Empresa no encontrada" }));
+                    return;
+                }
+                // Obtener el perfil de la empresa
+                const perfil = yield perfilEmpresa_model_1.default.findOne({ id_empresa: empresa._id });
+                res.json({
+                    empresa,
+                    perfil
+                });
+                console.log("Empresa: ", empresa);
+                console.log("Perfil: ", perfil);
             }
             catch (error) {
-                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
-                    error: "Hubo un error"
-                }));
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, { error: "Hubo un error" }));
             }
         });
     }
@@ -186,6 +211,58 @@ class EmpresaController {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
                     error: "No se pudo actualizar la información del perfil"
                 }));
+            }
+        });
+    }
+    obtenerPerfilEmpresa(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const perfil = yield perfilEmpresa_model_1.default.findOne({ id_empresa: id });
+                if (perfil) {
+                    res.json(perfil);
+                }
+                else {
+                    res.status(404).json({ message: 'Perfil de empresa no encontrado' });
+                }
+            }
+            catch (error) {
+                res.status(500).json({ message: 'Error al obtener el perfil de la empresa', error });
+            }
+        });
+    }
+    ;
+    buscarEmpresas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Filtrando las empresas");
+                // Extracción de parámetros de búsqueda desde la consulta de la URL
+                const { ciudad, estado, giro } = req.body;
+                // Construcción dinámica del filtro de búsqueda
+                const filtros = {};
+                if (estado)
+                    filtros.estado = estado;
+                if (ciudad)
+                    filtros.ciudad = ciudad;
+                if (giro)
+                    filtros.giro = giro;
+                // Consulta a la base de datos usando los filtros
+                const empresas = yield empresa_model_1.default.find(filtros);
+                // Verificar si se encontraron empresas
+                if (empresas.length === 0) {
+                    console.log("No hay coincidencias");
+                    res.status(404).json({
+                        message: "No se encontraron coincidencias"
+                    });
+                    return;
+                }
+                res.json(empresas);
+            }
+            catch (error) {
+                console.error("Error al buscar empresas:", error);
+                res.status(500).json({
+                    error: "Hubo un error al buscar las empresas"
+                });
             }
         });
     }

@@ -8,11 +8,13 @@ class EmpresaRoutes {
     config(): void {
         this.router.get('/obtenerEmpresa/:id',empresaController.listOne);
         this.router.get('/listarEmpresa', empresaController.list)
+        this.router.get('/getGiros',empresaController.getGiro)
         this.router.post('/', empresaController.createEmpresa);
         this.router.delete('/:id',empresaController.borrarEmpresa);
         this.router.put('/:id',empresaController.actualizarEmpresa);
         this.router.put('/actualizar/:id',empresaController.actualizarPerfilEmpresa);
         this.router.delete('/eliminarEmpresa/:id', empresaController.borrarEmpresa);
+        this.router.post('/filtros',empresaController.buscarEmpresas)
     }
 }
 const empresaRoutes = new EmpresaRoutes();

@@ -175,6 +175,15 @@ class ofertaLaboralController {
             // Consulta a la base de datos usando los filtros
             const ofertas = await OfertaLaboral.find(filtros);
 
+            if (ofertas.length === 0) {
+                console.log("No hay coincidencias");
+                
+                res.status(404).json({
+                    message: "No se encontraron coincidencias"
+                });
+                return;
+            }
+    
             res.json(ofertas);
         } catch (error) {
             console.error("Error al buscar ofertas:", error);

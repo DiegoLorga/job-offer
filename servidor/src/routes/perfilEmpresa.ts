@@ -15,7 +15,7 @@ class perfilEmpresaRoutes {
         this.router.post('/crearEnlace',redesSocialesController.createEnlaceRed);
         this.router.put('/actualizar/:id',empresaController.actualizarPerfilEmpresa);
         this.router.delete('/eliminarEmpresa/:id', empresaController.borrarEmpresa);
-
+        this.router.get('/perfil/:id', empresaController.obtenerPerfilEmpresa);
     }
 }
 const PerfilEmpresaRoutes = new perfilEmpresaRoutes();

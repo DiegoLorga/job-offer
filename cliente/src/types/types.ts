@@ -61,12 +61,22 @@ export interface ProfileError {
 export interface Empresa {
     _id: string;
     nombre: string;
-    //correo:string;
+    correo:string;
     direccion: string;
-    //ciudad: string;
-    //estado: string;
+    ciudad: string;
+    estado: string;
     giro: string;
-    foto: string;
+    foto: boolean;
+}
+
+export interface PerfilEmpresa {
+    _id:string;
+    id_empresa: string;
+    descripcion: string;
+    mision:string;
+    empleos:string
+    paginaoficial: string;
+    redesSociales: string
 }
 
 export interface Oferta1{

@@ -70,11 +70,13 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     //para cargar la imagen
     const handleUploadImage = async () => {
         if (!selectedFile) {
             return;
         }
+
 
         const reader = new FileReader();
         reader.onloadend = async () => {
@@ -83,6 +85,7 @@ export default function PerfilUsuarios() {
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
                 const userId = usuario.id;
+
 
                 try {
                     const response = await fetch(`${API_URI_IMAGENES}/uploadImagen`, {
@@ -95,6 +98,7 @@ export default function PerfilUsuarios() {
                             id: userId
                         })
                     });
+
 
                     if (response.ok) {
                         //const data = await response.json();
@@ -115,6 +119,7 @@ export default function PerfilUsuarios() {
                             text: 'Error al caragar la imagen'
                         })
 
+
                     }
                 } catch (error) {
                     console.error('Error al cargar la imagen:', error);
@@ -122,6 +127,7 @@ export default function PerfilUsuarios() {
                 }
             }
         };
+
 
         reader.readAsDataURL(selectedFile);
     };
@@ -133,9 +139,11 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     // Función de manejo del envío del formulario
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
 
         // Mostrar una alerta de confirmación antes de proceder
         const result = await Swal.fire({
@@ -149,14 +157,17 @@ export default function PerfilUsuarios() {
             cancelButtonText: 'Cancelar'
         });
 
+
         // Si el usuario confirma, continuar con la actualización
         if (result.isConfirmed) {
             const storedUser = localStorage.getItem('usuario');
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
 
+
                 // Crear el objeto de actualización solo con los campos que tienen valor
                 const updatedFields: Record<string, string> = {};
+
 
                 if (selectedNombre) updatedFields.nombre = selectedNombre;
                 if (selectedDireccion) updatedFields.direccion = selectedDireccion;
@@ -171,6 +182,7 @@ export default function PerfilUsuarios() {
                         },
                         body: JSON.stringify(updatedFields) // Solo los campos con valor
                     });
+
 
                     if (response.ok) {
                         const updatedUser = await response.json(); // Obtener la respuesta actualizada
@@ -215,6 +227,7 @@ export default function PerfilUsuarios() {
                             setSelectedCiudad('');
                             setErrorNombre("");
                         });
+
 
                     } else {
                         const json = await response.json() as AuthResponseError;
@@ -642,6 +655,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
     return (
         <DefaultLayout showNav={true}>
 
+
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs">
                     <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
@@ -649,9 +663,11 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                 </ul>
             </div>
 
+
             {/* para perfil  */}
             <div id="perfil" className="container2">
                 <br /><br />
+
 
                 <div className="profile-container">
                     <div className="profile-picture-container" onClick={handleImageClick}>
@@ -673,8 +689,10 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                     />
                 </div>
 
+
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
+
 
                 <div className="button-containerSave">
                     <button
@@ -688,9 +706,12 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                 </div>
 
 
+
+
                 <div className="nombre-contenedor">
                     <h1 className="nombre-titulo">{nombre}</h1>
                 </div>
+
 
                 <form className="form-horizontal">
                     <label htmlFor="correo">Correo</label>
@@ -710,9 +731,11 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                         <input type="text" id="ciudad" name="ciudad" value={ciudad} readOnly />
                     </div>
 
+
                     <div className="button-container1">
                         <a className="waves-effect waves-light btn modal-trigger" href="#modal1">Actualizar</a>
                     </div>
+
 
                 </form>
 
@@ -802,6 +825,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                 </div>
 
 
+
             </div>
 
             {/*informacion  */}
@@ -829,6 +853,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                         <p>Curriculum Vitae actualizado para sus futuras postulaciones</p><br />
                     </div>
                 </div>
+                </div>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Experiencia laboral reciente</span>
@@ -840,6 +865,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                         </a>
                         <p>Experiencia laboral adquirida de su último trabajo.</p><br />
                     </div>
+                </div>
                 </div>
                 <div className="card">
                     <div className="card-content">
@@ -1062,3 +1088,6 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
         </DefaultLayout>
     );
 }
+
+
+

@@ -1,31 +1,76 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Empresa } from '../types/types'; // Ajusta la ruta según tu estructura de carpetas
+import React, { useEffect, useState } from 'react';
+import { Empresa, PerfilEmpresa } from '../types/types';
 import 'materialize-css/dist/css/materialize.min.css';
-import '../index.css'; // Asegúrate de tener los estilos personalizados aquí
+import { API_URL } from '../auth/apis';
+import M from 'materialize-css';
+import '../index.css';
+import '../estilos/estilosEmpresas.css';
+import '../estilos/estilosEmpresas.css'
 
-const EmpresaCard: React.FC<Empresa> = ({ _id, nombre, direccion, giro, foto }) => {
+const EmpresaCollapsibleItem: React.FC<Empresa> = ({ _id, nombre, direccion, giro, foto, correo, ciudad, estado }) => {
+    const [perfil, setPerfil] = useState<PerfilEmpresa | null>(null);
+
+    useEffect(() => {
+        M.Collapsible.init(document.querySelectorAll('.collapsible'));
+        console.log("Pestañas inicializadas");
+    }, []);
+
+    const fetchPerfil = async () => {
+        try {
+            const response = await fetch(`${API_URL}/empresa/obtenerEmpresa/${_id}`);
+            const data = await response.json();
+            setPerfil(data.perfil);
+            console.log(data.perfil);
+
+        } catch (error) {
+            console.error('Error al obtener el perfil de la empresa:', error);
+        }
+    };
+
     return (
-        <div className="card horizontal">
-            <div className="card-image circle-image-container">
-                <img 
-                    src={foto || "https://www.elfinanciero.com.mx/resizer/iKgpfAJUixbWsAh5wTbC98O2sVA=/1440x810/filters:format(jpg):quality(70)/cloudfront-us-east-1.images.arcpublishing.com/elfinanciero/WEBXETUXNJFRTILA7F3UNAIIXY.jpg"} 
-                    alt={`${nombre} logo`} 
-                    className="circle-image"
-                />
-            </div>
-            <div className="card-stacked">
-                <div className="card-content">
-                    <span className="card-title">{nombre}</span>
-                    <p>Ubicación: {direccion}</p>
-                    <p>Giro: {giro}</p>
+        <ul className="collapsible">
+            <li>
+                <div className="collapsible-header" onClick={fetchPerfil}>
+                    <div className="profile-picture-container">
+                        <img alt={nombre} />
+                    </div>
+                    <div className="empresa-info">
+                        <span className="nombre-empresa">{nombre}</span>
+                        <div className="location-email-giro">
+                            <div className="info-item">
+                                <p className='info-title'><i className="material-icons">location_on</i>Ubicación</p>
+                                <span>{direccion}, {ciudad}, {estado}</span>
+                            </div>
+                            <div className="info-item">
+                                <p className='info-title'><i className="material-icons">business</i>Giro</p>
+                                <span>{giro}</span>
+                            </div>
+                            <div className="info-item">
+                                <p className='info-title'><i className="material-icons">mail</i>Correo</p>
+                                <span>{correo}</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="card-action">
-                    <Link to={`/empresa/${_id}`}>Ver detalles</Link>
+                <div className="collapsible-body">
+                    {perfil ? (
+                        <>
+                            <p className="info-title">Descripción</p>
+                            <p>{perfil.descripcion}</p>
+                            <p className="info-title">Misión</p>
+                            <p>{perfil.mision}</p>
+                            <p className="info-title">Página oficial</p>
+                            <p><a href={perfil.paginaoficial} target="_blank" rel="noopener noreferrer">{perfil.paginaoficial}</a></p>
+                            <p className="info-title">Redes sociales</p>
+                            <p>{perfil.redesSociales}</p>
+                        </>
+                    ) : (
+                        <p>Cargando perfil...</p>
+                    )}
                 </div>
-            </div>
-        </div>
+            </li>
+        </ul>
     );
 };
 
-export default EmpresaCard;
+export default EmpresaCollapsibleItem;

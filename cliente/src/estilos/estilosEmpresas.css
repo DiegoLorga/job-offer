@@ -1,0 +1,250 @@
+.collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgb(255, 255, 255);
+}
+
+.collapsible-header img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.collapsible-header .empresa-info {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-right: 15px;
+}
+
+.collapsible-header .empresa-info .location-email-giro {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.collapsible-header .empresa-info span {
+    margin: 0 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collapsible-header .empresa-info .location-email-giro span {
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.collapsible-header .empresa-info .empresa-nombre {
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 10px;
+    /* Espacio adicional entre el nombre y los otros datos */
+}
+
+.location-email-giro span,
+.location-email-giro i {
+    margin-right: 10px;
+}
+
+.location-email-giro .icon-location {
+    color: #3498db;
+    /* Color del ícono de ubicación */
+}
+
+.location-email-giro .icon-briefcase {
+    color: #e67e22;
+    /* Color del ícono de giro */
+}
+
+.location-email-giro .icon-mail {
+    color: #e74c3c;
+    /* Color del ícono de correo */
+}
+
+.profile-picture-container {
+    width: 60px;
+    height: 60px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.profile-picture-container img {
+    width: 100%;
+    height: auto;
+}
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.info-container p {
+    margin: 2px 0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.empresa-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.empresa-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.empresa-details p {
+    margin: 3px 0;
+    color: #666;
+    font-size: 14px;
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.nombre-empresa {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: black;
+}
+
+.ubicacion-giro-correo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.ubicacion-giro-correo span {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.info-title {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 2px;
+    color: #333;
+}
+
+.info-title2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 8px;
+    margin-top: 0px;
+    color: #333;
+}
+
+.info-title3 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0;
+    /* Remueve cualquier margen */
+    color: #333;
+    position: absolute;
+    top: 0;
+    /* Posiciona en la parte superior */
+    left: 0;
+    /* Posiciona en la esquina izquierda */
+    padding: 5px;
+    /* Añade un pequeño padding para separarlo del borde */
+}
+
+.info-title i {
+    margin-right: 8px;
+    /* Espacio entre el ícono y el texto */
+    color: #007bff;
+    /* Color del ícono */
+}
+
+.main-container2 {
+    display: flex;
+    gap: 20px;
+    /* Espacio entre las columnas, si es necesario */
+}
+
+.izquierdo-side {
+    flex: 2;
+    /* Ocupará el 40% del contenedor principal */
+}
+
+.derecho-side {
+    flex: 7;
+    max-height: 10px;
+    margin-left: 30px;
+
+    /* Ocupará el 60% del contenedor principal */
+}
+
+.oferta-detalles-container2 {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 8px;
+}
+
+.oferta-header2 {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+}
+
+.oferta-header3 {
+    background: #ffffff;
+    padding: 40px;
+    /* Conserva el padding original */
+    border-radius: 0px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    position: relative;
+    /* Necesario para posicionar el texto dentro del contenedor */
+}
+
+.button-container2 {
+    justify-content: center; /* Centra el botón horizontalmente */
+    margin: 10px; /* Espacio superior e inferior más pequeño */
+    margin-top: 40px; /* Espacio superior entre el select y el botón */
+    width: 200px; /* Define un ancho fijo para el contenedor */
+}
+
+.button-container2 button {
+    width: 100%; /* El botón ocupará todo el ancho del contenedor */
+    height: 50px; /* Altura fija para el botón */
+    max-width: 200px; /* Ancho máximo para el botón */
+    min-width: 150px; /* Ancho mínimo para el botón */
+}
+
+
+.custom-btn2 {
+    width: 50%; /* El botón ocupará todo el ancho del contenedor */
+    background-color: #630bde;
+    color: white;
+    padding: 2px 10px; /* Espaciado interno para el botón */
+    font-size: 12px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center; /* Asegura que el texto esté centrado */
+    display: inline-block; /* Asegura que el botón se comporte como un elemento en línea */
+}
+
+.custom-btn2:hover {
+    background-color: #4b08a5; /* Cambia ligeramente el color en hover */
+}
+
+
+
+

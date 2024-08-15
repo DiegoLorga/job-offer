@@ -1,0 +1,198 @@
+[{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645272"
+  },
+  "giro": "Agricultura"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645273"
+  },
+  "giro": "Ganadería"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645274"
+  },
+  "giro": "Pesca"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645275"
+  },
+  "giro": "Silvicultura (explotación de bosques)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645276"
+  },
+  "giro": "Minería"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645277"
+  },
+  "giro": "Construcción"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645278"
+  },
+  "giro": "Automotriz"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645279"
+  },
+  "giro": "Textil"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527a"
+  },
+  "giro": "Alimentaria"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527b"
+  },
+  "giro": "Metalurgia"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527c"
+  },
+  "giro": "Química"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527d"
+  },
+  "giro": "Electrónica"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527e"
+  },
+  "giro": "Energética"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d851894464527f"
+  },
+  "giro": "Comercio (mayorista y minorista)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645280"
+  },
+  "giro": "Transporte y logística"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645281"
+  },
+  "giro": "Servicios financieros (bancos, seguros)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645282"
+  },
+  "giro": "Turismo y hostelería"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645283"
+  },
+  "giro": "Salud (hospitales, clínicas)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645284"
+  },
+  "giro": "Educación (colegios, universidades)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645285"
+  },
+  "giro": "Tecnología de la Información (TI)"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645286"
+  },
+  "giro": "Telecomunicaciones"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645287"
+  },
+  "giro": "Marketing y publicidad"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645288"
+  },
+  "giro": "Consultoría"
+},
+{
+  "_id": {
+    "$oid": "66bbdde4b8d8518944645289"
+  },
+  "giro": "Servicios legales"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d851894464528b"
+  },
+  "giro": "Administración pública"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d851894464528c"
+  },
+  "giro": "Organizaciones no gubernamentales (ONG)"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d851894464528d"
+  },
+  "giro": "Servicios culturales y creativos"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d851894464528e"
+  },
+  "giro": "Organismos internacionales"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d851894464528f"
+  },
+  "giro": "Desarrollo de software"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d8518944645290"
+  },
+  "giro": "Investigación y desarrollo (I+D)"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d8518944645291"
+  },
+  "giro": "Biotecnología"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d8518944645292"
+  },
+  "giro": "Inteligencia artificial"
+},
+{
+  "_id": {
+    "$oid": "66bbde36b8d8518944645293"
+  },
+  "giro": "Big Data y análisis de datos"
+}]

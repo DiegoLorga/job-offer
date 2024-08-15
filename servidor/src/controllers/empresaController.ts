@@ -9,6 +9,8 @@ import PerfilEmpresa from '../models/perfilEmpresa.model';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import fotosEmpresa from '../models/fotosEmpresa.model';
 import FotosPerfilEmpresa from '../models/fotosPerfilEmpresa.model';
+import Giro from '../models/giro.model';
+import { isEmpty } from 'validator';
 
 class EmpresaController {
 
@@ -114,17 +116,45 @@ class EmpresaController {
         }
     }
 
-    public async listOne(req: Request, res: Response): Promise<void> {
+    public async getGiro(req: Request, res: Response): Promise<void> {
         try {
-            console.log("Mostrando una empresa");
-            const OneEmpresa = await Empresa.findById(req.params.id)
-            res.json(OneEmpresa);
+            console.log("Mostrando todos los giros");
+            const giro = await Giro.find();
+            res.json(giro)
         } catch (error) {
             res.status(500).json(jsonResponse(500, {
-                error: "Hubo un error"
+                error: "Hubo un problema"
             }));
+
         }
     }
+
+    // Controllers/empresaController.ts
+public async listOne(req: Request, res: Response): Promise<void> {
+    try {
+        console.log("Mostrando una empresa");
+        const empresa = await Empresa.findById(req.params.id);
+        if (!empresa) {
+            res.status(404).json(jsonResponse(404, { error: "Empresa no encontrada" }));
+            return;
+        }
+
+        // Obtener el perfil de la empresa
+        const perfil = await PerfilEmpresa.findOne({ id_empresa: empresa._id });
+
+        res.json({
+            empresa,
+            perfil
+        });
+        console.log("Empresa: ",empresa);
+        console.log("Perfil: ",perfil);
+        
+        
+    } catch (error) {
+        res.status(500).json(jsonResponse(500, { error: "Hubo un error" }));
+    }
+}
+
 
     public async borrarEmpresa(req: Request, res: Response): Promise<void> {
         console.log("Borrando una empresa");
@@ -191,6 +221,57 @@ class EmpresaController {
         }
     }
 
+    public async  obtenerPerfilEmpresa (req: Request, res: Response): Promise<void> {
+        const { id } = req.params;
+        try {
+            const perfil = await PerfilEmpresa.findOne({ id_empresa: id });
+            if (perfil) {
+                res.json(perfil);
+            } else {
+                res.status(404).json({ message: 'Perfil de empresa no encontrado' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener el perfil de la empresa', error });
+        }
+    };
+
+    public async buscarEmpresas(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Filtrando las empresas");
+            
+            // Extracción de parámetros de búsqueda desde la consulta de la URL
+            const { ciudad, estado, giro } = req.body;
+            
+            // Construcción dinámica del filtro de búsqueda
+            const filtros: any = {};
+    
+            if (estado) filtros.estado = estado;
+            if (ciudad) filtros.ciudad = ciudad;
+            if (giro) filtros.giro = giro;
+    
+            // Consulta a la base de datos usando los filtros
+            const empresas = await Empresa.find(filtros);
+    
+            // Verificar si se encontraron empresas
+            if (empresas.length === 0) {
+                console.log("No hay coincidencias");
+                
+                res.status(404).json({
+                    message: "No se encontraron coincidencias"
+                });
+                return;
+            }
+    
+            res.json(empresas);
+    
+        } catch (error) {
+            console.error("Error al buscar empresas:", error);
+            res.status(500).json({
+                error: "Hubo un error al buscar las empresas"
+            });
+        }
+    }
+    
     
 
 }

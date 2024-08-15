@@ -10,11 +10,13 @@ class EmpresaRoutes {
     config() {
         this.router.get('/obtenerEmpresa/:id', empresaController_1.empresaController.listOne);
         this.router.get('/listarEmpresa', empresaController_1.empresaController.list);
+        this.router.get('/getGiros', empresaController_1.empresaController.getGiro);
         this.router.post('/', empresaController_1.empresaController.createEmpresa);
         this.router.delete('/:id', empresaController_1.empresaController.borrarEmpresa);
         this.router.put('/:id', empresaController_1.empresaController.actualizarEmpresa);
         this.router.put('/actualizar/:id', empresaController_1.empresaController.actualizarPerfilEmpresa);
         this.router.delete('/eliminarEmpresa/:id', empresaController_1.empresaController.borrarEmpresa);
+        this.router.post('/filtros', empresaController_1.empresaController.buscarEmpresas);
     }
 }
 const empresaRoutes = new EmpresaRoutes();
