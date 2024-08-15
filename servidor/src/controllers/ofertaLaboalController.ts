@@ -13,7 +13,7 @@ class ofertaLaboralController {
         const { id_empresa, titulo, puesto, sueldo, horario, modalidad, direccion, ciudad, estado, status,
             descripcion, requisitos, telefono, correo, educacion, idioma, experienciaLaboral, categoria } = req.body;
         const inicio = 0;
-            try {
+        try {
             const nuevaOfertaLaboral = new OfertaLaboral({
                 id_empresa,
                 titulo,
@@ -95,12 +95,12 @@ class ofertaLaboralController {
 
     public async eliminarOferta(req: Request, res: Response): Promise<void> {
         console.log("Borrando una empresa");
-    
+
         try {
             const idOferta = req.params.id;
-            
+
             const oferta = await OfertaLaboral.findByIdAndDelete(idOferta);
-    
+
             if (!oferta) {
                 console.log("Perfil no encontrado o ya eliminado");
             }
@@ -108,8 +108,8 @@ class ofertaLaboralController {
             res.status(200).json(jsonResponse(200, {
                 message: "Oferta eliminada correctamente"
             }));
-    
-    
+
+
         } catch (error) {
             console.error(error);  // Log the specific error for debugging
             res.status(400).json(jsonResponse(400, {
@@ -117,7 +117,7 @@ class ofertaLaboralController {
             }));
         }
     }
-    
+
     public async actualizarOfertaLaboral(req: Request, res: Response): Promise<void> {
         try {
             console.log("Actualizando una oferta");
@@ -130,25 +130,25 @@ class ofertaLaboralController {
         }
     }
 
-    public async createCategoria(req: Request, res: Response): Promise<void>{
+    public async createCategoria(req: Request, res: Response): Promise<void> {
         console.log("Creado un  rol");
-        const {nombre}=req.body;
-        try{
-            const nuevaCategoria= new Categoria({
+        const { nombre } = req.body;
+        try {
+            const nuevaCategoria = new Categoria({
                 nombre
-            }) 
+            })
             const CategoriaGuardado = await nuevaCategoria.save();
             res.json({
                 tipo: CategoriaGuardado.nombre
             })
-        }catch{
+        } catch {
             res.status(400).json(jsonResponse(400, {
                 error: "No se pudo crear la categoria"
 
             })
-        )
+            )
 
-        }   
+        }
     }
 
     public async list(req: Request, res: Response): Promise<void> {
@@ -160,8 +160,8 @@ class ofertaLaboralController {
     public async buscarOfertas(req: Request, res: Response): Promise<void> {
         try {
             // Extracción de parámetros de búsqueda desde la consulta de la URL
-            const { estado, ciudad, sueldo, modalidad, educacion, fechacreacion } = req.body;
-            
+            const { estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin } = req.body;
+
             // Construcción dinámica del filtro de búsqueda
             const filtros: any = {};
 
@@ -170,20 +170,31 @@ class ofertaLaboralController {
             if (sueldo) filtros.sueldo = { $gte: Number(sueldo) }; // Sueldo mayor o igual
             if (modalidad) filtros.modalidad = modalidad;
             if (educacion) filtros.educacion = educacion;
-            if (fechacreacion) filtros.createdAt = { $gte: new Date(fechacreacion as string) }; // Ofertas creadas después de la fecha
+
+            // Filtro para buscar entre dos fechas
+            if (fechaInicio && fechaFin) {
+                filtros.createdAt = {
+                    $gte: new Date(fechaInicio as string),
+                    $lte: new Date(fechaFin as string)
+                };
+            } else if (fechaInicio) {
+                filtros.createdAt = { $gte: new Date(fechaInicio as string) };
+            } else if (fechaFin) {
+                filtros.createdAt = { $lte: new Date(fechaFin as string) };
+            }
 
             // Consulta a la base de datos usando los filtros
             const ofertas = await OfertaLaboral.find(filtros);
 
             if (ofertas.length === 0) {
                 console.log("No hay coincidencias");
-                
+
                 res.status(404).json({
                     message: "No se encontraron coincidencias"
                 });
                 return;
             }
-    
+
             res.json(ofertas);
         } catch (error) {
             console.error("Error al buscar ofertas:", error);
@@ -192,6 +203,7 @@ class ofertaLaboralController {
             });
         }
     }
+
 
     public async ObtenerNombreEmpresa(req: Request, res: Response): Promise<void> {
         try {
@@ -223,7 +235,7 @@ class ofertaLaboralController {
 
             // 5. Retornar el nombre de la empresa
             res.json({ nombre: empresa.nombre });
-            
+
         } catch (error) {
             console.error("Error al obtener el nombre de la empresa:", error);
             res.status(500).json(jsonResponse(500, {

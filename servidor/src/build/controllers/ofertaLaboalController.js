@@ -171,7 +171,7 @@ class ofertaLaboralController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 // Extracción de parámetros de búsqueda desde la consulta de la URL
-                const { estado, ciudad, sueldo, modalidad, educacion, fechacreacion } = req.body;
+                const { estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin } = req.body;
                 // Construcción dinámica del filtro de búsqueda
                 const filtros = {};
                 if (estado)
@@ -184,8 +184,19 @@ class ofertaLaboralController {
                     filtros.modalidad = modalidad;
                 if (educacion)
                     filtros.educacion = educacion;
-                if (fechacreacion)
-                    filtros.createdAt = { $gte: new Date(fechacreacion) }; // Ofertas creadas después de la fecha
+                // Filtro para buscar entre dos fechas
+                if (fechaInicio && fechaFin) {
+                    filtros.createdAt = {
+                        $gte: new Date(fechaInicio),
+                        $lte: new Date(fechaFin)
+                    };
+                }
+                else if (fechaInicio) {
+                    filtros.createdAt = { $gte: new Date(fechaInicio) };
+                }
+                else if (fechaFin) {
+                    filtros.createdAt = { $lte: new Date(fechaFin) };
+                }
                 // Consulta a la base de datos usando los filtros
                 const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
                 if (ofertas.length === 0) {

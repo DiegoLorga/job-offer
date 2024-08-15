@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c6b"
+  },
+  "nivel": "PRIMARIA"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c6c"
+  },
+  "nivel": "SECUNDARIA"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c6d"
+  },
+  "nivel": "PREPARATORIA"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c6e"
+  },
+  "nivel": "TÉCNICO SUPERIOR"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c6f"
+  },
+  "nivel": "LICENCIATURA TRUNCA"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c70"
+  },
+  "nivel": "LICENCIATURA SIN TITULO"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c71"
+  },
+  "nivel": "LICENCIATURA CON TITULO"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c72"
+  },
+  "nivel": "MAESTRÍA"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c73"
+  },
+  "nivel": "DOCTORADO"
+},
+{
+  "_id": {
+    "$oid": "66be6b225e2b6eb94c2c7c74"
+  },
+  "nivel": "OTRO"
+}]
