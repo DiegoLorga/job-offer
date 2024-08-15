@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
+import Experiencia from '../models/experiencia.model';
 import PerfilUsuario from '../models/perfilUsuario.model';
 import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
 import { jsonResponse } from '../lib/jsonResponse';
@@ -50,12 +51,12 @@ class UsuarioController {
            correoError = "El correo electrónico ya está en uso"
         }
 
-        const estadoName = await Estado.findOne({ clave: estado });
+       /*const estadoName = await Estado.findOne({ clave: estado });
         let estadoNom: string = estado; // Definir la variable con el tipo correcto
 
         if (estadoName) {
             estadoNom = estadoName.nombre;
-        }
+        } */
 
         if (camposError || contrasenasError || nombreError || correoError) {
             res.status(400).json(jsonResponse(400, {
@@ -78,7 +79,7 @@ class UsuarioController {
                 contrasena: hashedPassword,
                 direccion,
                 ciudad,
-                estado: estadoNom,
+                estado,
                 id_rol: tipoRol
             });
 
@@ -87,11 +88,10 @@ class UsuarioController {
             const nuevoPerfil = new PerfilUsuario({
                 id_usuario: UsuarioGuardado._id,
                 cv: false,
-                experiencia: '',
-                especialidad: '',
-                habilidades: '',
+                experiencia: false,
+                habilidades: false,
                 educacion: '',
-                idiomas: '',
+                idiomas: false,
                 certificaciones: false,
                 repositorio: '',
                 status: false,
@@ -100,11 +100,14 @@ class UsuarioController {
 
             const PerfilGuardado = await nuevoPerfil.save();
 
-            const nuevaFotoPerfil = new FotosPerfilUsuario({
-                id_fotoUs: PerfilGuardado._id
+            const nuevoExp = new Experiencia({
+                id_usuario: UsuarioGuardado._id,
+                empresa: '',
+                puesto: '',
+                descripcion: ''
             });
-            await nuevaFotoPerfil.save();
 
+            const ExperienciaGuardado = await nuevoExp.save();
 
             const token = await createAccesToken({ id: UsuarioGuardado._id })
             res.cookie('token', token)
@@ -246,7 +249,7 @@ class UsuarioController {
     }
 
     public async actualizarUsuario(req: Request, res: Response): Promise<void> {
-        const { nombre, direccion, ciudad, estado } = req.body;
+        const { nombre, direccion, ciudad, estado, correo } = req.body;
     
         let nombreError: string | null = null;
     
@@ -255,14 +258,16 @@ class UsuarioController {
             nombreError = "Nombre no válido";
         }
         
-    
-      
-        const estadoName = await Estado.findOne({ clave: estado });
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(correo)) {
+                nombreError = "Correo no válido";
+            }
+        /*const estadoName = await Estado.findOne({ clave: estado });
         let estadoNom: string = estado;
     
         if (estadoName) {
             estadoNom = estadoName.nombre;
-        }
+        }*/
     
         if (nombreError) {
             res.status(400).json(jsonResponse(400, {
@@ -276,7 +281,7 @@ class UsuarioController {
         try {
             const perfil = await Usuario.findByIdAndUpdate(
                 req.params.id, 
-                { nombre, direccion, ciudad, estado: estadoNom }, 
+                { nombre, direccion, ciudad, estado, correo }, 
                 { new: true }
             );
             res.json(perfil);

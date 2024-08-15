@@ -238,7 +238,7 @@ export default function Registro() {
                                 className="browser-default"
                             >
                                 {ciudades.map(ciudad => (
-                                    <option key={ciudad._id} value={ciudad._id}>{ciudad.nombre}</option>
+                                    <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
                                 ))}
                             </select>
                         </div>

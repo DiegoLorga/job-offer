@@ -11,6 +11,7 @@ import cookieParser from 'cookie-parser'
 import usuarioRoutes from './routes/usuario';
 import PerfilEmpresaRoutes from './routes/perfilEmpresa';
 import ofertaLaboralRoutes from './routes/ofertalaboral';
+import perfilUsuarioRoutes from './routes/perfilUsuario';
 import path from 'path';
 class Server {
     public app: Application;
@@ -39,6 +40,7 @@ class Server {
         this.app.use('/api/rol',rolRoutes);
         this.app.use('/api/perfilEmpresa',PerfilEmpresaRoutes);
         this.app.use('/api/OfertaLaboral',ofertaLaboralRoutes);
+        this.app.use('/api/perfilUsuario',perfilUsuarioRoutes);
     }
     start(): void {
         this.app.listen(this.app.get('port'), () => {

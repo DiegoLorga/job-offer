@@ -8,43 +8,9 @@ import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import Swal from 'sweetalert2';
 import '../estilos/estiloPerfilUsuario.css';
 import { Navigate, useNavigate } from "react-router-dom";
-import { AuthReponseRegister, AuthResponseError } from "../types/types";
+import { AuthResponseError } from "../types/types";
+import { Estado, Ciudad, Usuario, perfilUsuario, Experiencia } from '../types/types';
 
-
-interface Estado {
-    _id: string;
-    nombre: string;
-    clave: string;
-}
-
-interface Ciudad {
-    _id: string;
-    nombre: string;
-    clave: string;
-}
-
-interface Usuario {
-    _id: string;
-    nombre: string;
-    correo: string;
-    direccion: string;
-    estado: string;
-    ciudad: string;
-}
-
-interface perfilUsuario {
-    _id: string;
-    cv: false,
-    experiencia: string,
-    especialidad: string,
-    habilidades: string,
-    educacion: string,
-    idiomas: string,
-    certificaciones: false,
-    repositorio: string,
-    status: false,
-    foto: false
-}
 
 export default function PerfilUsuarios() {
     const [errorResponse, setErrorResponse] = useState<string>("");
@@ -56,155 +22,41 @@ export default function PerfilUsuarios() {
     const [selectedCiudad, setSelectedCiudad] = useState("");
     const [selectedNombre, setSelectedNombre] = useState<string>("");
     const [selectedDireccion, setSelectedDireccion] = useState<string>("");
+    const [selectedCorreo, setSelectedCorreo] = useState<string>("")
     const [ciudad, setCiudad] = useState<string>("");
     const [estado, setEstado] = useState<string>("");
+    const [estado2, setEstado2] = useState<string>("");
     const [estados, setEstados] = useState<Estado[]>([]);
     const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // Para manejar la imagen
     const [previewImage, setPreviewImage] = useState<string | null>(null); // Asegurarse de que solo sea string o null
+    const [previewImageBoton, setPreviewImageBoton] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null); // Referencia al input de archivo
     const [foto, setFoto] = useState<boolean>(false);
     const [errorNombre, setErrorNombre] = useState("");
     const auth = useAuth();
     const goTo = useNavigate();
+    const [selectedFileDoc, setSelectedFileDoc] = useState<File | null>(null);
+    const [habilidad, setHabilidad] = useState('');
+    const [habilidades, setHabilidades] = useState<string[]>([]);
+    const [experiencia, setExperiencia] = useState<Experiencia | null>(null);
 
-
-    // Obtener la lista de estados al cargar el componente
-    useEffect(() => {
-        async function fetchEstados() {
-            try {
-                const response = await fetch(`${API_URL}/usuario/getEstados`);
-                if (response.ok) {
-                    const data = await response.json() as Estado[];
-                    setEstados(data);
-                    /*if (data.length > 0) {
-                        setSelectedEstado(data[0].clave);
-                    } */
-                } else {
-                    console.error('Error al obtener los estados:', response.statusText);
-                }
-            } catch (error) {
-                console.error('Error al obtener los estados:', error);
-            }
+    //para habilidades
+    const handleSubmitHab = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (habilidad.trim()) {
+          setHabilidades([...habilidades, habilidad]);
+          setHabilidad(''); // Limpiar el campo después de añadir la habilidad
         }
-
-        fetchEstados();
-    }, []);
-
-    //setSelectedCiudad(ciudad);
-    useEffect(() => {
-        async function fetchCiudades() {
-            if (selectedEstado) {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
-                    if (response.ok) {
-                        const data = await response.json() as Ciudad[];
-                        setCiudades(data);
-                        if (data.length > 0) {
-                            setSelectedCiudad(data[0].nombre);
-                        }
-                    } else {
-                        console.error('Error al obtener las ciudades:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error al obtener las ciudades:', error);
-                }
-            } else {
-                setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
-            }
-
-        }
-
-        fetchCiudades();
-    }, [selectedEstado]);
-
-
-    useEffect(() => {
-        const modalElement = document.getElementById('modal1');
-        if (modalElement) {
-            // Asegúrate de que `modalElement` no sea `null` antes de inicializar el modal
-            const modalInstance = M.Modal.init(modalElement);
-
-            // Asegúrate de actualizar el modal con la información correcta cuando se abre
-            modalInstance.options.onOpenStart = () => {
-                setSelectedNombre(nombre);
-                setSelectedDireccion(direccion);
-                setSelectedEstado(estado);
-                setSelectedCiudad(ciudad);
-            };
-
-            return () => {
-                modalInstance.destroy();
-            };
-        }
-    }, [nombre, direccion, estado, ciudad]);
-
-    //para consultas
-    useEffect(() => {
-
-
-        M.Sidenav.init(document.querySelectorAll('.sidenav'));
-        M.Tabs.init(document.querySelectorAll('.tabs'));
-        const storedUser = localStorage.getItem('usuario');
-        if (storedUser) {
-            const usuario = JSON.parse(storedUser);
-            auth.setIsAuthenticated(true);
-
-            async function fetchUsuario() {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getUsuario/${usuario.id}`);
-                    if (response.ok) {
-                        const data = await response.json() as Usuario;
-                        setNombre(data.nombre);
-                        setCorreo(data.correo);
-                        setDireccion(data.direccion);
-                        setEstado(data.estado);
-                        setCiudad(data.ciudad);
-                        //console.log("Datos del usuario en perfil ", data);
-                    } else {
-                    }
-                } catch (error) {
-                    console.error('Error al obtener el usuario:', error);
-                }
-            }
-
-            async function fetchPerfilUsuario() {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
-                    if (response.ok) {
-                        const data = await response.json() as perfilUsuario;
-                        setFoto(data.foto);
-                        console.log("Datos del usuario en perfil ", data);
-                    } else {
-                    }
-                } catch (error) {
-                    console.error('Error al obtener el perfil del usuario:', error);
-                }
-            }
-            fetchUsuario();
-            fetchPerfilUsuario();
-        }
-
-    }, [auth]);
-
-
-    //para obtener imágenes 
-    const storedUser = localStorage.getItem('usuario');
-    let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
-    if (storedUser) {
-        const usuario = JSON.parse(storedUser);
-        //auth.setIsAuthenticated(true);
-        console.log(foto);
-        imageSrc = previewImage
-            ? previewImage
-            : foto
-                ? `${API_URI_IMAGENES}/img/perfilUsuario/${usuario.id}.jpg`
-                : `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
-    }
-
-
-
-    //para cargar la imagen 
+    };
+    
+    //para limpiar los campos de habilidades
+    const handleCloseHab = () => {
+        setHabilidad('');
+        setHabilidades([]); // Limpiar las habilidades al cerrar el modal
+    };
+    
+     //para cargar la imagen 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
@@ -212,6 +64,7 @@ export default function PerfilUsuarios() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result as string);
+                setPreviewImageBoton(reader.result as string);
             };
             reader.readAsDataURL(file);
         }
@@ -244,15 +97,18 @@ export default function PerfilUsuarios() {
                     });
 
                     if (response.ok) {
-                        const data = await response.json();
+                        //const data = await response.json();
                         Swal.fire({
                             title: "¡Éxito!",
                             text: "Imagen actualizada exitosamente.",
                             icon: "success"
+                        }).then(() => {
+                            // setSelectedFile(null); // Limpia el archivo seleccionado
+                            setPreviewImageBoton(null); // Limpia la imagen previa
+
                         });
-                        console.log(data);
                     } else {
-                        const errorData = await response.json();
+                        //const errorData = await response.json();
                         Swal.fire({
                             position: 'center',
                             icon: 'error',
@@ -262,7 +118,7 @@ export default function PerfilUsuarios() {
                     }
                 } catch (error) {
                     console.error('Error al cargar la imagen:', error);
-                    setErrorResponse("Error al cargar la imagen");
+                    //setErrorResponse("Error al cargar la imagen");
                 }
             }
         };
@@ -270,6 +126,7 @@ export default function PerfilUsuarios() {
         reader.readAsDataURL(selectedFile);
     };
 
+    //para el boton de guardar fotoperfil
     const handleImageClick = () => {
         if (fileInputRef.current) {
             fileInputRef.current.click(); // Activa el input de archivo
@@ -305,7 +162,7 @@ export default function PerfilUsuarios() {
                 if (selectedDireccion) updatedFields.direccion = selectedDireccion;
                 if (selectedEstado) updatedFields.estado = selectedEstado;
                 if (selectedCiudad) updatedFields.ciudad = selectedCiudad;
-
+                if (selectedCorreo) updatedFields.correo = selectedCorreo;
                 try {
                     const response = await fetch(`${API_URL}/usuario/actualizarUsuario/${usuario.id}`, {
                         method: "PUT",
@@ -317,31 +174,47 @@ export default function PerfilUsuarios() {
 
                     if (response.ok) {
                         const updatedUser = await response.json(); // Obtener la respuesta actualizada
-
-                        // Actualizar el estado del formulario principal con los nuevos valores
+                        const nuevoEstado = updatedUser.estado || estado;
                         setNombre(updatedUser.nombre || nombre);
                         setDireccion(updatedUser.direccion || direccion);
                         setEstado(updatedUser.estado || estado);
+                        setCorreo(updatedUser.correo || correo);
                         setCiudad(updatedUser.ciudad || ciudad);
 
+
+                        try {
+                            const response = await fetch(`${API_URL}/usuario/getEstado/${nuevoEstado}`);
+                            if (response.ok) {
+                                const data = await response.json() as Usuario;
+                                setEstado2(data.nombre);
+                                //console.log("Estadoactualizado", data);
+                            }
+                        } catch (error) {
+                            console.error('Error al obtener el usuario:', error);
+                        }
+
+                        // Mostrar mensaje de éxito y cerrar el modal
                         Swal.fire({
                             title: "Éxito",
                             text: "Usuario actualizado exitosamente",
                             icon: "success"
-                        });
-
-                        const modalElement = document.getElementById('modal1');
-                        if (modalElement) {
-                            const modalInstance = M.Modal.getInstance(modalElement);
-                            if (modalInstance) {
-                                modalInstance.close();
+                        }).then(() => {
+                            // Cerrar el modal después de mostrar el mensaje de éxito
+                            const modalElement = document.getElementById('modal1');
+                            if (modalElement) {
+                                const modalInstance = M.Modal.getInstance(modalElement);
+                                if (modalInstance) {
+                                    modalInstance.close();
+                                }
                             }
-                        }
-                        setSelectedNombre('');
-                        setSelectedDireccion('');
-                        setSelectedEstado('');
-                        setSelectedCiudad('');
-                        setErrorNombre("");
+                            // Opcional: Limpiar los campos del formulario
+                            setSelectedNombre('');
+                            setSelectedCorreo('');
+                            setSelectedDireccion('');
+                            setSelectedEstado('');
+                            setSelectedCiudad('');
+                            setErrorNombre("");
+                        });
 
                     } else {
                         const json = await response.json() as AuthResponseError;
@@ -370,11 +243,400 @@ export default function PerfilUsuarios() {
         }
     }
 
+    useEffect(() => {
+        const elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
 
+        return () => {
+            M.FormSelect.getInstance(elems[0])?.destroy();
+        };
+    }, []);
+
+    useEffect(() => {
+        const dropdownElems = document.querySelectorAll('.dropdown-trigger');
+        M.Dropdown.init(dropdownElems);
+
+        return () => {
+            M.Dropdown.getInstance(dropdownElems[0])?.destroy();
+        };
+    }, []);
+
+    // Obtener la lista de estados al cargar el componente
+    useEffect(() => {
+        async function fetchEstados() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getEstados`);
+                if (response.ok) {
+                    const data = await response.json() as Estado[];
+                    setEstados(data);
+                    /*if (data.length > 0) {
+                        setSelectedEstado(data[0].clave);
+                    } */
+                } else {
+                    console.error('Error al obtener los estados:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener los estados:', error);
+            }
+        }
+
+        fetchEstados();
+    }, []);
+
+    //setSelectedCiudad(ciudad);
+    useEffect(() => {
+        async function fetchCiudades() {
+            if (selectedEstado) {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
+                    if (response.ok) {
+                        const data = await response.json() as Ciudad[];
+                        setCiudades(data);
+                       
+                    } else {
+                        console.error('Error al obtener las ciudades:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error al obtener las ciudades:', error);
+                }
+            } else {
+                setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
+            }
+
+        }
+
+        fetchCiudades();
+    }, [selectedEstado]);
+
+    //para consultas en perfil
+    useEffect(() => {
+
+        M.Sidenav.init(document.querySelectorAll('.sidenav'));
+        M.Tabs.init(document.querySelectorAll('.tabs'));
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            auth.setIsAuthenticated(true);
+
+            async function fetchUsuario() {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getUsuario/${usuario.id}`);
+                    if (response.ok) {
+                        const data = await response.json() as Usuario;
+                        setNombre(data.nombre);
+                        setCorreo(data.correo);
+                        setDireccion(data.direccion);
+                        setEstado(data.estado);
+                        setCiudad(data.ciudad);
+                    }
+                } catch (error) {
+                    console.error('Error al obtener el usuario:', error);
+                }
+
+            }
+
+            async function fetchEstado() {
+                try {
+                    const nuevoEstado = usuario.estado || estado;
+                    const response = await fetch(`${API_URL}/usuario/getEstado/${nuevoEstado}`);
+                    if (response.ok) {
+                        const data = await response.json() as Usuario;
+                        setEstado2(data.nombre);
+                        
+                        // console.log("Estado", data);
+                    }
+                } catch (error) {
+                    //console.error('Error al obtener el usuario:', error);
+                }
+            }
+
+            async function fetchPerfilUsuario() {
+                try {
+                    const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
+                    if (response.ok) {
+                        const data = await response.json() as perfilUsuario;
+                        setFoto(data.foto);
+                        //console.log("Datos del usuario en perfil ", data);
+                    } else {
+                    }
+                } catch (error) {
+                    console.error('Error al obtener el perfil del usuario:', error);
+                }
+            }
+
+            fetchUsuario();
+            fetchPerfilUsuario();
+            fetchEstado();
+        }
+
+    }, [auth]);
+
+    //
+    useEffect(() => {
+        const modalElement = document.getElementById('modal1');
+
+        if (modalElement) {
+            // Inicializar el modal solo si el elemento existe
+            const modalInstance = M.Modal.init(modalElement, {
+                onOpenStart: () => {
+                    setSelectedNombre(nombre);
+                    setSelectedDireccion(direccion);
+                    setSelectedEstado(estado);
+                    setSelectedCiudad(ciudad);
+                    setSelectedCorreo(correo);
+                },
+                onCloseEnd: () => {
+                    // Opcional: resetear el modal cuando se cierra
+                }
+            });
+
+            return () => {
+                // Destruir la instancia del modal para evitar fugas de memoria
+                if (modalInstance) {
+                    modalInstance.destroy();
+                }
+            };
+        }
+    }, [nombre, direccion, estado, ciudad]);
+
+    const fetchExperiencia = async () => {
+        const storedUser2 = localStorage.getItem('usuario');
+        if (storedUser2) {
+            const usuario = JSON.parse(storedUser2);
+            auth.setIsAuthenticated(true);
+
+           
+            console.log(usuario);
+        try {
+            const response = await fetch(`/api/perfilUsuario/buscarExperiencia/${usuario._id}`);
+            const data = await response.json();
+            setExperiencia(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Error al obtener la experiencia:', error);
+        }
+    }
+    };
+
+    //para inicializar modales de competencias
+    useEffect(() => {
+        // Inicializar primer modal
+        const modalElement1 = document.getElementById('modalExp');
+        const modalInstance1 = modalElement1 ? M.Modal.init(modalElement1) : null;
+        if (modalInstance1) {
+            fetchExperiencia();
+            modalInstance1.options.onOpenStart = () => {
+                
+                setSelectedNombre(nombre);
+                setSelectedDireccion(direccion);
+                setSelectedEstado(estado);
+                setSelectedCiudad(ciudad);
+            };
+        }
+
+        // Inicializar segundo modal
+        const modalElement2 = document.getElementById('modalHab');
+        const modalInstance2 = modalElement2 ? M.Modal.init(modalElement2) : null;
+        if (modalInstance2) {
+            modalInstance2.options.onOpenStart = () => {
+                // Lógica específica para el segundo modal (si es necesario)
+            };
+        }
+
+        // Inicializar tercer modal
+        const modalElement3 = document.getElementById('modalEdu');
+        const modalInstance3 = modalElement3 ? M.Modal.init(modalElement3) : null;
+        if (modalInstance3) {
+            modalInstance3.options.onOpenStart = () => {
+                // Lógica específica para el segundo modal (si es necesario)
+            };
+        }
+
+        // Cleanup function
+        return () => {
+            if (modalInstance1) modalInstance1.destroy();
+            if (modalInstance2) modalInstance2.destroy();
+            if (modalInstance3) modalInstance3.destroy();
+        };
+    }, [nombre, direccion, estado, ciudad]);
+
+    //para obtener imágenes 
+    const storedUser = localStorage.getItem('usuario');
+    let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
+    if (storedUser) {
+        const usuario = JSON.parse(storedUser);
+        //auth.setIsAuthenticated(true);
+        //console.log(foto);
+        imageSrc = previewImage
+            ? previewImage
+            : foto
+                ? `${API_URI_IMAGENES}/img/perfilUsuario/${usuario.id}.jpg`
+                : `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
+    }
+
+    const eliminarHabilidad = (index: number) => {
+        setHabilidades(habilidades.filter((_, i) => i !== index));
+    };
 
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
+
+// Para confirmar que desea actualizar la imagen 
+const handleFileChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+        // Muestra un diálogo de confirmación antes de subir el archivo
+        Swal.fire({
+            title: '¿Desea subir este archivo?',
+            text: `Archivo: ${file.name}`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true // Invierte el orden de los botones
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si se confirma, llama a la función para subir el archivo
+                uploadFile(file);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Si se cancela, limpia el input de archivo
+                event.target.value = ''; // Resetea el valor del input
+                setSelectedFileDoc(null); // Limpia el estado del archivo seleccionado
+            }
+        });
+    }
+};
+
+// Subir el documento al servidor
+const uploadFile = async (file: File) => {
+    // Lee el archivo como base64
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+        const base64File = reader.result?.toString().split(',')[1]; // Elimina el prefijo data URL
+
+        // Obtén el usuario desde el localStorage
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const userId = usuario.id;
+
+            try {
+                const response = await fetch(`${API_URI_IMAGENES}/uploadCv`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        src: base64File,
+                        id: userId
+                    })
+                });
+                if (response.ok) {
+                    Swal.fire({
+                        title: "¡Éxito!",
+                        text: "Archivo actualizado exitosamente.",
+                        icon: "success"
+                    }).then(() => {
+                        // Limpia el archivo seleccionado y la previsualización
+                        setSelectedFileDoc(null); // Limpia el archivo seleccionado
+                    });
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'error',
+                        text: 'Error al cargar el archivo'
+                    });
+                }
+            } catch (error) {
+                console.error('Error al cargar el archivo:', error);
+                Swal.fire({
+                    title: "Error",
+                    text: "Ocurrió un error inesperado.",
+                    icon: "error"
+                });
+            }
+        }
+    };
+
+    reader.readAsDataURL(file);
+};
+
+//actualizar la experiencia de perfilUsuario
+const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Evita el comportamiento predeterminado del formulario
+
+    // Obtén los elementos del formulario
+    const empresaInput = document.getElementById('empresa') as HTMLInputElement;
+    const puestoInput = document.getElementById('puesto') as HTMLInputElement;
+    const descripcionInput = document.getElementById('descripcion') as HTMLTextAreaElement;
+
+    const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            auth.setIsAuthenticated(true);
+    
+        if (!empresaInput || !puestoInput || !descripcionInput) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'No se encontraron todos los campos del formulario.',
+        });
+        return;
+    }
+
+    // Obtén los valores de los elementos del formulario
+    const empresa = empresaInput.value;
+    const puesto = puestoInput.value;
+    const descripcion = descripcionInput.value;
+
+
+    try {
+        const response = await fetch(`${API_URL}/perfilUsuario/actualizarExperiencia/${usuario.id}`, {
+            method: 'PUT', // O 'POST' si estás creando un nuevo registro
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                empresa,
+                puesto,
+                descripcion,
+            }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Maneja la respuesta exitosa usando SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: '¡Éxito!',
+                text: 'Experiencia actualizada correctamente',
+            });
+            // Cierra el modal si es necesario
+            const modal = document.querySelector('#modalExp');
+            if (modal) {
+                M.Modal.getInstance(modal).close();
+            }
+        } else {
+            // Maneja errores usando SweetAlert
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Error al actualizar la experiencia',
+            });
+        }
+    } catch (error) {
+        console.error('Error de red:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error de red',
+        });
+    }
+  }
+};
+
 
 
     return (
@@ -419,7 +681,7 @@ export default function PerfilUsuarios() {
                         type="button"
                         className="btn"
                         onClick={handleUploadImage}
-                        disabled={!previewImage} // Desactiva si no hay imagen precargada ni seleccionada
+                        disabled={!previewImageBoton} // Desactiva si no hay imagen precargada ni seleccionada
                     >
                         Guardar
                     </button>
@@ -441,7 +703,7 @@ export default function PerfilUsuarios() {
                     </div>
                     <label htmlFor="estado">Estado</label>
                     <div className="input-field1">
-                        <input type="text" id="estado" name="estado" value={estado} readOnly />
+                        <input type="text" id="estado" name="estado" value={estado2} readOnly />
                     </div>
                     <label htmlFor="ciudad">Ciudad</label>
                     <div className="input-field1">
@@ -454,14 +716,29 @@ export default function PerfilUsuarios() {
 
                 </form>
 
-                {/* Modal Structure */}
+                {/* Modal para actualizar info de usuario */}
                 <div id="modal1" className="modal">
                     <div className="modal-contentperfil">
-                        <h4 style={{ textAlign: 'center' }}>Actualizar Información</h4>
-
+                        <br /><h4 style={{ textAlign: 'center' }}>Actualizar Información</h4><br />
                         <form className="col s12" onSubmit={handleSubmit}>
                             <div className="row">
                                 <div className="input-fieldperfil col s12">
+                                    <label htmlFor="correo">Correo Electrónico</label>
+                                    <i className="material-icons prefix">email</i>
+                                    <input
+                                        id="correo"
+                                        type="email"
+                                        className="validate"
+                                        value={selectedCorreo}
+                                        onChange={(e) => setSelectedCorreo(e.target.value)}
+                                    />
+
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="input-fieldperfil col s12">
+                                    <label htmlFor="nombre">Nombre</label>
+                                    <i className="material-icons prefix">person</i>
                                     <input
                                         id="nombre"
                                         type="text"
@@ -469,11 +746,12 @@ export default function PerfilUsuarios() {
                                         value={selectedNombre}
                                         onChange={(e) => setSelectedNombre(e.target.value)}
                                     />
-                                    <label htmlFor="nombre">Nombre</label>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="input-fieldperfil col s12">
+                                    <label htmlFor="direccion">Dirección</label>
+                                    <i className="material-icons prefix">location_on</i>
                                     <input
                                         id="direccion"
                                         type="text"
@@ -481,10 +759,8 @@ export default function PerfilUsuarios() {
                                         value={selectedDireccion}
                                         onChange={(e) => setSelectedDireccion(e.target.value)}
                                     />
-                                    <label htmlFor="direccion">Dirección</label>
                                 </div>
                             </div>
-
                             <div className="input-fieldperfil2">
                                 <label>Estado</label>
                                 <div className="input-fieldperfil2 col s12">
@@ -500,7 +776,6 @@ export default function PerfilUsuarios() {
                                     </select>
                                 </div>
                             </div>
-
                             <div className="input-fieldperfil2">
                                 <label>Ciudad</label>
                                 <div className="input-fieldperfil2 col s12">
@@ -509,79 +784,281 @@ export default function PerfilUsuarios() {
                                         onChange={(e) => setSelectedCiudad(e.target.value)}
                                         className="browser-default"
                                     >
-
                                         {ciudades.map(ciudad => (
                                             <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
                                         ))}
                                     </select>
                                 </div>
-                            </div>
-
-
-
+                            </div><br />
                             <div className="modal-footer">
-                                <button type="submit" className="waves-effect waves-light btn modal-trigger"
-                                    style={{ marginRight: '15px' }}>Enviar
+                                <button type="submit" className="waves-effect waves-light btn" style={{ marginRight: '15px' }}>
+                                    Enviar
                                     <i className="material-icons right">send</i>
                                 </button>
-                                <a href="#!" className="modal-close waves-effect waves-light btn modal-trigger"
-                                    style={{ marginRight: '30px' }}>Cerrar</a>
+                                <a className="modal-close waves-effect waves-light btn" style={{ marginRight: '30px' }}>Cerrar</a>
                             </div>
-
                         </form>
                     </div>
-
                 </div>
 
+
             </div>
-            {/* para informacion  */}
+
+            {/*informacion  */}
             <div id="info" className="containerinfo">
-            <h2>Información Adicional</h2><br/>
-
-
+                <h2>Información Adicional</h2><br />
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">CV</span>
-                        <p></p>
+
+                        <input
+                            type="file"
+                            id="fileInput"
+                            style={{ display: 'none' }}
+                            accept=".pdf"  // Permitir solo documentos
+                            onChange={handleFileChange2}
+                        />
+                        <button
+                            type="button"
+                            className="btn waves-effect waves-light right btn-upload"
+                            style={{ marginRight: '15px' }}
+                            onClick={() => document.getElementById('fileInput')?.click()} >
+                            Subir o actualizar CV
+                            <i className="material-icons right">add</i>
+                        </button>
+                        <p>Curriculum Vitae actualizado para sus futuras postulaciones</p><br />
                     </div>
                 </div>
                 <div className="card">
                     <div className="card-content">
-                    <br/><span className="card-title">Experiencia laboral reciente</span>
-                        <p>Experiencia laboral adquirida de su último trabajo.</p><br/>
+                        <span className="card-title">Experiencia laboral reciente</span>
+                        <a
+                            className=" btn-floating waves-effect waves-light btn-add right modal-trigger  "
+                            data-target="modalExp"
+                            style={{ display: 'flex', alignItems: 'center' }}>
+                            <i className="material-icons">add</i>
+                        </a>
+                        <p>Experiencia laboral adquirida de su último trabajo.</p><br />
                     </div>
                 </div>
                 <div className="card">
                     <div className="card-content">
-                    <br/><span className="card-title">Especialidad</span>
-                        <p>Áreas en donde tiene mayor conocimiento.</p><br/>
+                        <span className="card-title">Habilidades</span>
+                        <a
+                            className=" btn-floating waves-effect waves-light btn-add right modal-trigger  "
+                            data-target="modalHab"
+                            style={{ display: 'flex', alignItems: 'center' }}>
+                            <i className="material-icons">add</i>
+                        </a>
+                        <p>Habilidades con las que cuenta. Ej: Trabajo en equipo, adaptabilidad, etc.</p><br />
+                    </div>
+                </div><br />
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Educación</span>
+                        <a
+                            className=" btn-floating waves-effect waves-light btn-add right modal-trigger  "
+                            data-target="modalEdu"
+                            style={{ display: 'flex', alignItems: 'center' }}>
+                            <i className="material-icons">add</i>
+                        </a>
+                        <p>Último nivel de estudios.</p><br />
+                    </div>
+                </div><br />
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Idioma</span>
+                        <a className="btn-floating btn-medium waves-effect waves-light right btn-add">
+                            <i className="material-icons">add</i>
+                        </a>
+
+                        <p>Idiomas y nivel de conocimiento</p><br />
+                    </div>
+                </div><br />
+                <div className="card">
+                    <div className="card-content">
+                        <span className="card-title">Cursos y certificaciones</span>
+                        <a className="btn-floating btn-medium waves-effect waves-light right btn-add">
+                            <i className="material-icons">add</i>
+                        </a>
+                        <p>Cursos adicionales o certificados que respalden sus conocimientos.</p><br />
                     </div>
                 </div>
-                <div className="card">
-                    <div className="card-content">
-                    <br/><span className="card-title">Habilidades</span>
-                        <p>Habilidades con las que cuenta. Ej: Trabajo en equipo, adaptabilidad, etc.  </p><br/>
-                    </div>
-                </div><br/>
-                <div className="card">
-                    <div className="card-content">
-                    <br/><span className="card-title">Educación</span>
-                        <p>Último nivel de estudios. </p><br/>
-                    </div>
-                </div><br/>
-                <div className="card">
-                    <div className="card-content">
-                    <br/><span className="card-title">Idioma</span>
-                        <p>Idiomas y nivel de conocimiento </p><br/>
-                    </div>
-                </div><br/>
-                <div className="card">
-                    <div className="card-content">
-                    <br/><span className="card-title">Cursos y certificaciones</span>
-                        <p>Cursos adicionales o certificados que respalden sus conocimientos. </p><br/>
+
+                {/* Modal para Experiencia */}
+                <div id="modalExp" className="modal">
+                    <div className="modal-contentperfil">
+                        <br /><h4 style={{ textAlign: 'center' }}>Experiencia profesional</h4><br />
+                        <form className="col s12" onSubmit={actualizarExp}>
+                            <div className="input-fieldExp col s12">
+                                <label htmlFor="empresa">Empresa</label>
+                                <i className="material-icons prefix">business</i>
+                                <input
+                                    id="empresa"
+                                    type="text"
+                                    className="validate"
+                                    required
+                                />
+                            </div>
+                            <div className="input-fieldExp col s12">
+                                <label htmlFor="puesto">Puesto</label>
+                                <i className="material-icons prefix">work</i>
+                                <input
+                                    id="puesto"
+                                    type="text"
+                                    className="validate"
+                                    required
+                                />
+                            </div>
+
+                            <br /><br /><div className="input-fieldExp col s12">
+                                <label htmlFor="descripcion">Descripción de actividades</label>
+                                <i className="material-icons prefix">description</i>
+                                <textarea
+                                    id="descripcion"
+                                    className="materialize-textarea validate"
+                                    required
+                                ></textarea>
+                            </div><br />
+
+                            <div className="modal-footer">
+                                <button
+                                    type="submit"
+                                    className="waves-effect waves-light btn "
+                                    style={{ marginRight: '15px' }}
+                                >
+                                    Enviar
+                                    <i className="material-icons right">send</i>
+                                </button>
+                                <a
+                                    href="#!"
+                                    className="modal-close waves-effect waves-light btn "
+                                    style={{ marginRight: '30px' }}
+                                >
+                                    Cerrar
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
+                {/* Modal para Habilidades */}
+                <div id="modalHab" className="modal" >
+                    <div className="modal-contentperfil">
+                        <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
+                        <form className="col s12" onSubmit={handleSubmitHab}>
+                            <div className="input-fieldModal col s12">
+                                <i className="material-icons prefix">format_list_bulleted</i>
+                                <input
+                                    id="habilidad"
+                                    type="text"
+                                    className="validate"
+                                    value={habilidad}
+                                    onChange={(e) => setHabilidad(e.target.value)}
+                                    required
+                                />
+                                <label htmlFor="habilidad">Habilidad</label>
+                            </div>
+
+                            <div className="modal-footer">
+                                <button
+                                    type="submit"
+                                    className="waves-effect waves-light btn"
+                                    style={{ marginRight: '15px' }}
+                                >
+                                    Enviar
+                                    <i className="material-icons right">send</i>
+                                </button>
+                                <a
+                                    href="#!"
+                                    className="modal-close waves-effect waves-light btn"
+                                    style={{ marginRight: '30px' }}
+                                    onClick={handleCloseHab}
+                                >
+                                    Cerrar
+                                </a>
+                            </div>
+                        </form>
+
+                        {/* Lista de habilidades agregadas con estilo */}
+                        <div className="habilidades-list">
+                            {habilidades.map((hab, index) => (
+                                <div key={index} className="habilidad-item">
+                                    {hab}
+                                    <i
+                                        className="material-icons delete-icon"
+                                        onClick={() => eliminarHabilidad(index)}
+                                    >
+                                        close
+                                    </i>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                
+                {/* Modal para Educacion */}
+                <div id="modalEdu" className="modal">
+                    <div className="modal-contentperfil">
+                        <br /><h4 style={{ textAlign: 'center' }}>Experiencia profesional</h4><br />
+                        <form className="col s12" >
+                            <div className="input-fieldExp col s12">
+                                <label htmlFor="empresa">Empresa</label>
+                                <i className="material-icons prefix">business</i>
+                                <input
+                                    id="empresa"
+                                    type="text"
+                                    className="validate"
+                                    required
+                                />
+                            </div>
+                            <div className="input-fieldExp col s12">
+                                <label htmlFor="puesto">Puesto</label>
+                                <i className="material-icons prefix">work</i>
+                                <input
+                                    id="puesto"
+                                    type="text"
+                                    className="validate"
+                                    required
+                                />
+                            </div>
+
+                            <br /><br /><div className="input-fieldExp col s12">
+                                <label htmlFor="descripcion">Descripción de actividades</label>
+                                <i className="material-icons prefix">description</i>
+                                <textarea
+                                    id="descripcion"
+                                    className="materialize-textarea validate"
+                                    required
+                                ></textarea>
+                            </div><br />
+
+                            <div className="modal-footer">
+                                <button
+                                    type="submit"
+                                    className="waves-effect waves-light btn "
+                                    style={{ marginRight: '15px' }}
+                                >
+                                    Enviar
+                                    <i className="material-icons right">send</i>
+                                </button>
+                                <a
+                                    href="#!"
+                                    className="modal-close waves-effect waves-light btn "
+                                    style={{ marginRight: '30px' }}
+                                >
+                                    Cerrar
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
+
+
         </DefaultLayout>
     );
 }

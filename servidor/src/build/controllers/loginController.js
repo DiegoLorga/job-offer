@@ -60,6 +60,7 @@ class LoginController {
                         id: user._id,
                         nombre: user.nombre,
                         correo: user.correo,
+                        estado: user.estado,
                         id_rol: user.id_rol || 'usuario' // Si tiene roles, lo asignas aquí
                     }
                 }));
@@ -80,8 +81,8 @@ class LoginController {
         });
     }
     perfil(req, res) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b;
             const userId = (_a = req.usuario) === null || _a === void 0 ? void 0 : _a.id;
             const userType = (_b = req.usuario) === null || _b === void 0 ? void 0 : _b.type;
             if (!userId || !userType) {

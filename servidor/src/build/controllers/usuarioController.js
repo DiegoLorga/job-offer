@@ -16,6 +16,7 @@ exports.usuariosController = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const estado_model_1 = __importDefault(require("../models/estado.model"));
 const ciudad_model_1 = __importDefault(require("../models/ciudad.model"));
+const experiencia_model_1 = __importDefault(require("../models/experiencia.model"));
 const perfilUsuario_model_1 = __importDefault(require("../models/perfilUsuario.model"));
 const fotosPerfilUsuario_model_1 = __importDefault(require("../models/fotosPerfilUsuario.model"));
 const jsonResponse_1 = require("../lib/jsonResponse");
@@ -58,11 +59,12 @@ class UsuarioController {
             if (usuarioExistente) {
                 correoError = "El correo electrónico ya está en uso";
             }
-            const estadoName = yield estado_model_1.default.findOne({ clave: estado });
-            let estadoNom = estado; // Definir la variable con el tipo correcto
-            if (estadoName) {
-                estadoNom = estadoName.nombre;
-            }
+            /*const estadoName = await Estado.findOne({ clave: estado });
+             let estadoNom: string = estado; // Definir la variable con el tipo correcto
+     
+             if (estadoName) {
+                 estadoNom = estadoName.nombre;
+             } */
             if (camposError || contrasenasError || nombreError || correoError) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     camposError,
@@ -81,28 +83,30 @@ class UsuarioController {
                     contrasena: hashedPassword,
                     direccion,
                     ciudad,
-                    estado: estadoNom,
+                    estado,
                     id_rol: tipoRol
                 });
                 const UsuarioGuardado = yield nuevoUsuario.save();
                 const nuevoPerfil = new perfilUsuario_model_1.default({
                     id_usuario: UsuarioGuardado._id,
                     cv: false,
-                    experiencia: '',
-                    especialidad: '',
-                    habilidades: '',
+                    experiencia: false,
+                    habilidades: false,
                     educacion: '',
-                    idiomas: '',
+                    idiomas: false,
                     certificaciones: false,
                     repositorio: '',
                     status: false,
                     foto: false
                 });
                 const PerfilGuardado = yield nuevoPerfil.save();
-                const nuevaFotoPerfil = new fotosPerfilUsuario_model_1.default({
-                    id_fotoUs: PerfilGuardado._id
+                const nuevoExp = new experiencia_model_1.default({
+                    id_usuario: UsuarioGuardado._id,
+                    empresa: '',
+                    puesto: '',
+                    descripcion: ''
                 });
-                yield nuevaFotoPerfil.save();
+                const ExperienciaGuardado = yield nuevoExp.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: UsuarioGuardado._id });
                 res.cookie('token', token);
                 console.log(res.cookie);
@@ -248,17 +252,22 @@ class UsuarioController {
     }
     actualizarUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { nombre, direccion, ciudad, estado } = req.body;
+            const { nombre, direccion, ciudad, estado, correo } = req.body;
             let nombreError = null;
             const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
             if (!nameRegex.test(nombre)) {
                 nombreError = "Nombre no válido";
             }
-            const estadoName = yield estado_model_1.default.findOne({ clave: estado });
-            let estadoNom = estado;
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(correo)) {
+                nombreError = "Correo no válido";
+            }
+            /*const estadoName = await Estado.findOne({ clave: estado });
+            let estadoNom: string = estado;
+        
             if (estadoName) {
                 estadoNom = estadoName.nombre;
-            }
+            }*/
             if (nombreError) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     nombreError
@@ -266,12 +275,12 @@ class UsuarioController {
                 return;
             }
             try {
-                const perfil = yield usuario_model_1.default.findByIdAndUpdate(req.params.id, { nombre, direccion, ciudad, estado: estadoNom }, { new: true });
+                const perfil = yield usuario_model_1.default.findByIdAndUpdate(req.params.id, { nombre, direccion, ciudad, estado, correo }, { new: true });
                 res.json(perfil);
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(400, {
-                    nombreError: "Error al actualizar al usuario"
+                    camposError: "Error al actualizar al usuario"
                 }));
             }
         });

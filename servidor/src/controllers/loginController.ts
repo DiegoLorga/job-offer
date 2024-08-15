@@ -51,6 +51,7 @@ class LoginController {
                     id: user._id,
                     nombre: user.nombre,
                     correo: user.correo,
+                    estado: user.estado,
                     id_rol: user.id_rol || 'usuario' // Si tiene roles, lo asignas aquí
                 }
             }));

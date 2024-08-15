@@ -28,6 +28,7 @@ class Server {
         this.config();
         this.routes();
         this.app.use('/img', express_1.default.static(path_1.default.join(__dirname, 'img')));
+        this.app.use('/doc', express_1.default.static(path_1.default.join(__dirname, 'doc')));
     }
     config() {
         this.app.use(express_1.default.urlencoded({ limit: '50mb', parameterLimit: 100000, extended: false }));
@@ -51,9 +52,6 @@ class Server {
                     try {
                         // Buscar el perfil basado en id_usuario y actualizar el campo foto a true
                         const perfil = yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario: id }, { foto: true }, { new: true });
-                        if (!perfil) {
-                            return res.status(404).json({ message: "Perfil no encontrado" });
-                        }
                         res.json({ fileName: id + '.jpg', perfil });
                     }
                     catch (updateError) {
@@ -64,6 +62,34 @@ class Server {
             catch (writeError) {
                 console.log(writeError);
                 res.status(500).json({ message: "Error al procesar la imagen", error: writeError });
+            }
+        }));
+        this.app.post('/uploadCv', (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const file = req.body.src;
+            const name = 'cvUsuario';
+            const id = req.body.id;
+            const binaryData = Buffer.from(file.replace(/^data:application\/pdf;base64,/, ""), 'base64').toString('binary');
+            // Usa un bloque try-catch para manejar errores generales
+            try {
+                // Usa fs.promises para trabajar con promesas y evitar callbacks anidados
+                yield fs_1.default.promises.writeFile(`${__dirname}/doc/` + name + '/' + id + '.pdf', binaryData, "binary");
+                // Actualiza el perfil en la base de datos
+                const perfil = yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario: id }, { cv: true }, { new: true });
+                if (!perfil) {
+                    return res.status(404).json({ message: "Perfil no encontrado" });
+                }
+                // Responde con éxito
+                res.json({ fileName: id + '.pdf', perfil });
+            }
+            catch (error) {
+                // Maneja errores en un solo lugar
+                if (error instanceof Error) {
+                    console.error('Error:', error.message);
+                    res.status(500).json({ message: "Error al procesar el archivo", error: error.message });
+                }
+                else {
+                    res.status(500).json({ message: "Error" });
+                }
             }
         }));
         this.app.delete('/deleteImagen/:tipo/:id', (req, res) => __awaiter(this, void 0, void 0, function* () {

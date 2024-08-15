@@ -4,11 +4,10 @@ import mongoose, { Schema, Model, Document, Mixed } from 'mongoose';
 interface perfilUsuario extends Document {
   id_usuario: Mixed;
   cv: boolean;
-  experiencia: string;
-  especialidad: string;
-  habilidades: string;
+  experiencia: boolean;
+  habilidades: boolean;
   educacion: string;
-  idiomas: string;
+  idiomas: boolean;
   certificaciones: boolean;
   repositorio: string;
   status: boolean;
@@ -24,15 +23,11 @@ const schemaperfilUsuario = new Schema<perfilUsuario>({
     //required: true,
   },
   experiencia: {
-    type: String,
-    //required: true,
-  },
-  especialidad: {
-    type: String,
+    type: Boolean,
     //required: true,
   },
   habilidades: {
-    type: String,
+    type: Boolean,
     //required: true,
   },
   educacion: {
@@ -40,7 +35,7 @@ const schemaperfilUsuario = new Schema<perfilUsuario>({
     //required: true,
   },
   idiomas: {
-    type: String,
+    type: Boolean,
     //required: true,
   },
   certificaciones: {

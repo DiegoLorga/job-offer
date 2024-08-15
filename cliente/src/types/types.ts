@@ -97,3 +97,41 @@ export interface OfertaCompleta{
     experienciaLaboral:string;
     categoria: string
 }
+export interface Estado {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
+export interface Ciudad {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
+export interface Usuario {
+    _id: string;
+    nombre: string;
+    correo: string;
+    direccion: string;
+    estado: string;
+    ciudad: string;
+}
+export interface perfilUsuario {
+    _id: string;
+    cv: false,
+    experiencia: string,
+    especialidad: string,
+    habilidades: string,
+    educacion: string,
+    idiomas: string,
+    certificaciones: false,
+    repositorio: string,
+    status: false,
+    foto: false
+}
+
+export interface Experiencia {
+    _id: string;
+    empresa: string,
+    puesto: string,
+    descripcion: string
+}

@@ -51,3 +51,164 @@
   margin-bottom: 40px; /* Espacio entre las tarjetas */
 }
 
+.containerinfo {
+  position: relative;
+}
+
+.card-title {
+  display: inline-block;
+}
+
+
+/* BOTONES ESTILOS AAAAAH */
+.btn-upload {
+  margin-top: 0;
+  background-color:  #757575; /* Color del botón de subir */
+  color: white;
+  transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
+}
+
+.btn-upload:hover {
+  background-color: #413e3e; /* Azul más oscuro al pasar el mouse */
+}
+
+.btn-add {
+  background-color: #bdbdbd; /* Gris */
+    border-radius: 50%; /* Redondeado */
+    color: white;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-text {
+  margin-top: 0;
+  font-size: 14px;
+  margin-right: 8px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color:#666666; /* Gris más oscuro al pasar el mouse */
+}
+
+.btn-add {
+  background-color: #bdbdbd; /* Gris */
+    border-radius: 50%; /* Redondeado */
+    color: white;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-text {
+  margin-top: 0;
+  font-size: 14px;
+  margin-right: 8px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color:#666666; /* Gris más oscuro al pasar el mouse */
+}
+
+/* Ajustar el modal en general usando ID */
+#modal1 {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 800px; /* Ancho máximo del modal */
+  max-height: 620px; /* Altura fija del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+/* Ajustar el contenido del footer del modal usando ID */
+.modal-footer {
+  margin-left: 45px;
+  padding: 10px 20px; /* Ajusta el relleno según tus necesidades */
+}
+
+/* Ajustar el contenido del modal usando ID */
+#modal1 .modal-contentperfil {
+  padding: 20px; /* Ajusta el relleno según tus necesidades */
+}
+
+#modalExp {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 750px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.input-fieldperfil2 select {
+  padding-left: 60px; /* Asegúrate de que el texto no se superponga con el ícono */
+}
+
+/* Asegúrate de que los íconos y los campos de entrada estén alineados */
+.input-fieldperfil {
+  position: relative;
+ 
+}
+
+.input-fieldperfil i {
+  position: absolute;
+  left: -25px; /* Ajusta la posición horizontal del ícono */
+  top: 60%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.input-fieldExp {
+  position: relative;
+ 
+}
+
+.input-fieldExp i {
+  position: absolute;
+  left: -25px; /* Ajusta la posición horizontal del ícono */
+  top: 60%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+/* Estos son los estilos para poner el icono en los modales */
+
+.input-fieldModal {
+  position: relative;
+ 
+}
+
+.input-fieldModal i {
+  position: absolute;
+  left: -25px; /* Este también gg */
+  top: 60%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+/* Este es para ajustar el tamaño del modal */
+#modalHab {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 750px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.habilidades-list {
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 10px; /* Espacio entre los elementos */
+}
+
+.habilidad-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f0f0f0;
+  border-radius: 15px;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.delete-icon {
+  cursor: pointer;
+  color: rgb(31, 31, 31);
+  font-size: 18px;
+}
