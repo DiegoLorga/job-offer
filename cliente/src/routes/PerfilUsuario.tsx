@@ -544,19 +544,19 @@ export default function PerfilUsuarios() {
                         <span className="card-title">CV</span>
                         <p></p>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Experiencia laboral reciente</span>
                         <p>Experiencia laboral adquirida de su último trabajo.</p><br/>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Especialidad</span>
                         <p>Áreas en donde tiene mayor conocimiento.</p><br/>
                     </div>
-                </div><br/>
+                </div>
                 <div className="card">
                     <div className="card-content">
                     <br/><span className="card-title">Habilidades</span>
