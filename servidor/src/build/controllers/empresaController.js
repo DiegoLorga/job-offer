@@ -232,5 +232,39 @@ class EmpresaController {
         });
     }
     ;
+    buscarEmpresas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Filtrando las empresas");
+                // Extracción de parámetros de búsqueda desde la consulta de la URL
+                const { ciudad, estado, giro } = req.body;
+                // Construcción dinámica del filtro de búsqueda
+                const filtros = {};
+                if (estado)
+                    filtros.estado = estado;
+                if (ciudad)
+                    filtros.ciudad = ciudad;
+                if (giro)
+                    filtros.giro = giro;
+                // Consulta a la base de datos usando los filtros
+                const empresas = yield empresa_model_1.default.find(filtros);
+                // Verificar si se encontraron empresas
+                if (empresas.length === 0) {
+                    console.log("No hay coincidencias");
+                    res.status(404).json({
+                        message: "No se encontraron coincidencias"
+                    });
+                    return;
+                }
+                res.json(empresas);
+            }
+            catch (error) {
+                console.error("Error al buscar empresas:", error);
+                res.status(500).json({
+                    error: "Hubo un error al buscar las empresas"
+                });
+            }
+        });
+    }
 }
 exports.empresaController = new EmpresaController();

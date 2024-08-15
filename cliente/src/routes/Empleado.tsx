@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useLocation } from 'react-router-dom';
 import DefaultLayout from "../layout/DefaultLayout";
+import Swal from 'sweetalert2';
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import EmpresaCard from "../routes/EmpresaCard";
@@ -17,6 +18,18 @@ interface Giro {
     giro: string;
 }
 
+interface Estado {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
+
+interface Ciudad {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
+
 export default function Empleados() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -26,6 +39,11 @@ export default function Empleados() {
     const [selectedGiro, setSelectedGiro] = useState<string>("");
     const [ofertaSeleccionada, setOfertaSeleccionada] = useState<OfertaCompleta | null>(null);
     const [empresaNombre, setEmpresaNombre] = useState<string | null>(null);
+    const [estados, setEstados] = useState<Estado[]>([]);
+    const [selectedEstado, setSelectedEstado] = useState<string>("");
+    const [ciudades, setCiudades] = useState<Ciudad[]>([]);
+    const [ciudad, setCiudad] = useState("");
+    const [nombreEstado, setNombreEstado] = useState<string>("");
 
     const auth = useAuth();
     const location = useLocation();
@@ -33,31 +51,104 @@ export default function Empleados() {
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
-        console.log("Pestañas inicializadas");
         const elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
 
-
         return () => {
-            M.FormSelect.getInstance(elems[0])?.destroy();
+            elems.forEach((elem) => {
+                const instance = M.FormSelect.getInstance(elem);
+                if (instance) instance.destroy();
+            });
         };
-
     }, []);
 
-    async function fetchGiros() {
-        try {
-            const response = await fetch(`${API_URL}/empresa/getGiros`);
-            if (response.ok) {
-                const data = await response.json() as Giro[];
-                console.log('Datos de giros:', data); // Verifica la estructura aquí
-                setGiros(data);
-            } else {
-                console.error('Error al obtener los giros:', response.statusText);
+    useEffect(() => {
+        // Inicializa el datepicker de Materialize
+        M.Datepicker.init(document.querySelectorAll('.datepicker'), {
+            format: 'yyyy-mm-dd', // Formato de fecha, ajústalo según lo que necesites
+
+        });
+    }, []); // El arreglo vacío asegura que se ejecute solo una vez al montar el componente
+
+    useEffect(() => {
+        async function fetchEstados() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getEstados`);
+                if (response.ok) {
+                    const data = await response.json() as Estado[];
+                    setEstados(data);
+                    if (data.length > 0) {
+                        setSelectedEstado(data[0].clave);
+                        setNombreEstado(data[0].nombre); // Guardar el nombre del primer estado
+                    }
+                } else {
+                    console.error('Error al obtener los estados:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener los estados:', error);
             }
-        } catch (error) {
-            console.error('Error al obtener los giros:', error);
         }
-    }
+
+        fetchEstados();
+    }, []);
+
+    useEffect(() => {
+        async function fetchEstadoNombre() {
+            const estado = estados.find(e => e.clave === selectedEstado);
+            if (estado) {
+                setNombreEstado(estado.nombre);
+            }
+        }
+        fetchEstadoNombre();
+    }, [selectedEstado, estados]);
+
+    // Cargar ciudades al cambiar el estado seleccionado
+    useEffect(() => {
+        async function fetchCiudades() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
+                if (response.ok) {
+                    const data = await response.json() as Ciudad[];
+                    setCiudades(data);
+                    if (data.length > 0) {
+                        setCiudad(data[0].nombre);
+                    }
+                } else {
+                    console.error('Error al obtener las ciudades:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
+            }
+        }
+
+        if (selectedEstado) {
+            fetchCiudades();
+        }
+    }, [selectedEstado]);
+
+    useEffect(() => {
+        async function fetchGiros() {
+            try {
+                const response = await fetch(`${API_URL}/empresa/getGiros`);
+                if (response.ok) {
+                    const data = await response.json() as Giro[];
+                    setGiros(data);
+                    console.log("Datos de los giros: ", data);
+                    if (data.length > 0) {
+                        setSelectedGiro(data[0].giro);
+                    }
+
+                } else {
+                    console.error('Error al obtener los giros:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener los giros:', error);
+            }
+        }
+
+        fetchGiros();
+    }, []);
+
     useEffect(() => {
         async function fetchEmpresas() {
             try {
@@ -71,6 +162,8 @@ export default function Empleados() {
 
         fetchEmpresas();
     }, []);
+
+
 
     useEffect(() => {
         async function fetchOfertas() {
@@ -87,6 +180,12 @@ export default function Empleados() {
         fetchOfertas();
     }, []);
 
+    useEffect(() => {
+        // Reinicializar el select después de que los giros se hayan cargado
+        const elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    }, [giros, estados, ciudades]);
+
     const handleVerDetalles = async (id: string) => {
         try {
             // Cargar detalles de la oferta seleccionada
@@ -101,6 +200,80 @@ export default function Empleados() {
 
         } catch (error) {
             console.error('Error al obtener detalles de la oferta:', error);
+        }
+    };
+
+    const handleAplicarFiltros = async () => {
+        try {
+            // Realizar la petición POST al endpoint de filtros
+            const response = await fetch(`${API_URL}/empresa/filtros`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    estado: nombreEstado,
+                    ciudad: ciudad,
+                    giro: selectedGiro,
+                }),
+            });
+
+            console.log("estado: ", nombreEstado);
+            console.log("ciudad: ", ciudad);
+            console.log("giro: ", selectedGiro);
+
+            if (response.ok) {
+                const data = await response.json();
+                setEmpresas(data); // Actualizar el estado con las empresas filtradas
+                console.log("Datos: ", data);
+
+            } else {
+                console.error('Error al aplicar filtros:', response.statusText);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    text: 'No se encontraron coincidencias'
+                })
+            }
+        } catch (error) {
+            console.error('Error al aplicar filtros:', error);
+        }
+    };
+
+    const handleAplicarFiltrosOfertas = async () => {
+        try {
+            // Realizar la petición POST al endpoint de filtros
+            const response = await fetch(`${API_URL}/OfertaLaboral/buscar`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    estado: nombreEstado,
+                    ciudad: ciudad,
+
+                }),
+            });
+
+            console.log("estado: ", nombreEstado);
+            console.log("ciudad: ", ciudad);
+            console.log("giro: ", selectedGiro);
+
+            if (response.ok) {
+                const data = await response.json();
+                setEmpresas(data); // Actualizar el estado con las empresas filtradas
+                console.log("Datos: ", data);
+
+            } else {
+                console.error('Error al aplicar filtros:', response.statusText);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'error',
+                    text: 'No se encontraron coincidencias'
+                })
+            }
+        } catch (error) {
+            console.error('Error al aplicar filtros:', error);
         }
     };
 
@@ -125,8 +298,8 @@ export default function Empleados() {
                 <div className="row">
                     <div id="Empleos" className="container">
                         <ul className="tabs center">
-                            <li className="tab col s6"><a className="active" href="#test1">Para ti</a></li>
-                            <li className="tab col s6"><a href="#test2">Buscar</a></li>
+                            <li className="tab col s6"><a className="active" href="#test1"><i className="material-icons">wb_sunny</i>Para ti</a></li>
+                            <li className="tab col s6"><a href="#test2"><i className="material-icons">search</i>Buscar</a></li>
                         </ul>
                         <div id="test1" className="card-container">
                             <div className="main-container">
@@ -212,7 +385,156 @@ export default function Empleados() {
                             </div>
                         </div>
                         <div id="test2">
-                            {/* Aquí puedes agregar componentes o lógica para la búsqueda de ofertas */}
+                            <div className="header-container">
+                                <div className="select-container">
+                                    <p className='info-title4'>Estado</p>
+                                    <select
+                                        value={selectedEstado}
+                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                    >
+                                        {estados.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="select-container">
+                                    <p className='info-title4'>Ciudad</p>
+                                    <select
+                                        value={ciudad}
+                                        onChange={(e) => setCiudad(e.target.value)}
+                                    >
+                                        {ciudades.map(ciudad => (
+                                            <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="select-container">
+                                    <p className='info-title4'>Sueldo</p>
+                                    <select
+                                        value={selectedEstado}
+                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                    >
+                                        {estados.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="select-container">
+                                    <p className='info-title4'>Modalidad</p>
+                                    <select
+                                        value={selectedEstado}
+                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                    >
+                                        {estados.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="select-container">
+                                    <p className='info-title4'>Educación</p>
+                                    <select
+                                        value={selectedEstado}
+                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                    >
+                                        {estados.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className="select-container">
+                                    <p className='info-title4'>Fecha</p>                            
+                                        <input type="text" className="datepicker" />
+                                        <label htmlFor="date">Fecha</label>
+                                </div>
+                            </div>
+                            <div className="button-container">
+                                <button className="btn waves-effect waves-light">Aplicar</button>
+                            </div>
+                            <div className="main-container">
+                                <div className="left-side">
+                                    <div className="section">
+                                        <div className="cards-container">
+                                            {ofertas.length > 0 ? (
+                                                ofertas.map(oferta => (
+                                                    <div className="col s12" key={oferta._id}>
+                                                        <Oferta
+                                                            _id={oferta._id}
+                                                            titulo={oferta.titulo}
+                                                            direccion={oferta.direccion}
+                                                            puesto={oferta.puesto}
+                                                            sueldo={oferta.sueldo}
+                                                            onClick={() => handleVerDetalles(oferta._id)}
+                                                        />
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <p>No se encontraron ofertas.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="right-side">
+                                    {ofertaSeleccionada ? (
+                                        <div className="oferta-detalles-container">
+                                            {/* Primer Contenedor: Título, Nombre de la Empresa y Botón */}
+                                            <div className="oferta-header">
+                                                <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
+                                                <p className="empresa-nombre">{empresaNombre}</p>
+                                                <button className="btn waves-effect waves-light postularme-btn" type="button">
+                                                    Postularme
+                                                </button>
+                                            </div>
+
+                                            {/* Segundo Contenedor: Horario, Modalidad, Sueldo, Educación, Dirección */}
+                                            <div className="oferta-info-grid">
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">access_time</i> Horario</p>
+                                                    <p>{ofertaSeleccionada.horario}</p>
+                                                    <p>{ofertaSeleccionada.modalidad}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">attach_money</i> Sueldo</p>
+                                                    <p>{ofertaSeleccionada.sueldo}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">school</i> Educación</p>
+                                                    <p>{ofertaSeleccionada.educacion}</p>
+                                                </div>
+                                                <div className="oferta-info-item">
+                                                    <p className="info-title"><i className="material-icons">location_on</i> Dirección</p>
+                                                    <p><strong>Calle:</strong> {ofertaSeleccionada.direccion}</p>
+
+                                                    <div className="ciudad-estado-container">
+                                                        <p><strong>Ciudad:</strong> {ofertaSeleccionada.ciudad}</p>
+                                                        <p><strong>Estado:</strong> {ofertaSeleccionada.estado}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Tercer Contenedor: Información restante */}
+                                            <div className="oferta-detalles-resto">
+                                                <p className='info-title'><i className="material-icons">description</i> Descrpción</p>
+                                                <p> {ofertaSeleccionada.descripcion}</p>
+                                                <p className='info-title'><i className="material-icons">contacts</i> Contacto</p>
+                                                <p><strong>Teléfono:</strong> {ofertaSeleccionada.telefono}</p>
+                                                <p><strong>Correo:</strong> {ofertaSeleccionada.correo}</p>
+                                                <p className='info-title'><i className="material-icons">check</i> Requisitos</p>
+                                                <p>{ofertaSeleccionada.requisitos}</p>
+                                                <p><strong>Idioma:</strong> {ofertaSeleccionada.idioma}</p>
+                                                <p><strong>Experiencia Laboral:</strong> {ofertaSeleccionada.experienciaLaboral}</p>
+                                                <p className='info-title'><i className="material-icons">work</i> Categoria</p>
+                                                <p> {ofertaSeleccionada.categoria}</p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <p>Seleccione una oferta para ver detalles.</p>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -224,44 +546,70 @@ export default function Empleados() {
                                         <p className='info-title2'>Filtrar empresas</p>
                                     </div>
                                     <div className="oferta-header3">
-                                        <p className='info-title3'>Ciudad</p>
+                                        <p className='info-title3'>Estado</p>
+                                        <select
+                                            value={selectedEstado}
+                                            onChange={(e) => setSelectedEstado(e.target.value)}
+                                        >
+                                            {estados.map(estado => (
+                                                <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="oferta-header3">
-                                        <p className='info-title3'>Estado</p>
-
+                                        <p className='info-title3'>Ciudad</p>
+                                        <select
+                                            value={ciudad}
+                                            onChange={(e) => setCiudad(e.target.value)}
+                                        >
+                                            {ciudades.map(ciudad => (
+                                                <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="oferta-header3">
                                         <p className='info-title3'>Giro</p>
-                                        <select onFocus={fetchGiros} onChange={(e) => setSelectedGiro(e.target.value)} value={selectedGiro}>
-                                            <option value="" disabled>Seleccionar Giro</option>
-                                            {giros.map(giro => (
-                                                <option key={giro._id} value={giro._id}>{giro.giro}</option>
+                                        <select
+                                            value={selectedGiro}
+                                            onChange={(e) => setSelectedGiro(e.target.value)}
+                                        >
+                                            {giros.map((giro) => (
+                                                <option key={giro._id} value={giro.giro}>
+                                                    {giro.giro}
+                                                </option>
                                             ))}
                                         </select>
+                                        <div className="button-container2">
+                                            <a
+                                                className="waves-effect waves-light btn-small custom-btn2"
+                                                onClick={handleAplicarFiltros}
+                                            >
+                                                Aplicar
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="derecho-side">
-                                <div className="row">
-                                    {empresas.length > 0 ? (
-                                        empresas.map((empresa) => (
-                                            <div className="container" key={empresa._id}>
-                                                <EmpresaCard
-                                                    _id={empresa._id}
-                                                    nombre={empresa.nombre}
-                                                    direccion={empresa.direccion}
-                                                    giro={empresa.giro}
-                                                    foto={empresa.foto}
-                                                    correo={empresa.correo}
-                                                    ciudad={empresa.ciudad}
-                                                    estado={empresa.estado}
-                                                />
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <p>No se encontraron empresas.</p>
-                                    )}
-                                </div>
+                                {empresas.length > 0 ? (
+                                    empresas.map((empresa) => (
+                                        <div className="container" key={empresa._id}>
+                                            <EmpresaCard
+                                                _id={empresa._id}
+                                                nombre={empresa.nombre}
+                                                direccion={empresa.direccion}
+                                                giro={empresa.giro}
+                                                foto={empresa.foto}
+                                                correo={empresa.correo}
+                                                ciudad={empresa.ciudad}
+                                                estado={empresa.estado}
+                                            />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No se encontraron empresas.</p>
+                                )}
+
                             </div>
                         </div>
                     </div>

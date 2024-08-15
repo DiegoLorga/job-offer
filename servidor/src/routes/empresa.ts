@@ -14,6 +14,7 @@ class EmpresaRoutes {
         this.router.put('/:id',empresaController.actualizarEmpresa);
         this.router.put('/actualizar/:id',empresaController.actualizarPerfilEmpresa);
         this.router.delete('/eliminarEmpresa/:id', empresaController.borrarEmpresa);
+        this.router.post('/filtros',empresaController.buscarEmpresas)
     }
 }
 const empresaRoutes = new EmpresaRoutes();

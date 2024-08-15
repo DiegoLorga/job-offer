@@ -10,6 +10,7 @@ import OfertaLaboral from '../models/OfertaLaboral.model';
 import fotosEmpresa from '../models/fotosEmpresa.model';
 import FotosPerfilEmpresa from '../models/fotosPerfilEmpresa.model';
 import Giro from '../models/giro.model';
+import { isEmpty } from 'validator';
 
 class EmpresaController {
 
@@ -234,6 +235,43 @@ public async listOne(req: Request, res: Response): Promise<void> {
         }
     };
 
+    public async buscarEmpresas(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Filtrando las empresas");
+            
+            // Extracción de parámetros de búsqueda desde la consulta de la URL
+            const { ciudad, estado, giro } = req.body;
+            
+            // Construcción dinámica del filtro de búsqueda
+            const filtros: any = {};
+    
+            if (estado) filtros.estado = estado;
+            if (ciudad) filtros.ciudad = ciudad;
+            if (giro) filtros.giro = giro;
+    
+            // Consulta a la base de datos usando los filtros
+            const empresas = await Empresa.find(filtros);
+    
+            // Verificar si se encontraron empresas
+            if (empresas.length === 0) {
+                console.log("No hay coincidencias");
+                
+                res.status(404).json({
+                    message: "No se encontraron coincidencias"
+                });
+                return;
+            }
+    
+            res.json(empresas);
+    
+        } catch (error) {
+            console.error("Error al buscar empresas:", error);
+            res.status(500).json({
+                error: "Hubo un error al buscar las empresas"
+            });
+        }
+    }
+    
     
 
 }

@@ -188,6 +188,13 @@ class ofertaLaboralController {
                     filtros.createdAt = { $gte: new Date(fechacreacion) }; // Ofertas creadas después de la fecha
                 // Consulta a la base de datos usando los filtros
                 const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
+                if (ofertas.length === 0) {
+                    console.log("No hay coincidencias");
+                    res.status(404).json({
+                        message: "No se encontraron coincidencias"
+                    });
+                    return;
+                }
                 res.json(ofertas);
             }
             catch (error) {
