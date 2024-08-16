@@ -18,6 +18,10 @@ interface Giro {
     giro: string;
 }
 
+interface Educacion {
+    _id: string;
+    nivel: string;
+}
 interface Estado {
     _id: string;
     nombre: string;
@@ -37,6 +41,8 @@ export default function Empleados() {
     const [ofertas, setOfertas] = useState<Oferta1[]>([]);
     const [giros, setGiros] = useState<Giro[]>([]);
     const [selectedGiro, setSelectedGiro] = useState<string>("");
+    const [educacion, setEducacion] = useState<Educacion[]>([]);
+    const [selectedEducacion, setSelectedEducacion] = useState<string>("");
     const [ofertaSeleccionada, setOfertaSeleccionada] = useState<OfertaCompleta | null>(null);
     const [empresaNombre, setEmpresaNombre] = useState<string | null>(null);
     const [estados, setEstados] = useState<Estado[]>([]);
@@ -147,6 +153,30 @@ export default function Empleados() {
         }
 
         fetchGiros();
+    }, []);
+
+
+    useEffect(() => {
+        async function fetchEducacion() {
+            try {
+                const response = await fetch(`${API_URL}/OfertaLaboral/educacion`);
+                if (response.ok) {
+                    const data = await response.json() as Educacion[];
+                    setEducacion(data);
+                    console.log("Datos de la educacion: ", data);
+                    if (data.length > 0) {
+                        setSelectedEducacion(data[0].nivel);
+                    }
+
+                } else {
+                    console.error('Error al obtener los datos de nivel:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener los datos de nivel:', error);
+            }
+        }
+
+        fetchEducacion();
     }, []);
 
     useEffect(() => {
@@ -412,32 +442,32 @@ export default function Empleados() {
 
                                 <div className="select-container">
                                     <p className='info-title4'>Sueldo</p>
-                                    <select
-                                        value={selectedEstado}
-                                        onChange={(e) => setSelectedEstado(e.target.value)}
-                                    >
-                                        {estados.map(estado => (
-                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
-                                        ))}
+                                    <select> 
+                                    <option value="1">$1,000 MX - $5,000 MX</option>
+                                    <option value="2">$5,000 MX - $10,000 MX</option>
+                                    <option value="3">$10,000 MX - $20,000 MX</option>
+                                    <option value="4">$20,000 MX O MÁS</option>
                                     </select>
                                 </div>
                                 <div className="select-container">
                                     <p className='info-title4'>Modalidad</p>
                                     <select>
-                                        <option value="REMOTO">REMOTO</option>
-                                        <option value="PRESENCIAL">PRESENCIAL</option>
-                                        <option value="HIBRIDO">HIBRIDO</option>
+                                        <option value="1">REMOTO</option>
+                                        <option value="2">PRESENCIAL</option>
+                                        <option value="3">HIBRIDO</option>
                                     </select>
                                 </div>
 
                                 <div className="select-container">
                                     <p className='info-title4'>Educación</p>
                                     <select
-                                        value={selectedEstado}
-                                        onChange={(e) => setSelectedEstado(e.target.value)}
+                                        value={selectedEducacion}
+                                        onChange={(e) => setSelectedEducacion(e.target.value)}
                                     >
-                                        {estados.map(estado => (
-                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        {educacion.map((educacion) => (
+                                            <option key={educacion._id} value={educacion.nivel}>
+                                                {educacion.nivel}
+                                            </option>
                                         ))}
                                     </select>
                                 </div>

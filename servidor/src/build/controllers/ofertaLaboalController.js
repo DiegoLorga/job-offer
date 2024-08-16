@@ -17,6 +17,7 @@ const jsonResponse_1 = require("../lib/jsonResponse");
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 const categoria_model_1 = __importDefault(require("../models/categoria.model"));
 const empresa_model_1 = __importDefault(require("../models/empresa.model"));
+const educacion_model_1 = __importDefault(require("../models/educacion.model"));
 class ofertaLaboralController {
     constructor() {
     }
@@ -170,21 +171,49 @@ class ofertaLaboralController {
     buscarOfertas(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Extracción de parámetros de búsqueda desde la consulta de la URL
                 const { estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin } = req.body;
-                // Construcción dinámica del filtro de búsqueda
                 const filtros = {};
                 if (estado)
                     filtros.estado = estado;
                 if (ciudad)
                     filtros.ciudad = ciudad;
-                if (sueldo)
-                    filtros.sueldo = { $gte: Number(sueldo) }; // Sueldo mayor o igual
-                if (modalidad)
-                    filtros.modalidad = modalidad;
+                // Lógica para modalidad
+                if (modalidad) {
+                    switch (modalidad) {
+                        case 1:
+                            filtros.modalidad = 'Remoto';
+                            break;
+                        case 2:
+                            filtros.modalidad = 'Presencial';
+                            break;
+                        case 3:
+                            filtros.modalidad = 'Híbrido';
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                // Lógica para sueldo
+                if (sueldo) {
+                    switch (sueldo) {
+                        case 1:
+                            filtros.sueldo = { $gte: 1000, $lte: 5000 };
+                            break;
+                        case 2:
+                            filtros.sueldo = { $gte: 5000, $lte: 10000 };
+                            break;
+                        case 3:
+                            filtros.sueldo = { $gte: 10000, $lte: 20000 };
+                            break;
+                        case 4:
+                            filtros.sueldo = { $gte: 20000 };
+                            break;
+                        default:
+                            break;
+                    }
+                }
                 if (educacion)
                     filtros.educacion = educacion;
-                // Filtro para buscar entre dos fechas
                 if (fechaInicio && fechaFin) {
                     filtros.createdAt = {
                         $gte: new Date(fechaInicio),
@@ -197,7 +226,6 @@ class ofertaLaboralController {
                 else if (fechaFin) {
                     filtros.createdAt = { $lte: new Date(fechaFin) };
                 }
-                // Consulta a la base de datos usando los filtros
                 const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
                 if (ofertas.length === 0) {
                     console.log("No hay coincidencias");
@@ -248,6 +276,12 @@ class ofertaLaboralController {
                     error: "Hubo un error"
                 }));
             }
+        });
+    }
+    getEducacion(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const educacion = yield educacion_model_1.default.find();
+            res.json(educacion);
         });
     }
 }

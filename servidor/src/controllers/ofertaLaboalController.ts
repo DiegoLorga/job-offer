@@ -3,7 +3,7 @@ import { jsonResponse } from '../lib/jsonResponse';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import Categoria from '../models/categoria.model';
 import Empresa from '../models/empresa.model';
-
+import Educacion from '../models/educacion.model';
 class ofertaLaboralController {
 
     constructor() {
@@ -159,19 +159,52 @@ class ofertaLaboralController {
 
     public async buscarOfertas(req: Request, res: Response): Promise<void> {
         try {
-            // Extracción de parámetros de búsqueda desde la consulta de la URL
             const { estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin } = req.body;
-
-            // Construcción dinámica del filtro de búsqueda
+    
             const filtros: any = {};
-
+    
             if (estado) filtros.estado = estado;
             if (ciudad) filtros.ciudad = ciudad;
-            if (sueldo) filtros.sueldo = { $gte: Number(sueldo) }; // Sueldo mayor o igual
-            if (modalidad) filtros.modalidad = modalidad;
+    
+            // Lógica para modalidad
+            if (modalidad) {
+                switch (modalidad) {
+                    case 1:
+                        filtros.modalidad = 'Remoto';
+                        break;
+                    case 2:
+                        filtros.modalidad = 'Presencial';
+                        break;
+                    case 3:
+                        filtros.modalidad = 'Híbrido';
+                        break;
+                    default:
+                        break;
+                }
+            }
+    
+            // Lógica para sueldo
+            if (sueldo) {
+                switch (sueldo) {
+                    case 1:
+                        filtros.sueldo = { $gte: 1000, $lte: 5000 };
+                        break;
+                    case 2:
+                        filtros.sueldo = { $gte: 5000, $lte: 10000 };
+                        break;
+                    case 3:
+                        filtros.sueldo = { $gte: 10000, $lte: 20000 };
+                        break;
+                    case 4:
+                        filtros.sueldo = { $gte: 20000 };
+                        break;
+                    default:
+                        break;
+                }
+            }
+    
             if (educacion) filtros.educacion = educacion;
-
-            // Filtro para buscar entre dos fechas
+    
             if (fechaInicio && fechaFin) {
                 filtros.createdAt = {
                     $gte: new Date(fechaInicio as string),
@@ -182,19 +215,18 @@ class ofertaLaboralController {
             } else if (fechaFin) {
                 filtros.createdAt = { $lte: new Date(fechaFin as string) };
             }
-
-            // Consulta a la base de datos usando los filtros
+    
             const ofertas = await OfertaLaboral.find(filtros);
-
+    
             if (ofertas.length === 0) {
                 console.log("No hay coincidencias");
-
+    
                 res.status(404).json({
                     message: "No se encontraron coincidencias"
                 });
                 return;
             }
-
+    
             res.json(ofertas);
         } catch (error) {
             console.error("Error al buscar ofertas:", error);
@@ -203,6 +235,7 @@ class ofertaLaboralController {
             });
         }
     }
+    
 
 
     public async ObtenerNombreEmpresa(req: Request, res: Response): Promise<void> {
@@ -243,6 +276,13 @@ class ofertaLaboralController {
             }));
         }
     }
+
+    public async getEducacion(req: Request, res: Response): Promise<void> {
+        const educacion = await Educacion.find();
+        res.json(educacion);
+
+    }
+
 
 }
 export const OfertaLaboralController = new ofertaLaboralController();
