@@ -423,13 +423,10 @@ export default function Empleados() {
                                 </div>
                                 <div className="select-container">
                                     <p className='info-title4'>Modalidad</p>
-                                    <select
-                                        value={selectedEstado}
-                                        onChange={(e) => setSelectedEstado(e.target.value)}
-                                    >
-                                        {estados.map(estado => (
-                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
-                                        ))}
+                                    <select>
+                                        <option value="REMOTO">REMOTO</option>
+                                        <option value="PRESENCIAL">PRESENCIAL</option>
+                                        <option value="HIBRIDO">HIBRIDO</option>
                                     </select>
                                 </div>
 
@@ -446,9 +443,15 @@ export default function Empleados() {
                                 </div>
 
                                 <div className="select-container">
-                                    <p className='info-title4'>Fecha</p>                            
-                                        <input type="text" className="datepicker" />
-                                       
+                                    <p className='info-title4'>Fecha</p>
+                                    <input type="text" className="datepicker" />
+
+                                </div>
+
+                                <div className="select-container">
+                                    <p className='info-title4'>Fecha</p>
+                                    <input type="text" className="datepicker" />
+
                                 </div>
                             </div>
                             <div className="button-container">
