@@ -373,85 +373,55 @@ export default function PerfilUsuarios() {
 
     //
     useEffect(() => {
-        const modalElement = document.getElementById('modal1');
-
-        if (modalElement) {
-            // Inicializar el modal solo si el elemento existe
-            const modalInstance = M.Modal.init(modalElement, {
-                onOpenStart: () => {
-                    setSelectedNombre(nombre);
-                    setSelectedDireccion(direccion);
-                    setSelectedEstado(estado);
-                    setSelectedCiudad(ciudad);
-                    setSelectedCorreo(correo);
-                },
-                onCloseEnd: () => {
-                    // Opcional: resetear el modal cuando se cierra
-                }
-            });
-
-            return () => {
-                // Destruir la instancia del modal para evitar fugas de memoria
-                if (modalInstance) {
-                    modalInstance.destroy();
-                }
-            };
-        }
-    }, [nombre, direccion, estado, ciudad]);
-
-    const fetchExperiencia = async () => {
-        const storedUser2 = localStorage.getItem('usuario');
-        if (storedUser2) {
-            const usuario = JSON.parse(storedUser2);
-            auth.setIsAuthenticated(true);
-
-           
-            console.log(usuario);
-        try {
-            const response = await fetch(`/api/perfilUsuario/buscarExperiencia/${usuario._id}`);
-            const data = await response.json();
-            setExperiencia(data);
-            console.log(data);
-        } catch (error) {
-            console.error('Error al obtener la experiencia:', error);
-        }
-    }
-    };
-
-    //para inicializar modales de competencias
-    useEffect(() => {
         // Inicializar primer modal
         const modalElement1 = document.getElementById('modalExp');
         const modalInstance1 = modalElement1 ? M.Modal.init(modalElement1) : null;
         if (modalInstance1) {
-            fetchExperiencia();
             modalInstance1.options.onOpenStart = () => {
-                
-                setSelectedNombre(nombre);
-                setSelectedDireccion(direccion);
-                setSelectedEstado(estado);
-                setSelectedCiudad(ciudad);
+                fetchExperiencia();
             };
         }
-
+    
+        // Función asíncrona para obtener la experiencia del usuario
+        const fetchExperiencia = async () => {  // Tipo explícito para usuarioId
+            const storedUser2 = localStorage.getItem('usuario');
+                if (storedUser2) {
+                    const usuario = JSON.parse(storedUser2);
+                    auth.setIsAuthenticated(true);
+                    //console.log(usuario);
+                    
+                
+            try {
+                console.log(usuario.id);
+                const response = await fetch(`${API_URL}/perfilUsuario/buscarExperiencia/${usuario.id}`);
+                const data = await response.json();
+                setExperiencia(data);
+                console.log("datos exp", data);
+            } catch (error) {
+                console.error('Error al obtener la experiencia:', error);
+            }
+            }
+        };
+        
+        //fetchExperiencia();
         // Inicializar segundo modal
         const modalElement2 = document.getElementById('modalHab');
         const modalInstance2 = modalElement2 ? M.Modal.init(modalElement2) : null;
         if (modalInstance2) {
             modalInstance2.options.onOpenStart = () => {
-                // Lógica específica para el segundo modal (si es necesario)
+                
             };
         }
-
+    
         // Inicializar tercer modal
         const modalElement3 = document.getElementById('modalEdu');
         const modalInstance3 = modalElement3 ? M.Modal.init(modalElement3) : null;
         if (modalInstance3) {
             modalInstance3.options.onOpenStart = () => {
-                // Lógica específica para el segundo modal (si es necesario)
+                // Lógica específica para el tercer modal (si es necesario)
             };
         }
-
+    
         // Cleanup function
         return () => {
             if (modalInstance1) modalInstance1.destroy();
@@ -459,7 +429,7 @@ export default function PerfilUsuarios() {
             if (modalInstance3) modalInstance3.destroy();
         };
     }, [nombre, direccion, estado, ciudad]);
-
+    
     //para obtener imágenes 
     const storedUser = localStorage.getItem('usuario');
     let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
@@ -574,7 +544,6 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
     const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
-            auth.setIsAuthenticated(true);
     
         if (!empresaInput || !puestoInput || !descripcionInput) {
         Swal.fire({
@@ -603,8 +572,6 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                 descripcion,
             }),
         });
-
-        const result = await response.json();
 
         if (response.ok) {
             // Maneja la respuesta exitosa usando SweetAlert
@@ -636,7 +603,6 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
     }
   }
 };
-
 
 
     return (
@@ -885,62 +851,69 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                     </div>
                 </div>
 
-                {/* Modal para Experiencia */}
                 <div id="modalExp" className="modal">
-                    <div className="modal-contentperfil">
-                        <br /><h4 style={{ textAlign: 'center' }}>Experiencia profesional</h4><br />
-                        <form className="col s12" onSubmit={actualizarExp}>
-                            <div className="input-fieldExp col s12">
-                                <label htmlFor="empresa">Empresa</label>
-                                <i className="material-icons prefix">business</i>
-                                <input
-                                    id="empresa"
-                                    type="text"
-                                    className="validate"
-                                    required
-                                />
-                            </div>
-                            <div className="input-fieldExp col s12">
-                                <label htmlFor="puesto">Puesto</label>
-                                <i className="material-icons prefix">work</i>
-                                <input
-                                    id="puesto"
-                                    type="text"
-                                    className="validate"
-                                    required
-                                />
-                            </div>
-
-                            <br /><br /><div className="input-fieldExp col s12">
-                                <label htmlFor="descripcion">Descripción de actividades</label>
-                                <i className="material-icons prefix">description</i>
-                                <textarea
-                                    id="descripcion"
-                                    className="materialize-textarea validate"
-                                    required
-                                ></textarea>
-                            </div><br />
-
-                            <div className="modal-footer">
-                                <button
-                                    type="submit"
-                                    className="waves-effect waves-light btn "
-                                    style={{ marginRight: '15px' }}
-                                >
-                                    Enviar
-                                    <i className="material-icons right">send</i>
-                                </button>
-                                <a
-                                    href="#!"
-                                    className="modal-close waves-effect waves-light btn "
-                                    style={{ marginRight: '30px' }}
-                                >
-                                    Cerrar
-                                </a>
-                            </div>
-                        </form>
+            <div className="modal-contentperfil">
+                <br />
+                <h4 style={{ textAlign: 'center' }}>Experiencia profesional</h4><br />
+                <form className="col s12" onSubmit={actualizarExp}>
+                    <div className="input-fieldExp col s12">
+                        <label htmlFor="empresa" className={experiencia?.empresa ? 'active' : ''}>Empresa</label>
+                        <i className="material-icons prefix">business</i>
+                        <input
+                            id="empresa"
+                            type="text"
+                            className="validate"
+                            value={experiencia?.empresa || ''}
+                            onChange={(e) => setExperiencia({ ...experiencia, empresa: e.target.value } as Experiencia)}
+                            required
+                        />
                     </div>
-                </div>
+                    <div className="input-fieldExp col s12">
+                        <label htmlFor="puesto" className={experiencia?.puesto ? 'active' : ''}>Puesto</label>
+                        <i className="material-icons prefix">work</i>
+                        <input
+                            id="puesto"
+                            type="text"
+                            className="validate"
+                            value={experiencia?.puesto || ''}
+                            onChange={(e) => setExperiencia({ ...experiencia, puesto: e.target.value } as Experiencia)}
+                            required
+                        />
+                    </div>
+
+                    <br /><br />
+                    <div className="input-fieldExp col s12">
+                        <label htmlFor="descripcion" className={experiencia?.descripcion ? 'active' : ''}>Descripción de actividades</label>
+                        <i className="material-icons prefix">description</i>
+                        <textarea
+                            id="descripcion"
+                            className="materialize-textarea validate"
+                            value={experiencia?.descripcion || ''}
+                            onChange={(e) => setExperiencia({ ...experiencia, descripcion: e.target.value } as Experiencia)}
+                            required
+                        ></textarea>
+                    </div><br />
+
+                    <div className="modal-footer">
+                        <button
+                            type="submit"
+                            className="waves-effect waves-light btn"
+                            style={{ marginRight: '15px' }}
+                        >
+                            Enviar
+                            <i className="material-icons right">send</i>
+                        </button>
+                        <a
+                            href="#!"
+                            className="modal-close waves-effect waves-light btn"
+                            style={{ marginRight: '30px' }}
+                        >
+                            Cerrar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
 
                 {/* Modal para Habilidades */}
                 <div id="modalHab" className="modal" >
@@ -1001,10 +974,10 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                 {/* Modal para Educacion */}
                 <div id="modalEdu" className="modal">
                     <div className="modal-contentperfil">
-                        <br /><h4 style={{ textAlign: 'center' }}>Experiencia profesional</h4><br />
+                        <br /><h4 style={{ textAlign: 'center' }}>Último nivel de estudios cursado</h4><br />
                         <form className="col s12" >
                             <div className="input-fieldExp col s12">
-                                <label htmlFor="empresa">Empresa</label>
+                                <label htmlFor="empresa">Nivel</label>
                                 <i className="material-icons prefix">business</i>
                                 <input
                                     id="empresa"
@@ -1014,7 +987,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                                 />
                             </div>
                             <div className="input-fieldExp col s12">
-                                <label htmlFor="puesto">Puesto</label>
+                                <label htmlFor="puesto">Institución</label>
                                 <i className="material-icons prefix">work</i>
                                 <input
                                     id="puesto"
@@ -1023,16 +996,16 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                                     required
                                 />
                             </div>
-
-                            <br /><br /><div className="input-fieldExp col s12">
-                                <label htmlFor="descripcion">Descripción de actividades</label>
-                                <i className="material-icons prefix">description</i>
-                                <textarea
-                                    id="descripcion"
-                                    className="materialize-textarea validate"
+                            <div className="input-fieldExp col s12">
+                                <label htmlFor="puesto">Título o carrera</label>
+                                <i className="material-icons prefix">work</i>
+                                <input
+                                    id="puesto"
+                                    type="text"
+                                    className="validate"
                                     required
-                                ></textarea>
-                            </div><br />
+                                />
+                            </div>
 
                             <div className="modal-footer">
                                 <button
