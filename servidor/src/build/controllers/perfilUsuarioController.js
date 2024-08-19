@@ -113,10 +113,7 @@ class PerfilUsuarioController {
                     id_usuario: habilidad.id_usuario.toString()
                 }));
                 console.log(habilidadesFormateadas);
-                res.json({
-                    statusCode: 200,
-                    data: habilidadesFormateadas
-                });
+                res.status(200).json(habilidadesFormateadas);
             }
             catch (error) {
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
@@ -159,6 +156,35 @@ class PerfilUsuarioController {
                 console.error('Error al crear habilidades:', error); // Para depuración
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
                     Error: "Error al crear las habilidades"
+                }));
+            }
+        });
+    }
+    eliminarHabilidad(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id_habilidad } = req.params; // _id de la habilidad a eliminar
+            const { id_usuario } = req.body; // id_usuario del usuario
+            try {
+                // Elimina la habilidad específica basada en _id
+                const habilidadEliminada = yield habilidades_model_1.default.findOneAndDelete({
+                    _id: id_habilidad,
+                    id_usuario
+                });
+                if (!habilidadEliminada) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
+                        Error: "Habilidad no encontrada para el usuario dado"
+                    }));
+                    return;
+                }
+                // Si se requiere, puedes realizar otras acciones aquí, como actualizar el campo de habilidades en el perfil
+                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
+                    Message: "Habilidad eliminada correctamente"
+                }));
+            }
+            catch (error) {
+                console.error('Error al eliminar la habilidad:', error.message); // Más detalles del error
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    Error: "Error al eliminar la habilidad"
                 }));
             }
         });

@@ -121,10 +121,8 @@ class PerfilUsuarioController {
             }));
             console.log(habilidadesFormateadas)
     
-            res.json({
-                statusCode: 200,
-                data: habilidadesFormateadas
-            });
+            res.status(200).json(habilidadesFormateadas);
+
         } catch (error: any) {
             res.status(500).json(jsonResponse(500, {
                 Error: "Error al buscar las habilidades"
@@ -176,6 +174,40 @@ class PerfilUsuarioController {
             }));
         }
     }
+
+    public async eliminarHabilidad(req: Request, res: Response): Promise<void> {
+        const { id_habilidad } = req.params; // _id de la habilidad a eliminar
+        const { id_usuario } = req.body; // id_usuario del usuario
+    
+        try {
+            // Elimina la habilidad específica basada en _id
+            const habilidadEliminada = await Habilidad.findOneAndDelete({
+                _id: id_habilidad,
+                id_usuario
+            });
+    
+            if (!habilidadEliminada) {
+                res.status(404).json(jsonResponse(404, {
+                    Error: "Habilidad no encontrada para el usuario dado"
+                }));
+                return;
+            }
+    
+            // Si se requiere, puedes realizar otras acciones aquí, como actualizar el campo de habilidades en el perfil
+    
+            res.status(200).json(jsonResponse(200, {
+                Message: "Habilidad eliminada correctamente"
+            }));
+        } catch (error: any) {
+            console.error('Error al eliminar la habilidad:', error.message); // Más detalles del error
+            res.status(500).json(jsonResponse(500, {
+                Error: "Error al eliminar la habilidad"
+            }));
+        }
+    }
+    
+    
+    
     
 }
 export const perfilUsuarioController = new PerfilUsuarioController();
