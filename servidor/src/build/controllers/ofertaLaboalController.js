@@ -181,13 +181,13 @@ class ofertaLaboralController {
                 if (modalidad) {
                     switch (modalidad) {
                         case 1:
-                            filtros.modalidad = 'Remoto';
+                            filtros.modalidad = 'REMOTO';
                             break;
                         case 2:
-                            filtros.modalidad = 'Presencial';
+                            filtros.modalidad = 'PRESENCIAL';
                             break;
                         case 3:
-                            filtros.modalidad = 'Híbrido';
+                            filtros.modalidad = 'HIBRIDO';
                             break;
                         default:
                             break;
@@ -226,7 +226,10 @@ class ofertaLaboralController {
                 else if (fechaFin) {
                     filtros.createdAt = { $lte: new Date(fechaFin) };
                 }
+                // Consulta a la base de datos usando los filtros combinados
                 const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
+                console.log(estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin);
+                //console.log(filtros);
                 if (ofertas.length === 0) {
                     console.log("No hay coincidencias");
                     res.status(404).json({
