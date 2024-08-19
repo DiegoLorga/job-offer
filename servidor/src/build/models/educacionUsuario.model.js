@@ -24,46 +24,47 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-// Esquema de Mongoose para el perfil de usuario
-const schemaperfilUsuario = new mongoose_1.Schema({
-    cv: {
-        type: Boolean,
-        //required: true,
+const schemaEducacionUsuario = new mongoose_1.Schema({
+    nombre: {
+        type: String,
+        required: true,
+        trim: true
     },
-    experiencia: {
-        type: Boolean,
-        //required: true,
+    correo: {
+        type: String,
+        required: true,
+        trim: true,
+        unique: true
     },
-    habilidades: {
-        type: Boolean,
-        //required: true,
+    contrasena: {
+        type: String,
+        required: true
     },
-    educacion: {
-        type: Boolean,
-        //required: true,
+    id_rol: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Rol',
+        requiere: true
     },
-    idiomas: {
-        type: Boolean,
-        //required: true,
+    direccion: {
+        type: String,
+        required: true
     },
-    certificaciones: {
-        type: Boolean,
-        //required: true,
+    estado: {
+        type: String,
+        required: true
     },
-    status: {
-        type: Boolean,
-        //required: true,
+    ciudad: {
+        type: String,
+        required: true
+    },
+    giro: {
+        type: String,
+        required: true
     },
     foto: {
         type: Boolean,
-        //required: true,
-    },
-    id_usuario: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Usuario',
-        requiere: true
-    },
+    }
 }, {
     timestamps: true
 });
-exports.default = mongoose_1.default.model('perfilUsuario', schemaperfilUsuario);
+exports.default = mongoose_1.default.model('EducacionUsuario', schemaEducacionUsuario);

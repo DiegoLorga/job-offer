@@ -10,6 +10,9 @@ class perfilUsuarioRoutes {
     config() {
         this.router.put("/actualizarExperiencia/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarExperiencia);
         this.router.get("/buscarExperiencia/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarExperiencia);
+        this.router.put("/actualizarHabilidades/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarHabilidades);
+        this.router.get("/buscarHabilidades/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarHabilidades);
+        this.router.post("/crearHabilidades/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.crearHabilidades);
     }
 }
 const administradorRoutes = new perfilUsuarioRoutes();

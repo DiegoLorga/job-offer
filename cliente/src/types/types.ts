@@ -128,13 +128,11 @@ export interface Usuario {
 export interface perfilUsuario {
     _id: string;
     cv: false,
-    experiencia: string,
-    especialidad: string,
-    habilidades: string,
-    educacion: string,
-    idiomas: string,
+    experiencia: false,
+    habilidades: false,
+    educacion: false,
+    idiomas: false,
     certificaciones: false,
-    repositorio: string,
     status: false,
     foto: false
 }
@@ -145,3 +143,15 @@ export interface Experiencia {
     puesto: string,
     descripcion: string
 }
+
+export interface Educacion {
+    _id: string;
+    nivel: string;
+}
+
+export interface Habilidad {
+    _id: string;
+    descripcion: string;
+    id_usuario: string;
+}
+

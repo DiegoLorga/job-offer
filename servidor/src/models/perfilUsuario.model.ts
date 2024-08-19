@@ -6,10 +6,9 @@ interface perfilUsuario extends Document {
   cv: boolean;
   experiencia: boolean;
   habilidades: boolean;
-  educacion: string;
+  educacion: boolean;
   idiomas: boolean;
   certificaciones: boolean;
-  repositorio: string;
   status: boolean;
   foto: boolean;
   createdAt: Date;
@@ -31,7 +30,7 @@ const schemaperfilUsuario = new Schema<perfilUsuario>({
     //required: true,
   },
   educacion: {
-    type: String,
+    type: Boolean,
     //required: true,
   },
   idiomas: {
@@ -40,10 +39,6 @@ const schemaperfilUsuario = new Schema<perfilUsuario>({
   },
   certificaciones: {
     type: Boolean,
-    //required: true,
-  },
-  repositorio: {
-    type: String,
     //required: true,
   },
   status: {

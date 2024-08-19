@@ -90,10 +90,9 @@ class UsuarioController {
                 cv: false,
                 experiencia: false,
                 habilidades: false,
-                educacion: '',
+                educacion: false,
                 idiomas: false,
                 certificaciones: false,
-                repositorio: '',
                 status: false,
                 foto: false
             });
@@ -229,8 +228,20 @@ class UsuarioController {
             const id_usuario = req.params.id_usuario;
             const perfilEncontrado = await PerfilUsuario.findOne({ id_usuario: id_usuario });
 
+            
             if (perfilEncontrado) {
-                res.json(perfilEncontrado);
+                res.json({
+                    id: perfilEncontrado._id,
+                    cv: perfilEncontrado.cv,
+                    experiencia:perfilEncontrado.experiencia,
+                    habilidades: perfilEncontrado.habilidades,
+                    educacion:perfilEncontrado.educacion,
+                    idiomas:perfilEncontrado.idiomas,
+                    certificaciones: perfilEncontrado.certificaciones,
+                    status: perfilEncontrado.status,
+                    foto: perfilEncontrado.foto
+                   
+                });
             } else {
                 res.status(404).json({ message: "Perfil de usuario no encontrado" });
             }

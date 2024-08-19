@@ -8,8 +8,8 @@ import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import Swal from 'sweetalert2';
 import '../estilos/estiloPerfilUsuario.css';
 import { Navigate, useNavigate } from "react-router-dom";
-import { AuthResponseError } from "../types/types";
-import { Estado, Ciudad, Usuario, perfilUsuario, Experiencia } from '../types/types';
+import { AuthResponseError, perfilUsuario } from '../types/types';
+import { Estado, Ciudad, Usuario, Experiencia, Educacion, Habilidad } from '../types/types';
 
 
 export default function PerfilUsuarios() {
@@ -40,15 +40,81 @@ export default function PerfilUsuarios() {
     const [habilidad, setHabilidad] = useState('');
     const [habilidades, setHabilidades] = useState<string[]>([]);
     const [experiencia, setExperiencia] = useState<Experiencia | null>(null);
+    const [perfilUsuario, setPerfilUsuario] = useState<perfilUsuario | null>(null);
+    const [cambios, setCambios] = useState<boolean>(false);
+    const [educacion, setEducacion] = useState<Educacion[]>([]);
+    const [selectedEducacion, setSelectedEducacion] = useState<string>("");
 
-    //para habilidades
-    const handleSubmitHab = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (habilidad.trim()) {
-          setHabilidades([...habilidades, habilidad]);
-          setHabilidad(''); // Limpiar el campo después de añadir la habilidad
+//agregar al cliente habilidades
+const handleAgregarHabilidad = () => {
+    if (habilidad.trim()) {
+        if (habilidades.length >= 5) {
+            Swal.fire('Error', 'Puedes agregar solo 5 habilidades', 'error');
+            setHabilidad('');
+            return;
         }
-    };
+        setHabilidades([...habilidades, habilidad]);
+        setHabilidad(''); // Limpiar el campo después de añadir la habilidad
+    }
+
+};
+
+        //para actualizar/agregar habilidades
+const handleEnviarHabilidades  = async (e: React.FormEvent) => {;
+            e.preventDefault();
+
+            if (habilidades.length !== 5) {
+                Swal.fire('Error', 'Debes agregar o actualizar en total 5 habilidades', 'error');
+                return;
+            }
+
+            if (!perfilUsuario) {
+                Swal.fire('Error', 'Perfil del usuario no encontrado', 'error');
+                return;
+            }
+            // Verifica si `perfilUsuario.habilidades` es falso
+            const storedUser = localStorage.getItem('usuario');
+            if (storedUser) {
+                const usuario = JSON.parse(storedUser);
+            if (perfilUsuario.habilidades === false) {
+                Swal.fire({
+                    title: 'Confirmar',
+                    text: "¿Deseas agregar las nuevas habilidades?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, agregar',
+                    cancelButtonText: 'Cancelar'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        // Crear habilidades si el usuario confirma
+                        try {
+                            const response = await fetch(`${API_URL}/perfilUsuario/crearHabilidades/${usuario.id}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(habilidades.map(hab => ({ descripcion: hab, id_usuario: usuario.id })))
+                            });
+        
+                            const data = await response.json();
+                            if (response.ok) {
+                                Swal.fire('Éxito', 'Habilidades agregadas correctamente', 'success');
+                                setHabilidades([]); // Limpiar la lista después de agregar
+                                setCambios(true);
+                            } else {
+                                Swal.fire('Error', 'No se pudieron agregar las habilidades', 'error');
+                            }
+                        } catch (error) {
+                            Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+                        }
+                    }
+                });
+            } else {
+                
+            }
+    
+        }
+        };
     
     //para limpiar los campos de habilidades
     const handleCloseHab = () => {
@@ -250,7 +316,7 @@ export default function PerfilUsuarios() {
         return () => {
             M.FormSelect.getInstance(elems[0])?.destroy();
         };
-    }, []);
+    }, [educacion]);
 
     useEffect(() => {
         const dropdownElems = document.querySelectorAll('.dropdown-trigger');
@@ -350,28 +416,94 @@ export default function PerfilUsuarios() {
                 }
             }
 
-            async function fetchPerfilUsuario() {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
-                    if (response.ok) {
-                        const data = await response.json() as perfilUsuario;
-                        setFoto(data.foto);
-                        //console.log("Datos del usuario en perfil ", data);
-                    } else {
-                    }
-                } catch (error) {
-                    console.error('Error al obtener el perfil del usuario:', error);
-                }
-            }
-
             fetchUsuario();
-            fetchPerfilUsuario();
             fetchEstado();
         }
 
     }, [auth]);
+    
+//para usuario perfil 
+useEffect(() => {
 
-    //
+    const storedUser = localStorage.getItem('usuario');
+    if (storedUser) {
+        const usuario = JSON.parse(storedUser);
+
+
+        async function fetchPerfilUsuario() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getPerfilUsuario/${usuario.id}`);
+                if (response.ok) {
+                    const data = await response.json() as perfilUsuario;
+                    setFoto(data.foto);
+                    setPerfilUsuario(data);
+                    console.log("Datos del usuario en peerfil ", perfilUsuario);
+                    if (data.habilidades) {
+                        const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
+                         console.log('Datos recibidos:', habilidadesResponse);
+                        if (habilidadesResponse.ok) {
+                            // Extrae el array de habilidades
+                            const habilidadesData = await habilidadesResponse.json();
+
+                            // Verifica que habilidadesData sea un array
+                            if (Array.isArray(habilidadesData)) {
+                                // Extrae solo las descripciones
+                                const descripciones = habilidadesData.map((hab: { descripcion: string }) => hab.descripcion);
+                                setHabilidades(descripciones);
+                            } else {
+                                console.error('La respuesta del servidor no es un array');
+                            }
+                        } else {
+                            console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
+                        }
+                    }
+                } 
+                
+            } catch (error) {
+                console.error('Error al obtener el perfil del usuario:', error);
+            }
+        }
+
+        
+        
+       
+        fetchPerfilUsuario();
+    }
+
+}, [perfilUsuario?.habilidades, cambios]);
+    //inicializar modal1
+    useEffect(() => {
+        const modalElement = document.getElementById('modal1');
+
+
+        if (modalElement) {
+            // Inicializar el modal solo si el elemento existe
+            const modalInstance = M.Modal.init(modalElement, {
+                onOpenStart: () => {
+                    setSelectedNombre(nombre);
+                    setSelectedDireccion(direccion);
+                    setSelectedEstado(estado);
+                    setSelectedCiudad(ciudad);
+                    setSelectedCorreo(correo);
+                },
+                onCloseEnd: () => {
+                    // Opcional: resetear el modal cuando se cierra
+                }
+            });
+
+
+            return () => {
+                // Destruir la instancia del modal para evitar fugas de memoria
+                if (modalInstance) {
+                    modalInstance.destroy();
+                }
+            };
+        }
+    }, [nombre, direccion, estado, ciudad]);
+
+
+
+    //para inicalizar modales
     useEffect(() => {
         // Inicializar primer modal
         const modalElement1 = document.getElementById('modalExp');
@@ -418,7 +550,7 @@ export default function PerfilUsuarios() {
         const modalInstance3 = modalElement3 ? M.Modal.init(modalElement3) : null;
         if (modalInstance3) {
             modalInstance3.options.onOpenStart = () => {
-                // Lógica específica para el tercer modal (si es necesario)
+                fetchEducacion();
             };
         }
     
@@ -428,8 +560,25 @@ export default function PerfilUsuarios() {
             if (modalInstance2) modalInstance2.destroy();
             if (modalInstance3) modalInstance3.destroy();
         };
-    }, [nombre, direccion, estado, ciudad]);
-    
+    }, []);
+
+    async function fetchEducacion() {
+        try {
+            const response = await fetch(`${API_URL}/OfertaLaboral/educacion`);
+            if (response.ok) {
+                const data = await response.json() as Educacion[];
+                setEducacion(data);
+                console.log("Datos de la educaciónnnnnnn: ", data);
+                if (data.length > 0) {
+                    setSelectedEducacion(data[0].nivel);
+                }
+            } else {
+                console.error('Error al obtener los datos de nivel:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error al obtener los datos de nivel:', error);
+        }
+    }
     //para obtener imágenes 
     const storedUser = localStorage.getItem('usuario');
     let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
@@ -757,11 +906,11 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                                 </div>
                             </div><br />
                             <div className="modal-footer">
-                                <button type="submit" className="waves-effect waves-light btn" style={{ marginRight: '15px' }}>
+                                <button type="submit" className="btn" style={{ marginRight: '15px' }}>
                                     Enviar
                                     <i className="material-icons right">send</i>
                                 </button>
-                                <a className="modal-close waves-effect waves-light btn" style={{ marginRight: '30px' }}>Cerrar</a>
+                                <a className="modal-close btn" style={{ marginRight: '30px' }}>Cerrar</a>
                             </div>
                         </form>
                     </div>
@@ -915,60 +1064,70 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
             </div>
         </div>
 
-                {/* Modal para Habilidades */}
-                <div id="modalHab" className="modal" >
-                    <div className="modal-contentperfil">
-                        <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
-                        <form className="col s12" onSubmit={handleSubmitHab}>
-                            <div className="input-fieldModal col s12">
-                                <i className="material-icons prefix">format_list_bulleted</i>
-                                <input
-                                    id="habilidad"
-                                    type="text"
-                                    className="validate"
-                                    value={habilidad}
-                                    onChange={(e) => setHabilidad(e.target.value)}
-                                    required
-                                />
-                                <label htmlFor="habilidad">Habilidad</label>
-                            </div>
+        <div id="modalHab" className="modal">
+    <div className="modal-contentperfil">
+        <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
+        <form className="col s12" onSubmit={(e) => e.preventDefault()}>
+            <div className="input-fieldModal col s12">
+                <i className="material-icons prefix">format_list_bulleted</i>
+                <input
+                    id="habilidad"
+                    type="text"
+                    className="validate"
+                    value={habilidad}
+                    onChange={(e) => setHabilidad(e.target.value)}
+                    required
+                />
+                <label htmlFor="habilidad">Habilidad</label>
+            </div>
 
-                            <div className="modal-footer">
-                                <button
-                                    type="submit"
-                                    className="waves-effect waves-light btn"
-                                    style={{ marginRight: '15px' }}
-                                >
-                                    Enviar
-                                    <i className="material-icons right">send</i>
-                                </button>
-                                <a
-                                    href="#!"
-                                    className="modal-close waves-effect waves-light btn"
-                                    style={{ marginRight: '30px' }}
-                                    onClick={handleCloseHab}
-                                >
-                                    Cerrar
-                                </a>
-                            </div>
-                        </form>
+            <div className="modal-footer">
+                <button
+                    type="button"
+                    className="btn"
+                    style={{ marginRight: '15px' }}
+                    onClick={handleAgregarHabilidad}
+                >
+                    Agregar
+                    <i className="material-icons right">add</i>
+                </button>
+                <button
+                    type="button"
+                    className="btn"
+                    style={{ marginRight: '15px' }}
+                    onClick={handleEnviarHabilidades}
+                >
+                    Enviar
+                    <i className="material-icons right">send</i>
+                </button>
+                <a
+                    href="#!"
+                    className="modal-close btn"
+                    style={{ marginRight: '30px' }}
+                    onClick={handleCloseHab}
+                >
+                    Cerrar
+                </a>
+            </div>
+        </form>
 
-                        {/* Lista de habilidades agregadas con estilo */}
-                        <div className="habilidades-list">
-                            {habilidades.map((hab, index) => (
-                                <div key={index} className="habilidad-item">
-                                    {hab}
-                                    <i
-                                        className="material-icons delete-icon"
-                                        onClick={() => eliminarHabilidad(index)}
-                                    >
-                                        close
-                                    </i>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+        {/* Lista de habilidades agregadas con estilo */}
+        <div className="habilidades-list">
+            {habilidades.map((hab, index) => (
+                <div key={index} className="habilidad-item">
+                    {hab}
+                    <i
+                        className="material-icons delete-icon"
+                        onClick={() => eliminarHabilidad(index)}
+                    >
+                        close
+                    </i>
                 </div>
+            ))}
+        </div>
+    </div>
+</div>
+
 
                 
                 {/* Modal para Educacion */}
@@ -976,19 +1135,23 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                     <div className="modal-contentperfil">
                         <br /><h4 style={{ textAlign: 'center' }}>Último nivel de estudios cursado</h4><br />
                         <form className="col s12" >
-                            <div className="input-fieldExp col s12">
-                                <label htmlFor="empresa">Nivel</label>
-                                <i className="material-icons prefix">business</i>
-                                <input
-                                    id="empresa"
-                                    type="text"
-                                    className="validate"
-                                    required
-                                />
+                        <div className="input-fieldExp col s12">
+                <label htmlFor="nivel" className="active">Nivel</label>
+                <i className="material-icons prefix">school</i>
+                                <select
+                                    value={selectedEducacion}
+                                    onChange={(e) => setSelectedEducacion(e.target.value)}
+                                >
+                                    {educacion.map((educacion) => (
+                                        <option key={educacion._id} value={educacion.nivel}>
+                                            {educacion.nivel}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="input-fieldExp col s12">
-                                <label htmlFor="puesto">Institución</label>
-                                <i className="material-icons prefix">work</i>
+                            <br /><label htmlFor="puesto">Institución</label>
+                                <i className="material-icons prefix">location_city</i>
                                 <input
                                     id="puesto"
                                     type="text"
@@ -1018,7 +1181,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                                 </button>
                                 <a
                                     href="#!"
-                                    className="modal-close waves-effect waves-light btn "
+                                    className="modal-close  btn "
                                     style={{ marginRight: '30px' }}
                                 >
                                     Cerrar
