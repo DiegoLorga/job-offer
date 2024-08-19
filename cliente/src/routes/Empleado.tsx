@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef} from 'react';
 import { useAuth } from "../auth/AuthProvider";
 import { Navigate, useLocation } from 'react-router-dom';
 import DefaultLayout from "../layout/DefaultLayout";
@@ -50,6 +50,11 @@ export default function Empleados() {
     const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const [ciudad, setCiudad] = useState("");
     const [nombreEstado, setNombreEstado] = useState<string>("");
+    const [selectedSueldo, setSelectedSueldo] = useState<string>("1");
+    const [selectedModalidad, setSelectedModalidad] = useState<string>("1");
+    const [fechaInicio, setFechaInicio] = useState<string>("");
+    const [fechaFin, setFechaFin] = useState<string>("");
+
 
     const auth = useAuth();
     const location = useLocation();
@@ -69,13 +74,22 @@ export default function Empleados() {
     }, []);
 
     useEffect(() => {
-        // Inicializa el datepicker de Materialize
-        M.Datepicker.init(document.querySelectorAll('.datepicker'), {
-            format: 'yyyy-mm-dd', // Formato de fecha, ajústalo según lo que necesites
-
+        // Inicializa el selector de fechas de Materialize
+        const elemsInicio = document.querySelectorAll('.datepicker-inicio');
+        const elemsFin = document.querySelectorAll('.datepicker-fin');
+        
+        M.Datepicker.init(elemsInicio, {
+            format: 'yyyy-mm-dd',
+            onSelect: (date) => setFechaInicio(date.toISOString().split('T')[0])
         });
-    }, []); // El arreglo vacío asegura que se ejecute solo una vez al montar el componente
+        
+        M.Datepicker.init(elemsFin, {
+            format: 'yyyy-mm-dd',
+            onSelect: (date) => setFechaFin(date.toISOString().split('T')[0])
+        });
+    }, []);
 
+    
     useEffect(() => {
         async function fetchEstados() {
             try {
@@ -270,9 +284,17 @@ export default function Empleados() {
         }
     };
 
-    const handleAplicarFiltrosOfertas = async () => {
+    const handleSueldoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedSueldo(e.target.value);
+    };
+
+    const handleModalidadChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedModalidad(e.target.value);
+    };
+
+
+    const handleBuscarOfertas = async () => {
         try {
-            // Realizar la petición POST al endpoint de filtros
             const response = await fetch(`${API_URL}/OfertaLaboral/buscar`, {
                 method: 'POST',
                 headers: {
@@ -281,18 +303,26 @@ export default function Empleados() {
                 body: JSON.stringify({
                     estado: nombreEstado,
                     ciudad: ciudad,
-
+                    sueldo: parseInt(selectedSueldo,10),
+                    modalidad: parseInt(selectedModalidad,10),
+                    educacion: selectedEducacion,
+                    fechaInicio: fechaInicio,
+                    fechaFin: fechaFin
                 }),
             });
+            console.log(nombreEstado);
+            console.log(ciudad);
+            console.log(selectedSueldo);
+            console.log(selectedModalidad);
+            console.log(selectedEducacion);
+            console.log(fechaInicio);
+            console.log(fechaFin);
 
-            console.log("estado: ", nombreEstado);
-            console.log("ciudad: ", ciudad);
-            console.log("giro: ", selectedGiro);
 
             if (response.ok) {
                 const data = await response.json();
-                setEmpresas(data); // Actualizar el estado con las empresas filtradas
-                console.log("Datos: ", data);
+                setOfertas(data);
+                console.log("Datos de oferta: ", data);
 
             } else {
                 console.error('Error al aplicar filtros:', response.statusText);
@@ -300,7 +330,7 @@ export default function Empleados() {
                     position: 'center',
                     icon: 'error',
                     text: 'No se encontraron coincidencias'
-                })
+                });
             }
         } catch (error) {
             console.error('Error al aplicar filtros:', error);
@@ -442,16 +472,22 @@ export default function Empleados() {
 
                                 <div className="select-container">
                                     <p className='info-title4'>Sueldo</p>
-                                    <select> 
-                                    <option value="1">$1,000 MX - $5,000 MX</option>
-                                    <option value="2">$5,000 MX - $10,000 MX</option>
-                                    <option value="3">$10,000 MX - $20,000 MX</option>
-                                    <option value="4">$20,000 MX O MÁS</option>
+                                    <select
+                                        value={selectedSueldo}
+                                        onChange={handleSueldoChange}
+                                    >
+                                        <option value="1">$1,000 MX - $5,000 MX</option>
+                                        <option value="2">$5,000 MX - $10,000 MX</option>
+                                        <option value="3">$10,000 MX - $20,000 MX</option>
+                                        <option value="4">$20,000 MX O MÁS</option>
                                     </select>
                                 </div>
                                 <div className="select-container">
                                     <p className='info-title4'>Modalidad</p>
-                                    <select>
+                                    <select
+                                        value={selectedModalidad}
+                                        onChange={handleModalidadChange}
+                                    >
                                         <option value="1">REMOTO</option>
                                         <option value="2">PRESENCIAL</option>
                                         <option value="3">HIBRIDO</option>
@@ -473,19 +509,34 @@ export default function Empleados() {
                                 </div>
 
                                 <div className="select-container">
-                                    <p className='info-title4'>Fecha</p>
-                                    <input type="text" className="datepicker" />
+                                    <p className='info-title4'>Fecha Inicio</p>
+                                    <input
+                                        type="text"
+                                        className='datepicker datepicker-inicio'
+                                        value={fechaInicio}
+                                        onChange={(e) => setFechaInicio(e.target.value)}
+                                    />
 
                                 </div>
 
                                 <div className="select-container">
-                                    <p className='info-title4'>Fecha</p>
-                                    <input type="text" className="datepicker" />
+                                    <p className='info-title4'>Fecha Fin</p>
+                                    <input
+                                        type="text"
+                                        className='datepicker datepicker-fin'
+                                        value={fechaFin}
+                                        onChange={(e) => setFechaFin(e.target.value)}
+                                    />
 
                                 </div>
                             </div>
                             <div className="button-container">
-                                <button className="btn waves-effect waves-light">Aplicar</button>
+                                <a
+                                    className="waves-effect waves-light btn-small custom-btn2"
+                                    onClick={handleBuscarOfertas}
+                                >
+                                    Aplicar
+                                </a>
                             </div>
                             <div className="main-container">
                                 <div className="left-side">
