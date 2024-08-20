@@ -150,6 +150,7 @@ export interface Educacion {
 }
 
 export interface Habilidad {
+    
     _id: string;
     descripcion: string;
     id_usuario: string;
