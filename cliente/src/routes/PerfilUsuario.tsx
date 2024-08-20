@@ -448,8 +448,8 @@ useEffect(() => {
                             // Verifica que habilidadesData sea un array
                             if (Array.isArray(habilidadesData)) {
                                 // Extrae solo las descripciones
-                                const descripciones = habilidadesData.map((hab: { descripcion: string }) => hab.descripcion);
-                                setHabilidades(descripciones);
+                                const descripciones = habilidadesData.map(hab => ({ descripcion: hab, id_usuario: usuario.id }))
+                               // setHabilidades(descripciones);
                             } else {
                                 console.error('La respuesta del servidor no es un array');
                             }
@@ -967,7 +967,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                         </a>
                         <p>Habilidades con las que cuenta. Ej: Trabajo en equipo, adaptabilidad, etc.</p><br />
                     </div>
-                </div><br />
+                </div>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Educación</span>
@@ -979,7 +979,7 @@ const actualizarExp= async (event: React.FormEvent<HTMLFormElement>) => {
                         </a>
                         <p>Último nivel de estudios.</p><br />
                     </div>
-                </div><br />
+                </div>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Idioma</span>
