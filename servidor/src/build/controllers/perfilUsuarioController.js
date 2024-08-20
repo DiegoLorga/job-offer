@@ -17,6 +17,7 @@ const experiencia_model_1 = __importDefault(require("../models/experiencia.model
 const jsonResponse_1 = require("../lib/jsonResponse");
 const perfilUsuario_model_1 = __importDefault(require("../models/perfilUsuario.model"));
 const habilidades_model_1 = __importDefault(require("../models/habilidades.model"));
+const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsuario.model"));
 class PerfilUsuarioController {
     actualizarExperiencia(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -205,6 +206,29 @@ class PerfilUsuarioController {
                 console.error('Error al eliminar la habilidad:', error.message);
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
                     Error: "Error al eliminar la habilidad"
+                }));
+            }
+        });
+    }
+    actualizarEducacion(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { nivel, institucion, carrera } = req.body;
+            const { id_usuario } = req.params;
+            try {
+                const educacionUsuario = yield educacionUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { nivel, institucion, carrera }, { new: true, runValidators: true });
+                if (!educacionUsuario) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
+                        Error: "No se encontró la educación para el usuario dado"
+                    }));
+                    return;
+                }
+                const perfil = yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { educacion: true }, { new: true });
+                // Devuelve la experiencia actualizada
+                res.json((0, jsonResponse_1.jsonResponse)(200, educacionUsuario));
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    Error: "Error al actualizar educacion"
                 }));
             }
         });

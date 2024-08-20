@@ -25,44 +25,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const schemaEducacionUsuario = new mongoose_1.Schema({
-    nombre: {
+    nivel: {
         type: String,
-        required: true,
-        trim: true
+        //required: true,
+        //trim: true
     },
-    correo: {
+    institucion: {
         type: String,
-        required: true,
-        trim: true,
-        unique: true
+        //required: true,
+        //trim: true,
     },
-    contrasena: {
+    carrera: {
         type: String,
-        required: true
+        //required: true
     },
-    id_rol: {
+    id_usuario: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Rol',
+        ref: 'Usuario',
         requiere: true
-    },
-    direccion: {
-        type: String,
-        required: true
-    },
-    estado: {
-        type: String,
-        required: true
-    },
-    ciudad: {
-        type: String,
-        required: true
-    },
-    giro: {
-        type: String,
-        required: true
-    },
-    foto: {
-        type: Boolean,
     }
 }, {
     timestamps: true

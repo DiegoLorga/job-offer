@@ -24,6 +24,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jwt_1 = require("../libs/jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const empresa_model_1 = __importDefault(require("../models/empresa.model"));
+const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsuario.model"));
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 class UsuarioController {
     createUsuario(req, res) {
@@ -106,6 +107,13 @@ class UsuarioController {
                     descripcion: ''
                 });
                 const ExperienciaGuardado = yield nuevoExp.save();
+                const nuevaEduUsu = new educacionUsuario_model_1.default({
+                    id_usuario: UsuarioGuardado._id,
+                    nivel: '',
+                    institucion: '',
+                    carrera: ''
+                });
+                yield nuevaEduUsu.save();
                 const token = yield (0, jwt_1.createAccesToken)({ id: UsuarioGuardado._id });
                 res.cookie('token', token);
                 console.log(res.cookie);

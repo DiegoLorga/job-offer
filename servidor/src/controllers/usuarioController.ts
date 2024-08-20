@@ -10,6 +10,7 @@ import bcrypt from 'bcryptjs';
 import { createAccesToken } from '../libs/jwt';
 import jwt from 'jsonwebtoken';
 import Empresa from '../models/empresa.model';
+import EducacionUsuario from '../models/educacionUsuario.model';
 import Administrador from '../models/administrador.model';
 
 class UsuarioController {
@@ -107,6 +108,15 @@ class UsuarioController {
             });
 
             const ExperienciaGuardado = await nuevoExp.save();
+
+            const nuevaEduUsu = new EducacionUsuario({
+                id_usuario: UsuarioGuardado._id,
+                nivel: '',
+                institucion: '',
+                carrera: ''
+            });
+
+            await nuevaEduUsu.save();
 
             const token = await createAccesToken({ id: UsuarioGuardado._id })
             res.cookie('token', token)
