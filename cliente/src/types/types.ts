@@ -129,7 +129,7 @@ export interface perfilUsuario {
     _id: string;
     cv: false,
     experiencia: false,
-    habilidades: false,
+    habilidades: boolean,
     educacion: false,
     idiomas: false,
     certificaciones: false,

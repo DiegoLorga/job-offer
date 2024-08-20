@@ -124,17 +124,16 @@ class PerfilUsuarioController {
     }
     crearHabilidades(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const habilidades = req.body; // Se espera que sea un array de habilidades
+            const habilidades = req.body; // Array de habilidades a agregar
             const { id_usuario } = req.params;
             try {
-                // Verifica que req.body sea un array
                 if (!Array.isArray(habilidades)) {
                     res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                         Error: "El cuerpo de la solicitud debe ser un array de habilidades"
                     }));
                     return;
                 }
-                // Verifica que cada habilidad tenga una descripción
+                // Verifica que cada habilidad tenga una descripción válida
                 for (const habilidad of habilidades) {
                     if (!habilidad.descripcion || typeof habilidad.descripcion !== 'string') {
                         res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
@@ -143,20 +142,39 @@ class PerfilUsuarioController {
                         return;
                     }
                 }
-                // Añadir el id_usuario a cada habilidad
-                const habilidadesConUsuario = habilidades.map(habilidad => (Object.assign(Object.assign({}, habilidad), { id_usuario })));
-                yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { habilidades: true }, { new: true });
-                console.log(habilidades);
-                console.log(habilidadesConUsuario);
-                // Crear las nuevas habilidades
-                const nuevasHabilidades = yield habilidades_model_1.default.insertMany(habilidadesConUsuario);
-                res.status(201).json((0, jsonResponse_1.jsonResponse)(201, nuevasHabilidades));
+                // Filtra las habilidades que ya existen en la base de datos
+                const habilidadesExistentes = yield habilidades_model_1.default.find({
+                    id_usuario,
+                    descripcion: { $in: habilidades.map(h => h.descripcion) }
+                }).exec();
+                const descripcionesExistentes = habilidadesExistentes.map(h => h.descripcion);
+                // Filtra las habilidades nuevas que no están en la base de datos
+                const habilidadesNuevas = habilidades.filter(h => !descripcionesExistentes.includes(h.descripcion));
+                if (habilidadesNuevas.length > 0) {
+                    // Crear nuevas habilidades
+                    const nuevasHabilidades = yield habilidades_model_1.default.insertMany(habilidadesNuevas.map(habilidad => (Object.assign(Object.assign({}, habilidad), { id_usuario }))));
+                    // Actualizar el perfil del usuario con los IDs de las nuevas habilidades
+                    yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { $addToSet: { habilidades_ids: { $each: nuevasHabilidades.map(h => h._id) } } } // Usa $addToSet para agregar solo los nuevos IDs
+                    );
+                    res.status(201).json((0, jsonResponse_1.jsonResponse)(201, nuevasHabilidades));
+                }
+                else {
+                    res.status(200).json((0, jsonResponse_1.jsonResponse)(200, { Message: "No hay nuevas habilidades para agregar" }));
+                }
             }
             catch (error) {
-                console.error('Error al crear habilidades:', error); // Para depuración
-                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
-                    Error: "Error al crear las habilidades"
-                }));
+                if (error instanceof Error) {
+                    console.error('Error al crear habilidades:', error.message);
+                    res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                        Error: "Error al crear las habilidades"
+                    }));
+                }
+                else {
+                    console.error('Error desconocido:', error);
+                    res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                        Error: "Error desconocido al crear las habilidades"
+                    }));
+                }
             }
         });
     }
@@ -176,13 +194,15 @@ class PerfilUsuarioController {
                     }));
                     return;
                 }
-                // Si se requiere, puedes realizar otras acciones aquí, como actualizar el campo de habilidades en el perfil
+                // Actualiza el perfil del usuario para eliminar la habilidad
+                yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { $pull: { habilidadesIds: id_habilidad } } // Usa $pull para eliminar el ID de las habilidades
+                );
                 res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
                     Message: "Habilidad eliminada correctamente"
                 }));
             }
             catch (error) {
-                console.error('Error al eliminar la habilidad:', error.message); // Más detalles del error
+                console.error('Error al eliminar la habilidad:', error.message);
                 res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
                     Error: "Error al eliminar la habilidad"
                 }));

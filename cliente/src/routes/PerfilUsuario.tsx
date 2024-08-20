@@ -78,11 +78,13 @@ export default function PerfilUsuarios() {
     const handleEnviarHabilidades = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Verifica si las habilidades tienen el número correcto
         if (habilidades.length !== 5) {
             Swal.fire('Error', 'Debes agregar o actualizar en total 5 habilidades', 'error');
             return;
         }
 
+        // Verifica si el perfil del usuario está disponible
         if (!perfilUsuario) {
             Swal.fire('Error', 'Perfil del usuario no encontrado', 'error');
             return;
@@ -92,47 +94,62 @@ export default function PerfilUsuarios() {
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
 
-            if (!perfilUsuario.habilidades) {
-                Swal.fire({
-                    title: 'Confirmar',
-                    text: "¿Deseas agregar las nuevas habilidades?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Sí, agregar',
-                    cancelButtonText: 'Cancelar'
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        try {
-                            const response = await fetch(`${API_URL}/perfilUsuario/crearHabilidades/${usuario.id}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                // Aquí se envían los objetos `Habilidad` completos
-                                body: JSON.stringify(habilidades.map(hab => ({
-                                    descripcion: hab.descripcion,
-                                    id_usuario: hab.id_usuario
-                                })))
+            // Muestra un mensaje de confirmación
+            Swal.fire({
+                title: 'Confirmar',
+                text: "¿Deseas agregar las nuevas habilidades?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, agregar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        // Realiza la solicitud al servidor
+                        const response = await fetch(`${API_URL}/perfilUsuario/crearHabilidades/${usuario.id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(habilidades.map(hab => ({
+                                descripcion: hab.descripcion,
+                                id_usuario: hab.id_usuario
+                            })))
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+
+                            setCambios(true); // Actualizar el estado para reflejar cambios
+
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Habilidades agregadas correctamente",
+                                icon: "success"
+                            }).then(() => {
+                                // Cerrar el modal después de mostrar el mensaje de éxito
+                                const modalElement = document.getElementById('modalHab');
+                                if (modalElement) {
+                                    const modalInstance = M.Modal.getInstance(modalElement);
+                                    if (modalInstance) {
+                                        modalInstance.close();
+                                    }
+                                }
                             });
 
-                            const data = await response.json();
-                            if (response.ok) {
-                                Swal.fire('Éxito', 'Habilidades agregadas correctamente', 'success');
-                                setHabilidades([]); // Limpiar la lista después de agregar
-                                setCambios(true);
-                            } else {
-                                Swal.fire('Error', data.message || 'No se pudieron agregar las habilidades', 'error');
-                            }
-                        } catch (error) {
-                            Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+
+
+                        } else {
+                            Swal.fire('Error', data.message || 'No se pudieron agregar las habilidades', 'error');
                         }
+                    } catch (error) {
+                        Swal.fire('Error', 'Error al conectar con el servidor', 'error');
                     }
-                });
-            } else {
-                // Lógica para manejar la actualización de habilidades si ya existen
-            }
+                }
+            });
         }
     };
+
 
 
     //para limpiar los campos de habilidades
@@ -634,19 +651,13 @@ export default function PerfilUsuarios() {
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
         });
-        console.log(habilidad);
-        
 
         if (result.isConfirmed) {
-            if (!habilidad.id_usuario) {
-                console.log("Eliminando aun no esta en la base de datos");
-                
+            if (!habilidad.id_usuario) { // Verifica si _id está indefinido o vacío
                 // Si la habilidad no tiene _id, elimínala solo de la interfaz
                 setHabilidades(habilidades.filter((_, i) => i !== index));
                 Swal.fire('Éxito', 'Habilidad eliminada de la lista', 'success');
             } else {
-                console.log("Eliminando desde la base de datos");
-                
                 // Si la habilidad tiene _id, intenta eliminarla de la base de datos
                 const storedUser = localStorage.getItem('usuario');
 
