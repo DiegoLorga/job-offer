@@ -154,7 +154,6 @@ export default function PerfilUsuarios() {
     const handleCloseHab = () => {
         setHabilidad('');
 
-
     };
 
 
@@ -698,7 +697,6 @@ export default function PerfilUsuarios() {
     const eliminarHabilidad = async (index: number) => {
         const habilidad = habilidades[index]; // Obtén la habilidad a eliminar
 
-
         // Mostrar una alerta de confirmación
         const result = await Swal.fire({
             title: '¿Estás seguro?',
@@ -711,32 +709,28 @@ export default function PerfilUsuarios() {
             cancelButtonText: 'Cancelar'
         });
         console.log(habilidad);
-       
-
+        
 
         if (result.isConfirmed) {
             if (!habilidad.id_usuario) {
                 console.log("Eliminando aun no esta en la base de datos");
-               
+                
                 // Si la habilidad no tiene _id, elimínala solo de la interfaz
                 setHabilidades(habilidades.filter((_, i) => i !== index));
                 Swal.fire('Éxito', 'Habilidad eliminada de la lista', 'success');
             } else {
                 console.log("Eliminando desde la base de datos");
-               
+                
                 // Si la habilidad tiene _id, intenta eliminarla de la base de datos
                 const storedUser = localStorage.getItem('usuario');
-
 
                 if (!storedUser) {
                     Swal.fire('Error', 'No se encontró información del usuario', 'error');
                     return;
                 }
 
-
                 const usuario = JSON.parse(storedUser);
                 const idUsuario = usuario.id; // Asume que el ID del usuario está en `usuario.id`
-
 
                 try {
                     const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
@@ -746,7 +740,6 @@ export default function PerfilUsuarios() {
                         },
                         body: JSON.stringify({ id_usuario: idUsuario }) // Envía el ID del usuario en el cuerpo de la solicitud
                     });
-
 
                     if (response.ok) {
                         // Si la eliminación en la base de datos fue exitosa, elimínala también de la interfaz
@@ -763,12 +756,6 @@ export default function PerfilUsuarios() {
             }
         }
     };
-
-
-
-
-
-
 
 
 
