@@ -3,6 +3,8 @@ import Experiencia from '../models/experiencia.model';
 import { jsonResponse } from '../lib/jsonResponse';
 import PerfilUsuario from '../models/perfilUsuario.model';
 import Habilidad from '../models/habilidades.model';
+import EducacionUsuario from '../models/educacionUsuario.model';
+
 
 class PerfilUsuarioController {
 
@@ -206,7 +208,34 @@ class PerfilUsuarioController {
         }
     }
     
-    
+    public async actualizarEducacion(req: Request, res: Response): Promise<void> {
+        const { nivel, institucion, carrera } = req.body;
+        const { id_usuario } = req.params; 
+
+        try {
+            const educacionUsuario = await EducacionUsuario.findOneAndUpdate(
+                { id_usuario },
+                { nivel, institucion, carrera },
+                { new: true, runValidators: true } 
+            );
+
+            if (!educacionUsuario) {
+                res.status(404).json(jsonResponse(404, {
+                    Error: "No se encontró la educación para el usuario dado" 
+                }));
+                return;
+            }
+
+            const perfil = await PerfilUsuario.findOneAndUpdate({ id_usuario }, { educacion: true }, { new: true });
+
+            // Devuelve la experiencia actualizada
+            res.json(jsonResponse(200, educacionUsuario));
+        } catch (error: any) {
+            res.status(500).json(jsonResponse(500, {
+                Error: "Error al actualizar educacion"
+            }));
+        }
+    }
     
     
 }

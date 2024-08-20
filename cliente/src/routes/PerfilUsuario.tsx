@@ -12,6 +12,8 @@ import { AuthResponseError, perfilUsuario } from '../types/types';
 import { Estado, Ciudad, Usuario, Experiencia, Educacion, Habilidad } from '../types/types';
 
 
+
+
 export default function PerfilUsuarios() {
     const [errorResponse, setErrorResponse] = useState<string>("");
     const [successMessage, setSuccessMessage] = useState<string>("");
@@ -45,6 +47,7 @@ export default function PerfilUsuarios() {
     const [educacion, setEducacion] = useState<Educacion[]>([]);
     const [selectedEducacion, setSelectedEducacion] = useState<string>("");
 
+
     //agregar al cliente habilidades
     const handleAgregarHabilidad = () => {
         if (habilidad.trim()) {
@@ -53,6 +56,7 @@ export default function PerfilUsuarios() {
                 setHabilidad('');
                 return;
             }
+
 
             // Verifica que perfilUsuario no sea null
             if (perfilUsuario) {
@@ -63,8 +67,10 @@ export default function PerfilUsuarios() {
                     id_usuario: perfilUsuario._id // Asegúrate de que `perfilUsuario.id` esté definido
                 };
 
+
                 // Agregar el nuevo objeto Habilidad al array
                 setHabilidades([...habilidades, nuevaHabilidad]);
+
 
                 setHabilidad(''); // Limpiar el campo después de añadir la habilidad
             } else {
@@ -74,23 +80,29 @@ export default function PerfilUsuarios() {
     };
 
 
+
+
     //para actualizar/agregar habilidades
     const handleEnviarHabilidades = async (e: React.FormEvent) => {
         e.preventDefault();
+
 
         if (habilidades.length !== 5) {
             Swal.fire('Error', 'Debes agregar o actualizar en total 5 habilidades', 'error');
             return;
         }
 
+
         if (!perfilUsuario) {
             Swal.fire('Error', 'Perfil del usuario no encontrado', 'error');
             return;
         }
 
+
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
+
 
             if (!perfilUsuario.habilidades) {
                 Swal.fire({
@@ -115,6 +127,7 @@ export default function PerfilUsuarios() {
                                 })))
                             });
 
+
                             const data = await response.json();
                             if (response.ok) {
                                 Swal.fire('Éxito', 'Habilidades agregadas correctamente', 'success');
@@ -135,13 +148,17 @@ export default function PerfilUsuarios() {
     };
 
 
+
+
     //para limpiar los campos de habilidades
     const handleCloseHab = () => {
         setHabilidad('');
-        
+
+
     };
 
-    //para cargar la imagen 
+
+    //para cargar la imagen
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             const file = event.target.files[0];
@@ -155,11 +172,13 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     //para cargar la imagen
     const handleUploadImage = async () => {
         if (!selectedFile) {
             return;
         }
+
 
         const reader = new FileReader();
         reader.onloadend = async () => {
@@ -168,6 +187,7 @@ export default function PerfilUsuarios() {
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
                 const userId = usuario.id;
+
 
                 try {
                     const response = await fetch(`${API_URI_IMAGENES}/uploadImagen`, {
@@ -181,6 +201,7 @@ export default function PerfilUsuarios() {
                         })
                     });
 
+
                     if (response.ok) {
                         //const data = await response.json();
                         Swal.fire({
@@ -191,6 +212,7 @@ export default function PerfilUsuarios() {
                             // setSelectedFile(null); // Limpia el archivo seleccionado
                             setPreviewImageBoton(null); // Limpia la imagen previa
 
+
                         });
                     } else {
                         //const errorData = await response.json();
@@ -200,6 +222,7 @@ export default function PerfilUsuarios() {
                             text: 'Error al caragar la imagen'
                         })
 
+
                     }
                 } catch (error) {
                     console.error('Error al cargar la imagen:', error);
@@ -208,8 +231,10 @@ export default function PerfilUsuarios() {
             }
         };
 
+
         reader.readAsDataURL(selectedFile);
     };
+
 
     //para el boton de guardar fotoperfil
     const handleImageClick = () => {
@@ -218,9 +243,11 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     // Función de manejo del envío del formulario
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
 
         // Mostrar una alerta de confirmación antes de proceder
         const result = await Swal.fire({
@@ -234,14 +261,17 @@ export default function PerfilUsuarios() {
             cancelButtonText: 'Cancelar'
         });
 
+
         // Si el usuario confirma, continuar con la actualización
         if (result.isConfirmed) {
             const storedUser = localStorage.getItem('usuario');
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
 
+
                 // Crear el objeto de actualización solo con los campos que tienen valor
                 const updatedFields: Record<string, string> = {};
+
 
                 if (selectedNombre) updatedFields.nombre = selectedNombre;
                 if (selectedDireccion) updatedFields.direccion = selectedDireccion;
@@ -257,6 +287,7 @@ export default function PerfilUsuarios() {
                         body: JSON.stringify(updatedFields) // Solo los campos con valor
                     });
 
+
                     if (response.ok) {
                         const updatedUser = await response.json(); // Obtener la respuesta actualizada
                         const nuevoEstado = updatedUser.estado || estado;
@@ -265,6 +296,8 @@ export default function PerfilUsuarios() {
                         setEstado(updatedUser.estado || estado);
                         setCorreo(updatedUser.correo || correo);
                         setCiudad(updatedUser.ciudad || ciudad);
+
+
 
 
                         try {
@@ -277,6 +310,7 @@ export default function PerfilUsuarios() {
                         } catch (error) {
                             console.error('Error al obtener el usuario:', error);
                         }
+
 
                         // Mostrar mensaje de éxito y cerrar el modal
                         Swal.fire({
@@ -300,6 +334,7 @@ export default function PerfilUsuarios() {
                             setSelectedCiudad('');
                             setErrorNombre("");
                         });
+
 
                     } else {
                         const json = await response.json() as AuthResponseError;
@@ -328,23 +363,28 @@ export default function PerfilUsuarios() {
         }
     }
 
+
     useEffect(() => {
         const elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
+
 
         return () => {
             M.FormSelect.getInstance(elems[0])?.destroy();
         };
     }, [educacion]);
 
+
     useEffect(() => {
         const dropdownElems = document.querySelectorAll('.dropdown-trigger');
         M.Dropdown.init(dropdownElems);
+
 
         return () => {
             M.Dropdown.getInstance(dropdownElems[0])?.destroy();
         };
     }, []);
+
 
     // Obtener la lista de estados al cargar el componente
     useEffect(() => {
@@ -365,8 +405,10 @@ export default function PerfilUsuarios() {
             }
         }
 
+
         fetchEstados();
     }, []);
+
 
     //setSelectedCiudad(ciudad);
     useEffect(() => {
@@ -378,6 +420,7 @@ export default function PerfilUsuarios() {
                         const data = await response.json() as Ciudad[];
                         setCiudades(data);
 
+
                     } else {
                         console.error('Error al obtener las ciudades:', response.statusText);
                     }
@@ -388,13 +431,17 @@ export default function PerfilUsuarios() {
                 setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
             }
 
+
         }
+
 
         fetchCiudades();
     }, [selectedEstado]);
 
+
     //para consultas en perfil
     useEffect(() => {
+
 
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
@@ -402,6 +449,7 @@ export default function PerfilUsuarios() {
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
             auth.setIsAuthenticated(true);
+
 
             async function fetchUsuario() {
                 try {
@@ -418,7 +466,9 @@ export default function PerfilUsuarios() {
                     console.error('Error al obtener el usuario:', error);
                 }
 
+
             }
+
 
             async function fetchEstado() {
                 try {
@@ -428,6 +478,7 @@ export default function PerfilUsuarios() {
                         const data = await response.json() as Usuario;
                         setEstado2(data.nombre);
 
+
                         // console.log("Estado", data);
                     }
                 } catch (error) {
@@ -435,18 +486,24 @@ export default function PerfilUsuarios() {
                 }
             }
 
+
             fetchUsuario();
             fetchEstado();
         }
 
+
     }, [auth]);
 
-    //para usuario perfil 
+
+    //para usuario perfil
     useEffect(() => {
+
 
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
+
+
 
 
             async function fetchPerfilUsuario() {
@@ -466,24 +523,38 @@ export default function PerfilUsuarios() {
                                 console.log("Habilidades: ", habilidadesData);
 
 
-                            // Verifica que habilidadesData sea un array
-                            if (Array.isArray(habilidadesData)) {
-                                // Extrae solo las descripciones
-                                const descripciones = habilidadesData.map(hab => ({ descripcion: hab, id_usuario: usuario.id }))
-                               // setHabilidades(descripciones);
+
+
+                                // Verifica que habilidadesData sea un array
+                                if (Array.isArray(habilidadesData)) {
+                                    // Extrae solo las descripciones
+                                    const habilidades1 = habilidadesData.map((hab: Habilidad) => ({
+                                        _id: hab._id,
+                                        descripcion: hab.descripcion,
+                                        id_usuario: hab.id_usuario
+                                    }));
+                                    setHabilidades(habilidades1);
+                                    console.log("setHabilidades: ", habilidades1);
+
+
+                                } else {
+                                    console.error('La respuesta del servidor no es un array');
+                                }
                             } else {
-                                console.error('La respuesta del servidor no es un array');
+                                console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
                             }
-                        } else {
-                            console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
                         }
                     }
-                } 
-                
-            } catch (error) {
-                console.error('Error al obtener el perfil del usuario:', error);
+
+
+                } catch (error) {
+                    console.error('Error al obtener el perfil del usuario:', error);
+                }
             }
-        }
+
+
+
+
 
 
 
@@ -491,11 +562,11 @@ export default function PerfilUsuarios() {
             fetchPerfilUsuario();
         }
 
+
     }, [perfilUsuario?.habilidades, cambios]);
     //inicializar modal1
     useEffect(() => {
         const modalElement = document.getElementById('modal1');
-
 
         if (modalElement) {
             // Inicializar el modal solo si el elemento existe
@@ -513,6 +584,8 @@ export default function PerfilUsuarios() {
             });
 
 
+
+
             return () => {
                 // Destruir la instancia del modal para evitar fugas de memoria
                 if (modalInstance) {
@@ -521,7 +594,6 @@ export default function PerfilUsuarios() {
             };
         }
     }, [nombre, direccion, estado, ciudad]);
-
 
 
     //para inicalizar modales
@@ -535,6 +607,7 @@ export default function PerfilUsuarios() {
             };
         }
 
+
         // Función asíncrona para obtener la experiencia del usuario
         const fetchExperiencia = async () => {  // Tipo explícito para usuarioId
             const storedUser2 = localStorage.getItem('usuario');
@@ -542,6 +615,8 @@ export default function PerfilUsuarios() {
                 const usuario = JSON.parse(storedUser2);
                 auth.setIsAuthenticated(true);
                 //console.log(usuario);
+
+
 
 
                 try {
@@ -556,6 +631,7 @@ export default function PerfilUsuarios() {
             }
         };
 
+
         //fetchExperiencia();
         // Inicializar segundo modal
         const modalElement2 = document.getElementById('modalHab');
@@ -563,8 +639,10 @@ export default function PerfilUsuarios() {
         if (modalInstance2) {
             modalInstance2.options.onOpenStart = () => {
 
+
             };
         }
+
 
         // Inicializar tercer modal
         const modalElement3 = document.getElementById('modalEdu');
@@ -575,6 +653,7 @@ export default function PerfilUsuarios() {
             };
         }
 
+
         // Cleanup function
         return () => {
             if (modalInstance1) modalInstance1.destroy();
@@ -582,6 +661,7 @@ export default function PerfilUsuarios() {
             if (modalInstance3) modalInstance3.destroy();
         };
     }, []);
+
 
     async function fetchEducacion() {
         try {
@@ -600,7 +680,7 @@ export default function PerfilUsuarios() {
             console.error('Error al obtener los datos de nivel:', error);
         }
     }
-    //para obtener imágenes 
+    //para obtener imágenes
     const storedUser = localStorage.getItem('usuario');
     let imageSrc = `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
     if (storedUser) {
@@ -614,51 +694,93 @@ export default function PerfilUsuarios() {
                 : `${API_URI_IMAGENES}/img/auxiliares/perfil.png`;
     }
 
+
     const eliminarHabilidad = async (index: number) => {
-        const habilidadId = habilidades[index]._id; // Obtén el ID de la habilidad a eliminar
-        const storedUser = localStorage.getItem('usuario');
-    
-        if (!storedUser) {
-            Swal.fire('Error', 'No se encontró información del usuario', 'error');
-            return;
-        }
-    
-        const usuario = JSON.parse(storedUser);
-        const idUsuario = usuario.id; // Asume que el ID del usuario está en `usuario.id`
-    
-        try {
-            const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidadId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id_usuario: idUsuario }) // Envía el ID del usuario en el cuerpo de la solicitud
-            });
-    
-            if (response.ok) {
+        const habilidad = habilidades[index]; // Obtén la habilidad a eliminar
+
+
+        // Mostrar una alerta de confirmación
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Estás seguro de que deseas eliminar esta habilidad?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+        console.log(habilidad);
+       
+
+
+        if (result.isConfirmed) {
+            if (!habilidad.id_usuario) {
+                console.log("Eliminando aun no esta en la base de datos");
+               
+                // Si la habilidad no tiene _id, elimínala solo de la interfaz
                 setHabilidades(habilidades.filter((_, i) => i !== index));
-                Swal.fire('Éxito', 'Habilidad eliminada correctamente', 'success');
+                Swal.fire('Éxito', 'Habilidad eliminada de la lista', 'success');
             } else {
-                const errorData = await response.json();
-                Swal.fire('Error', errorData.Error || 'No se pudo eliminar la habilidad', 'error');
+                console.log("Eliminando desde la base de datos");
+               
+                // Si la habilidad tiene _id, intenta eliminarla de la base de datos
+                const storedUser = localStorage.getItem('usuario');
+
+
+                if (!storedUser) {
+                    Swal.fire('Error', 'No se encontró información del usuario', 'error');
+                    return;
+                }
+
+
+                const usuario = JSON.parse(storedUser);
+                const idUsuario = usuario.id; // Asume que el ID del usuario está en `usuario.id`
+
+
+                try {
+                    const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ id_usuario: idUsuario }) // Envía el ID del usuario en el cuerpo de la solicitud
+                    });
+
+
+                    if (response.ok) {
+                        // Si la eliminación en la base de datos fue exitosa, elimínala también de la interfaz
+                        setHabilidades(habilidades.filter((_, i) => i !== index));
+                        Swal.fire('Éxito', 'Habilidad eliminada correctamente', 'success');
+                    } else {
+                        const errorData = await response.json();
+                        Swal.fire('Error', errorData.Error || 'No se pudo eliminar la habilidad', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar la habilidad:', error);
+                    Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+                }
             }
-        } catch (error) {
-            console.error('Error al eliminar la habilidad:', error);
-            Swal.fire('Error', 'Error al conectar con el servidor', 'error');
         }
     };
-    
 
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
 
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
 
-    // Para confirmar que desea actualizar la imagen 
+
+    // Para confirmar que desea actualizar la imagen
     const handleFileChange2 = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -684,6 +806,7 @@ export default function PerfilUsuarios() {
         }
     };
 
+
     // Subir el documento al servidor
     const uploadFile = async (file: File) => {
         // Lee el archivo como base64
@@ -691,11 +814,13 @@ export default function PerfilUsuarios() {
         reader.onloadend = async () => {
             const base64File = reader.result?.toString().split(',')[1]; // Elimina el prefijo data URL
 
+
             // Obtén el usuario desde el localStorage
             const storedUser = localStorage.getItem('usuario');
             if (storedUser) {
                 const usuario = JSON.parse(storedUser);
                 const userId = usuario.id;
+
 
                 try {
                     const response = await fetch(`${API_URI_IMAGENES}/uploadCv`, {
@@ -735,21 +860,26 @@ export default function PerfilUsuarios() {
             }
         };
 
+
         reader.readAsDataURL(file);
     };
+
 
     //actualizar la experiencia de perfilUsuario
     const actualizarExp = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Evita el comportamiento predeterminado del formulario
+
 
         // Obtén los elementos del formulario
         const empresaInput = document.getElementById('empresa') as HTMLInputElement;
         const puestoInput = document.getElementById('puesto') as HTMLInputElement;
         const descripcionInput = document.getElementById('descripcion') as HTMLTextAreaElement;
 
+
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
+
 
             if (!empresaInput || !puestoInput || !descripcionInput) {
                 Swal.fire({
@@ -760,10 +890,13 @@ export default function PerfilUsuarios() {
                 return;
             }
 
+
             // Obtén los valores de los elementos del formulario
             const empresa = empresaInput.value;
             const puesto = puestoInput.value;
             const descripcion = descripcionInput.value;
+
+
 
 
             try {
@@ -778,6 +911,7 @@ export default function PerfilUsuarios() {
                         descripcion,
                     }),
                 });
+
 
                 if (response.ok) {
                     // Maneja la respuesta exitosa usando SweetAlert
@@ -811,8 +945,11 @@ export default function PerfilUsuarios() {
     };
 
 
+
+
     return (
         <DefaultLayout showNav={true}>
+
 
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs">
@@ -821,9 +958,11 @@ export default function PerfilUsuarios() {
                 </ul>
             </div>
 
+
             {/* para perfil  */}
             <div id="perfil" className="container2">
                 <br /><br />
+
 
                 <div className="profile-container2">
                     <div className="profile-picture-container2" onClick={handleImageClick}>
@@ -845,8 +984,10 @@ export default function PerfilUsuarios() {
                     />
                 </div>
 
+
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
+
 
                 <div className="button-containerSave">
                     <button
@@ -860,9 +1001,12 @@ export default function PerfilUsuarios() {
                 </div>
 
 
+
+
                 <div className="nombre-contenedor">
                     <h1 className="nombre-titulo">{nombre}</h1>
                 </div>
+
 
                 <form className="form-horizontal">
                     <label htmlFor="correo">Correo</label>
@@ -882,11 +1026,14 @@ export default function PerfilUsuarios() {
                         <input type="text" id="ciudad" name="ciudad" value={ciudad} readOnly />
                     </div>
 
+
                     <div className="button-container1">
                         <a className="waves-effect waves-light btn modal-trigger" href="#modal1">Actualizar</a>
                     </div>
 
+
                 </form>
+
 
                 {/* Modal para actualizar info de usuario */}
                 <div id="modal1" className="modal">
@@ -904,6 +1051,7 @@ export default function PerfilUsuarios() {
                                         value={selectedCorreo}
                                         onChange={(e) => setSelectedCorreo(e.target.value)}
                                     />
+
 
                                 </div>
                             </div>
@@ -974,7 +1122,10 @@ export default function PerfilUsuarios() {
                 </div>
 
 
+
+
             </div>
+
 
             {/*informacion  */}
             <div id="info" className="containerinfo">
@@ -982,6 +1133,7 @@ export default function PerfilUsuarios() {
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">CV</span>
+
 
                         <input
                             type="file"
@@ -1024,7 +1176,7 @@ export default function PerfilUsuarios() {
                         </a>
                         <p>Habilidades con las que cuenta. Ej: Trabajo en equipo, adaptabilidad, etc.</p><br />
                     </div>
-                </div>
+                </div><br />
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Educación</span>
@@ -1036,13 +1188,14 @@ export default function PerfilUsuarios() {
                         </a>
                         <p>Último nivel de estudios.</p><br />
                     </div>
-                </div>
+                </div><br />
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Idioma</span>
                         <a className="btn-floating btn-medium waves-effect waves-light right btn-add">
                             <i className="material-icons">add</i>
                         </a>
+
 
                         <p>Idiomas y nivel de conocimiento</p><br />
                     </div>
@@ -1056,6 +1209,7 @@ export default function PerfilUsuarios() {
                         <p>Cursos adicionales o certificados que respalden sus conocimientos.</p><br />
                     </div>
                 </div>
+
 
                 <div id="modalExp" className="modal">
                     <div className="modal-contentperfil">
@@ -1087,6 +1241,7 @@ export default function PerfilUsuarios() {
                                 />
                             </div>
 
+
                             <br /><br />
                             <div className="input-fieldExp col s12">
                                 <label htmlFor="descripcion" className={experiencia?.descripcion ? 'active' : ''}>Descripción de actividades</label>
@@ -1099,6 +1254,7 @@ export default function PerfilUsuarios() {
                                     required
                                 ></textarea>
                             </div><br />
+
 
                             <div className="modal-footer">
                                 <button
@@ -1121,6 +1277,7 @@ export default function PerfilUsuarios() {
                     </div>
                 </div>
 
+
                 <div id="modalHab" className="modal">
                     <div className="modal-contentperfil">
                         <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
@@ -1137,6 +1294,7 @@ export default function PerfilUsuarios() {
                                 />
                                 <label htmlFor="habilidad">Habilidad</label>
                             </div>
+
 
                             <div className="modal-footer">
                                 <button
@@ -1168,6 +1326,7 @@ export default function PerfilUsuarios() {
                             </div>
                         </form>
 
+
                         {/* Lista de habilidades agregadas con estilo */}
                         <div className="habilidades-list">
                             {habilidades.map((hab, index) => (
@@ -1183,8 +1342,12 @@ export default function PerfilUsuarios() {
                             ))}
                         </div>
 
+
                     </div>
                 </div>
+
+
+
 
 
 
@@ -1228,6 +1391,7 @@ export default function PerfilUsuarios() {
                                 />
                             </div>
 
+
                             <div className="modal-footer">
                                 <button
                                     type="submit"
@@ -1250,9 +1414,16 @@ export default function PerfilUsuarios() {
                 </div>
 
 
+
+
             </div>
+
+
 
 
         </DefaultLayout>
     );
 }
+
+
+

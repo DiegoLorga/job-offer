@@ -1,66 +1,35 @@
 import mongoose, { Schema, Model, Mixed } from 'mongoose';
 
 interface EducacionUsuario {
-    nombre: string;
-    correo: string;
-    id_rol: Mixed;
-    contrasena: string;
-    direccion: string;
-    ciudad: string;
-    estado: string;
-    giro: string;
-    foto: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    nivel: string;
+    institucion: string;
+    id_usuario: Mixed;
+    carrera: string;
 }
 
 const schemaEducacionUsuario = new Schema<EducacionUsuario>({
-    nombre:
+    nivel:
     {
         type: String,
-        required: true,
-        trim: true
+        //required: true,
+        //trim: true
     },
-    correo:
+    institucion:
     {
         type: String,
-        required: true,
-        trim: true,
-        unique: true
+        //required: true,
+        //trim: true,
+        
     },
-    contrasena:
+    carrera:
     {
         type: String,
-        required: true
+        //required: true
     },
-    id_rol: {
+    id_usuario: {
         type: Schema.Types.ObjectId,
-        ref: 'Rol',
+        ref: 'Usuario',
         requiere: true
-
-    },
-    direccion:
-    {
-        type: String,
-        required: true
-    },
-    estado:
-    {
-        type: String,
-        required: true
-    },
-    ciudad:
-    {
-        type: String,
-        required: true
-    },
-    giro:
-    {
-        type: String,
-        required: true
-    },
-    foto:{
-        type: Boolean,
     }
 },
     {

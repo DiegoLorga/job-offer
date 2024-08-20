@@ -156,3 +156,9 @@ export interface Habilidad {
     id_usuario: string;
 }
 
+export interface EducacionUsuario {
+    _id: string;
+    nivel: string;
+    institucion: string;
+    carrera: string;
+}
