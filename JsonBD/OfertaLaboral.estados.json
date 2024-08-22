@@ -1,0 +1,224 @@
+[{
+  "_id": {
+    "$oid": "66985548986109a9d4317dca"
+  },
+  "clave": "AGS",
+  "nombre": "AGUASCALIENTES"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dcb"
+  },
+  "clave": "BC",
+  "nombre": "BAJA CALIFORNIA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dcc"
+  },
+  "clave": "BCS",
+  "nombre": "BAJA CALIFORNIA SUR"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dcd"
+  },
+  "clave": "CMP",
+  "nombre": "CAMPECHE"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dce"
+  },
+  "clave": "COA",
+  "nombre": "COAHUILA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dcf"
+  },
+  "clave": "COL",
+  "nombre": "COLIMA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd0"
+  },
+  "clave": "CHS",
+  "nombre": "CHIAPAS"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd1"
+  },
+  "clave": "CHI",
+  "nombre": "CHIHUAHUA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd2"
+  },
+  "clave": "CMX",
+  "nombre": "CIUDAD DE MEXICO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd3"
+  },
+  "clave": "DGO",
+  "nombre": "DURANGO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd4"
+  },
+  "clave": "GTO",
+  "nombre": "GUANAJUATO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd5"
+  },
+  "clave": "GRO",
+  "nombre": "GUERRERO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd6"
+  },
+  "clave": "HGO",
+  "nombre": "HIDALGO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd7"
+  },
+  "clave": "JAL",
+  "nombre": "JALISCO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd8"
+  },
+  "clave": "MEX",
+  "nombre": "ESTADO DE MEXICO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dd9"
+  },
+  "clave": "MCH",
+  "nombre": "MICHOACAN"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dda"
+  },
+  "clave": "MOR",
+  "nombre": "MORELOS"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317ddb"
+  },
+  "clave": "NAY",
+  "nombre": "NAYARIT"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317ddc"
+  },
+  "clave": "NL",
+  "nombre": "NUEVO LEON"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317ddd"
+  },
+  "clave": "OAX",
+  "nombre": "OAXACA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317dde"
+  },
+  "clave": "PUE",
+  "nombre": "PUEBLA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317ddf"
+  },
+  "clave": "QR",
+  "nombre": "QUINTANA ROO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de0"
+  },
+  "clave": "QRO",
+  "nombre": "QUERETARO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de1"
+  },
+  "clave": "SIN",
+  "nombre": "SINALOA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de2"
+  },
+  "clave": "SLP",
+  "nombre": "SAN LUIS POTOSI"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de3"
+  },
+  "clave": "SON",
+  "nombre": "SONORA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de4"
+  },
+  "clave": "TAB",
+  "nombre": "TABASCO"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de5"
+  },
+  "clave": "TLX",
+  "nombre": "TLAXCALA"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de6"
+  },
+  "clave": "TMS",
+  "nombre": "TAMAULIPAS"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de7"
+  },
+  "clave": "VER",
+  "nombre": "VERACRUZ"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de8"
+  },
+  "clave": "YUC",
+  "nombre": "YUCATAN"
+},
+{
+  "_id": {
+    "$oid": "66985548986109a9d4317de9"
+  },
+  "clave": "ZAC",
+  "nombre": "ZACATECAS"
+}]
