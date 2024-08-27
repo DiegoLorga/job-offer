@@ -15,6 +15,7 @@ class perfilUsuarioRoutes {
         this.router.post("/crearHabilidades/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.crearHabilidades);
         this.router.delete('/eliminarHabilidad/:id_habilidad', perfilUsuarioController_1.perfilUsuarioController.eliminarHabilidad);
         this.router.put("/actualizarEducacion/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarEducacion);
+        this.router.get("/buscarEducacionUsuario/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarEduUsu);
     }
 }
 const administradorRoutes = new perfilUsuarioRoutes();

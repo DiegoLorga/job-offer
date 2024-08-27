@@ -213,5 +213,31 @@ class PerfilUsuarioController {
             }
         });
     }
+    buscarEduUsu(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id_usuario } = req.params;
+            try {
+                const eduUsu = yield educacionUsuario_model_1.default.findOne({ id_usuario });
+                if (!eduUsu) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
+                        Error: "No se encontró educacionUsuario para el usuario dado"
+                    }));
+                    return;
+                }
+                // Devuelve la experiencia encontrada
+                res.json({
+                    id: eduUsu._id,
+                    nivel: eduUsu.nivel,
+                    institucion: eduUsu.institucion,
+                    carrera: eduUsu.carrera
+                });
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
+                    Error: "Error al buscar la experiencia"
+                }));
+            }
+        });
+    }
 }
 exports.perfilUsuarioController = new PerfilUsuarioController();

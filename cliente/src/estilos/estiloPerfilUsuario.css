@@ -3,38 +3,33 @@
 
 /* Custom modal styles */
 .modal-contentperfil {
-    max-width: 600px; /* Establece el ancho del contenido del modal */
+    max-width: 450px; /* Establece el ancho del contenido del modal */
     margin: 0 auto; /* Centra el contenido del modal */
-    padding: 20px;
   }
   
   .input-fieldperfil input {
-    max-width: 1000px; /* Limita el ancho de los campos de entrada */
+    max-width: 500px; /* Limita el ancho de los campos de entrada */
     width: 100%; /* Asegura que respondan al diseño responsive */
     margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
   }
   
   .custom-modal {
     width: 10% !important; /* Ajusta el valor según lo necesites */
-    max-width: 200px; /* Limita el ancho máximo del modal */
   }
 
   .modal-contentperfil .input-fieldperfil select {
-    width: auto !important; /* Ancho automático */
     max-width: 300px; /* Ajusta el ancho máximo del select según sea necesario */
 }
 
 .input-fieldperfil2  {
   max-width: 300px; /* Limita el ancho de los campos de entrada */
   width: 100%; /* Asegura que respondan al diseño responsive */
-
-  
 }
 
 .input-fieldperfil2 select {
   font-family: 'Roboto', sans-serif; /* Reemplaza 'Roboto' con tu tipografía */
   font-size: 15px; /* Ajusta el tamaño de la fuente si es necesario */
-  color: rgb(129, 129, 129);
+  color: rgb(59, 59, 59);
 }
 
 .input-fieldperfil2 input.validate:not(.error) {
@@ -115,8 +110,8 @@
 /* Ajustar el modal en general usando ID */
 #modal1 {
   width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 800px; /* Ancho máximo del modal */
-  max-height: 620px; /* Altura fija del modal */
+  max-width: 650px; /* Ancho máximo del modal */
+  max-height: 500px; /* Altura fija del modal */
   overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
 }
 
@@ -133,7 +128,7 @@
 
 #modalExp {
   width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 750px; /* Ancho máximo del modal */
+  max-width: 600px; /* Ancho máximo del modal */
   overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
 }
 
@@ -162,8 +157,22 @@
 
 .input-fieldExp i {
   position: absolute;
-  left: -25px; /* Ajusta la posición horizontal del ícono */
-  top: 60%;
+  left: -30px; /* Ajusta la posición horizontal del ícono */
+  top: 63%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.input-fieldExp input {
+  max-width: 500px; /* Limita el ancho de los campos de entrada */
+  width: 100%; /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+}
+
+#descrip  {
+  position: absolute;
+  left: -30px; /* Ajusta la posición horizontal del ícono */
+  top: 55%;
   transform: translateY(-50%);
   color: #5f5757;
 }
@@ -211,4 +220,34 @@
   cursor: pointer;
   color: rgb(31, 31, 31);
   font-size: 18px;
+}
+
+#modalEdu {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 650px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.input-fieldEdu {
+  position: relative;
+ 
+}
+
+.input-fieldEdu i {
+  position: absolute;
+  left: -30px; /* Ajusta la posición horizontal del ícono */
+  top: 63%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.input-fieldEdu input {
+  max-width: 450px; /* Limita el ancho de los campos de entrada */
+  width: 100%; /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+}
+
+.modal-contentEdu {
+  max-width: 450px; /* Establece el ancho del contenido del modal */
+  margin: 0 auto; /* Centra el contenido del modal */
 }
