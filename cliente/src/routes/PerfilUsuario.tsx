@@ -471,6 +471,8 @@ export default function PerfilUsuarios() {
                         setFoto(data.foto);
                         setPerfilUsuario(data);
                        // console.log("Datos del usuario en peerfil ", perfilUsuario);
+                        
+                        
                         if (data.habilidades) {
                             const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
                            // console.log('Datos recibidos:', habilidadesResponse);
@@ -584,7 +586,7 @@ export default function PerfilUsuarios() {
         const modalInstance2 = modalElement2 ? M.Modal.init(modalElement2) : null;
         if (modalInstance2) {
             modalInstance2.options.onOpenStart = () => {
-
+                obtenerHabilidades();
             };
         }
 
@@ -652,6 +654,39 @@ export default function PerfilUsuarios() {
             console.error('Error al obtener los datos de nivel:', error);
         }
     }
+
+    async function obtenerHabilidades() {
+        const storedUser2 = localStorage.getItem('usuario');
+        if (storedUser2) {
+            const usuario = JSON.parse(storedUser2);
+        try {
+            const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
+            
+            if (habilidadesResponse.ok) {
+                setCambios(true); // Actualizar el estado para reflejar cambios
+    
+                const habilidadesData = await habilidadesResponse.json();
+    
+                if (Array.isArray(habilidadesData)) {
+                    const habilidades1 = habilidadesData.map((hab: Habilidad) => ({
+                        _id: hab._id,
+                        descripcion: hab.descripcion,
+                        id_usuario: hab.id_usuario
+                    }));
+                    setHabilidades(habilidades1);
+                } else {
+                    console.error('La respuesta del servidor no es un array');
+                }
+            } else {
+                console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
+            }
+        } catch (error) {
+            console.error('Error al realizar la solicitud:', error);
+        }
+
+        }
+    }
+    
 
     //para obtener imágenes
     const storedUser = localStorage.getItem('usuario');
@@ -1356,7 +1391,7 @@ export default function PerfilUsuarios() {
                                     {hab.descripcion}  {/* Muestra solo la descripción */}
                                     <i
                                         className="material-icons delete-icon"
-                                        onClick={() => hab._id ? eliminarHabilidad(index) : eliminarHabilidadTemporal(index)}
+                                        onClick={() => eliminarHabilidad(index)}
                                     >
                                         close
                                     </i>
