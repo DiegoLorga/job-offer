@@ -181,35 +181,22 @@ class PerfilUsuarioController {
     }
     eliminarHabilidad(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { id_habilidad } = req.params; // _id de la habilidad a eliminar
-            const { id_usuario } = req.body; // id_usuario del usuario
             try {
-                // Elimina la habilidad específica basada en _id
-                const habilidadEliminada = yield habilidades_model_1.default.findOneAndDelete({
-                    _id: id_habilidad,
-                    id_usuario
-                });
-                if (!habilidadEliminada) {
-                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, {
-                        Error: "Habilidad no encontrada para el usuario dado"
-                    }));
-                    return;
+                const habilidadId = req.params.id_habilidad;
+                // Verifica si es un UUID o ObjectId
+                const resultado = yield habilidades_model_1.default.findByIdAndDelete(habilidadId);
+                if (!resultado) {
+                    res.status(404).json({ message: 'Habilidad no encontrada' });
                 }
-                // Actualiza el perfil del usuario para eliminar la habilidad
-                yield perfilUsuario_model_1.default.findOneAndUpdate({ id_usuario }, { $pull: { habilidadesIds: id_habilidad } } // Usa $pull para eliminar el ID de las habilidades
-                );
-                res.status(200).json((0, jsonResponse_1.jsonResponse)(200, {
-                    Message: "Habilidad eliminada correctamente"
-                }));
+                res.status(200).json({ message: 'Habilidad eliminada correctamente' });
             }
             catch (error) {
-                console.error('Error al eliminar la habilidad:', error.message);
-                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, {
-                    Error: "Error al eliminar la habilidad"
-                }));
+                console.error('Error al eliminar habilidad:', error);
+                res.status(500).json({ message: 'Error al eliminar habilidad' });
             }
         });
     }
+    ;
     actualizarEducacion(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { nivel, institucion, carrera } = req.body;

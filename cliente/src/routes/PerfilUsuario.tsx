@@ -119,9 +119,9 @@ export default function PerfilUsuarios() {
 
                         const data = await response.json();
                         if (response.ok) {
-
                             setCambios(true); // Actualizar el estado para reflejar cambios
-
+                            console.log(data);
+                            
                             Swal.fire({
                                 title: "Éxito",
                                 text: "Habilidades agregadas correctamente",
@@ -478,6 +478,7 @@ export default function PerfilUsuarios() {
                             const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
                             console.log('Datos recibidos:', habilidadesResponse);
                             if (habilidadesResponse.ok) {
+                                setCambios(true); // Actualizar el estado para reflejar cambios
                                 // Extrae el array de habilidades
                                 const habilidadesData = await habilidadesResponse.json();
                                 console.log("Habilidades: ", habilidadesData);
@@ -515,6 +516,7 @@ export default function PerfilUsuarios() {
         }
 
     }, [perfilUsuario?.habilidades, cambios]);
+
     //inicializar modal1
     useEffect(() => {
         const modalElement = document.getElementById('modal1');
@@ -638,9 +640,8 @@ export default function PerfilUsuarios() {
     }
 
     const eliminarHabilidad = async (index: number) => {
-        const habilidad = habilidades[index]; // Obtén la habilidad a eliminar
+        const habilidad = habilidades[index];
 
-        // Mostrar una alerta de confirmación
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: '¿Estás seguro de que deseas eliminar esta habilidad?',
@@ -653,48 +654,55 @@ export default function PerfilUsuarios() {
         });
 
         if (result.isConfirmed) {
-            if (!habilidad.id_usuario) { // Verifica si _id está indefinido o vacío
-                // Si la habilidad no tiene _id, elimínala solo de la interfaz
-                setHabilidades(habilidades.filter((_, i) => i !== index));
-                Swal.fire('Éxito', 'Habilidad eliminada de la lista', 'success');
-            } else {
-                // Si la habilidad tiene _id, intenta eliminarla de la base de datos
-                const storedUser = localStorage.getItem('usuario');
+            const storedUser = localStorage.getItem('usuario');
+            if (!storedUser) {
+                Swal.fire('Error', 'No se encontró información del usuario', 'error');
+                return;
+            }
 
-                if (!storedUser) {
-                    Swal.fire('Error', 'No se encontró información del usuario', 'error');
-                    return;
-                }
+            const usuario = JSON.parse(storedUser);
 
-                const usuario = JSON.parse(storedUser);
-                const idUsuario = usuario.id; // Asume que el ID del usuario está en `usuario.id`
-
-                try {
-                    const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ id_usuario: idUsuario }) // Envía el ID del usuario en el cuerpo de la solicitud
-                    });
-
-                    if (response.ok) {
-                        // Si la eliminación en la base de datos fue exitosa, elimínala también de la interfaz
-                        setHabilidades(habilidades.filter((_, i) => i !== index));
-                        Swal.fire('Éxito', 'Habilidad eliminada correctamente', 'success');
-                    } else {
-                        const errorData = await response.json();
-                        Swal.fire('Error', errorData.Error || 'No se pudo eliminar la habilidad', 'error');
+            try {
+                const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
                     }
-                } catch (error) {
-                    console.error('Error al eliminar la habilidad:', error);
-                    Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+                });
+
+                if (response.ok) {
+                    setHabilidades(habilidades.filter((_, i) => i !== index));
+                    Swal.fire('Éxito', 'Habilidad eliminada correctamente', 'success');
+                } else {
+                    const errorData = await response.json();
+                    Swal.fire('Error', errorData.Error || 'No se pudo eliminar la habilidad', 'error');
                 }
+            } catch (error) {
+                console.error('Error al eliminar la habilidad:', error);
+                Swal.fire('Error', 'Error al conectar con el servidor', 'error');
             }
         }
     };
 
 
+    const eliminarHabilidadTemporal = (index: number) => {
+        // Mostrar una alerta de confirmación
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Estás seguro de que deseas eliminar esta habilidad?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Elimina la habilidad solo del estado local
+                const nuevasHabilidades = habilidades.filter((_, i) => i !== index);
+                setHabilidades(nuevasHabilidades);
+                Swal.fire('Éxito', 'Habilidad eliminada de la lista', 'success');
+            }
+        });
+    };
 
 
 
@@ -1220,13 +1228,14 @@ export default function PerfilUsuarios() {
                                     {hab.descripcion}  {/* Muestra solo la descripción */}
                                     <i
                                         className="material-icons delete-icon"
-                                        onClick={() => eliminarHabilidad(index)}
+                                        onClick={() => hab._id ? eliminarHabilidad(index) : eliminarHabilidadTemporal(index)}
                                     >
                                         close
                                     </i>
                                 </div>
                             ))}
                         </div>
+
 
                     </div>
                 </div>

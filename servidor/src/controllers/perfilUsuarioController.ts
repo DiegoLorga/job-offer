@@ -135,7 +135,7 @@ class PerfilUsuarioController {
     public async crearHabilidades(req: Request, res: Response): Promise<void> {
         const habilidades = req.body; // Array de habilidades a agregar
         const { id_usuario } = req.params;
-    
+
         try {
             if (!Array.isArray(habilidades)) {
                 res.status(400).json(jsonResponse(400, {
@@ -143,7 +143,7 @@ class PerfilUsuarioController {
                 }));
                 return;
             }
-    
+
             // Verifica que cada habilidad tenga una descripción válida
             for (const habilidad of habilidades) {
                 if (!habilidad.descripcion || typeof habilidad.descripcion !== 'string') {
@@ -153,18 +153,18 @@ class PerfilUsuarioController {
                     return;
                 }
             }
-    
+
             // Filtra las habilidades que ya existen en la base de datos
-            const habilidadesExistentes = await Habilidad.find({ 
-                id_usuario, 
-                descripcion: { $in: habilidades.map(h => h.descripcion) } 
+            const habilidadesExistentes = await Habilidad.find({
+                id_usuario,
+                descripcion: { $in: habilidades.map(h => h.descripcion) }
             }).exec();
-    
+
             const descripcionesExistentes = habilidadesExistentes.map(h => h.descripcion);
-    
+
             // Filtra las habilidades nuevas que no están en la base de datos
             const habilidadesNuevas = habilidades.filter(h => !descripcionesExistentes.includes(h.descripcion));
-    
+
             if (habilidadesNuevas.length > 0) {
                 // Crear nuevas habilidades
                 const nuevasHabilidades = await Habilidad.insertMany(
@@ -173,13 +173,13 @@ class PerfilUsuarioController {
                         id_usuario
                     }))
                 );
-    
+
                 // Actualizar el perfil del usuario con los IDs de las nuevas habilidades
                 await PerfilUsuario.findOneAndUpdate(
                     { id_usuario },
                     { $addToSet: { habilidades_ids: { $each: nuevasHabilidades.map(h => h._id) } } } // Usa $addToSet para agregar solo los nuevos IDs
                 );
-    
+
                 res.status(201).json(jsonResponse(201, nuevasHabilidades));
             } else {
                 res.status(200).json(jsonResponse(200, { Message: "No hay nuevas habilidades para agregar" }));
@@ -199,61 +199,41 @@ class PerfilUsuarioController {
         }
     }
     
-    
-    
-    
-    
 
 
     public async eliminarHabilidad(req: Request, res: Response): Promise<void> {
-        const { id_habilidad } = req.params; // _id de la habilidad a eliminar
-        const { id_usuario } = req.body; // id_usuario del usuario
-    
         try {
-            // Elimina la habilidad específica basada en _id
-            const habilidadEliminada = await Habilidad.findOneAndDelete({
-                _id: id_habilidad,
-                id_usuario
-            });
-    
-            if (!habilidadEliminada) {
-                res.status(404).json(jsonResponse(404, {
-                    Error: "Habilidad no encontrada para el usuario dado"
-                }));
-                return;
+            const habilidadId = req.params.id_habilidad;
+
+            // Verifica si es un UUID o ObjectId
+            const resultado = await Habilidad.findByIdAndDelete(habilidadId);
+
+            if (!resultado) {
+                res.status(404).json({ message: 'Habilidad no encontrada' });
             }
-    
-            // Actualiza el perfil del usuario para eliminar la habilidad
-            await PerfilUsuario.findOneAndUpdate(
-                { id_usuario },
-                { $pull: { habilidadesIds: id_habilidad } } // Usa $pull para eliminar el ID de las habilidades
-            );
-    
-            res.status(200).json(jsonResponse(200, {
-                Message: "Habilidad eliminada correctamente"
-            }));
-        } catch (error: any) {
-            console.error('Error al eliminar la habilidad:', error.message);
-            res.status(500).json(jsonResponse(500, {
-                Error: "Error al eliminar la habilidad"
-            }));
+
+            res.status(200).json({ message: 'Habilidad eliminada correctamente' });
+        } catch (error) {
+            console.error('Error al eliminar habilidad:', error);
+            res.status(500).json({ message: 'Error al eliminar habilidad' });
         }
-    }
-    
+    };
+
+
     public async actualizarEducacion(req: Request, res: Response): Promise<void> {
         const { nivel, institucion, carrera } = req.body;
-        const { id_usuario } = req.params; 
+        const { id_usuario } = req.params;
 
         try {
             const educacionUsuario = await EducacionUsuario.findOneAndUpdate(
                 { id_usuario },
                 { nivel, institucion, carrera },
-                { new: true, runValidators: true } 
+                { new: true, runValidators: true }
             );
 
             if (!educacionUsuario) {
                 res.status(404).json(jsonResponse(404, {
-                    Error: "No se encontró la educación para el usuario dado" 
+                    Error: "No se encontró la educación para el usuario dado"
                 }));
                 return;
             }
@@ -268,7 +248,7 @@ class PerfilUsuarioController {
             }));
         }
     }
-    
-    
+
+
 }
 export const perfilUsuarioController = new PerfilUsuarioController();
