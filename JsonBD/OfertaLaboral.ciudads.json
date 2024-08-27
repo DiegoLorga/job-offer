@@ -1,0 +1,1911 @@
+[{
+  "_id": {
+    "$oid": "669855ee986109a9d4317deb"
+  },
+  "clave": "CMX",
+  "nombre": "CIUDAD DE MEXICO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dec"
+  },
+  "clave": "JAL",
+  "nombre": "GUADALAJARA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ded"
+  },
+  "clave": "NL",
+  "nombre": "MONTERREY"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dee"
+  },
+  "clave": "BC",
+  "nombre": "TIJUANA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317def"
+  },
+  "clave": "MEX",
+  "nombre": "ECATEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df0"
+  },
+  "clave": "GTO",
+  "nombre": "LEÓN DE LOS ALDAMA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df1"
+  },
+  "clave": "PUE",
+  "nombre": "PUEBLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df2"
+  },
+  "clave": "JAL",
+  "nombre": "ZAPOPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df3"
+  },
+  "clave": "CHI",
+  "nombre": "JUÁREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df4"
+  },
+  "clave": "BC",
+  "nombre": "MEXICALI"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df5"
+  },
+  "clave": "MEX",
+  "nombre": "NEZAHUALCÓYOTL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df6"
+  },
+  "clave": "MEX",
+  "nombre": "CIUDAD NEZAHUALCÓYOTL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df7"
+  },
+  "clave": "MCH",
+  "nombre": "MORELIA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df8"
+  },
+  "clave": "QR",
+  "nombre": "CANCÚN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317df9"
+  },
+  "clave": "COA",
+  "nombre": "SALTILLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dfa"
+  },
+  "clave": "JAL",
+  "nombre": "TLAQUEPAQUE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dfb"
+  },
+  "clave": "DGO",
+  "nombre": "DURANGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dfc"
+  },
+  "clave": "MEX",
+  "nombre": "TLALNEPANTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dfd"
+  },
+  "clave": "MEX",
+  "nombre": "CHIMALHUACÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dfe"
+  },
+  "clave": "MEX",
+  "nombre": "TULTITLÁN DE MARIANO ESCOBEDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317dff"
+  },
+  "clave": "MEX",
+  "nombre": "CIUDAD LÓPEZ MATEOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e00"
+  },
+  "clave": "NL",
+  "nombre": "SAN NICOLÁS DE LOS GARZA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e01"
+  },
+  "clave": "VER",
+  "nombre": "VERACRUZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e02"
+  },
+  "clave": "MCH",
+  "nombre": "URUAPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e03"
+  },
+  "clave": "NAY",
+  "nombre": "TEPIC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e04"
+  },
+  "clave": "NL",
+  "nombre": "CIUDAD BENITO JUÁREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e05"
+  },
+  "clave": "QR",
+  "nombre": "PLAYA DEL CARMEN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e06"
+  },
+  "clave": "MEX",
+  "nombre": "COACALCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e07"
+  },
+  "clave": "SON",
+  "nombre": "HEROICA NOGALES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e08"
+  },
+  "clave": "MEX",
+  "nombre": "TOLUCA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e09"
+  },
+  "clave": "ZAC",
+  "nombre": "GUADALUPE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0a"
+  },
+  "clave": "MCH",
+  "nombre": "ZAMORA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0b"
+  },
+  "clave": "CMP",
+  "nombre": "CIUDAD DEL CARMEN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0c"
+  },
+  "clave": "GRO",
+  "nombre": "CHILPANCINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0d"
+  },
+  "clave": "QR",
+  "nombre": "CHETUMAL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0e"
+  },
+  "clave": "PUE",
+  "nombre": "SAN MARTÍN TEXMELUCAN DE LABASTIDA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e0f"
+  },
+  "clave": "VER",
+  "nombre": "SAN ANDRÉS TUXTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e10"
+  },
+  "clave": "YUC",
+  "nombre": "KANASÍN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e11"
+  },
+  "clave": "MCH",
+  "nombre": "APATZINGÁN DE LA CONSTITUCIÓN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e12"
+  },
+  "clave": "TMS",
+  "nombre": "MIRAMAR"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e13"
+  },
+  "clave": "COA",
+  "nombre": "MATAMOROS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e14"
+  },
+  "clave": "QRO",
+  "nombre": "EL PUEBLITO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e15"
+  },
+  "clave": "VER",
+  "nombre": "TLAPACOYAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e16"
+  },
+  "clave": "JAL",
+  "nombre": "CIUDAD GUZMÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e17"
+  },
+  "clave": "MEX",
+  "nombre": "SAN ANTONIO ENCHISI"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e18"
+  },
+  "clave": "VER",
+  "nombre": "MARTÍNEZ DE LA TORRE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e19"
+  },
+  "clave": "CHI",
+  "nombre": "PARRAL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1a"
+  },
+  "clave": "GTO",
+  "nombre": "SAN LUIS DE LA PAZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1b"
+  },
+  "clave": "AGS",
+  "nombre": "RINCÓN DE ROMOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1c"
+  },
+  "clave": "VER",
+  "nombre": "ACAYUCAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1d"
+  },
+  "clave": "MCH",
+  "nombre": "LA PIEDAD"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1e"
+  },
+  "clave": "TLX",
+  "nombre": "APIZACO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e1f"
+  },
+  "clave": "PUE",
+  "nombre": "XICOTEPEC DE JUÁREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e20"
+  },
+  "clave": "OAX",
+  "nombre": "SALINA CRUZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e21"
+  },
+  "clave": "DGO",
+  "nombre": "CIUDAD LERDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e22"
+  },
+  "clave": "MCH",
+  "nombre": "CIUDAD LÁZARO CÁRDENAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e23"
+  },
+  "clave": "QR",
+  "nombre": "COZUMEL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e24"
+  },
+  "clave": "MCH",
+  "nombre": "TACÁMBARO DE CODALLOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e25"
+  },
+  "clave": "OAX",
+  "nombre": "JUCHITÁN DE ZARAGOZA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e26"
+  },
+  "clave": "MEX",
+  "nombre": "TEJUPILCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e27"
+  },
+  "clave": "MCH",
+  "nombre": "LOS REYES DE SALGADO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e28"
+  },
+  "clave": "SLP",
+  "nombre": "RIOVERDE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e29"
+  },
+  "clave": "VER",
+  "nombre": "IXTACZOQUITLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2a"
+  },
+  "clave": "MCH",
+  "nombre": "JACONA DE PLANCARTE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2b"
+  },
+  "clave": "GTO",
+  "nombre": "YURIRIA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2c"
+  },
+  "clave": "MCH",
+  "nombre": "JIQUÍLPAN DE JUÁREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2d"
+  },
+  "clave": "JAL",
+  "nombre": "COYULA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2e"
+  },
+  "clave": "VER",
+  "nombre": "MISANTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e2f"
+  },
+  "clave": "GTO",
+  "nombre": "CORTAZAR"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e30"
+  },
+  "clave": "MEX",
+  "nombre": "VALLE DE BRAVO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e31"
+  },
+  "clave": "VER",
+  "nombre": "HUATUSCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e32"
+  },
+  "clave": "TMS",
+  "nombre": "ALTAMIRA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e33"
+  },
+  "clave": "PUE",
+  "nombre": "HUAUCHINANGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e34"
+  },
+  "clave": "VER",
+  "nombre": "COSAMALOAPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e35"
+  },
+  "clave": "OAX",
+  "nombre": "PINOTEPA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e36"
+  },
+  "clave": "PUE",
+  "nombre": "ACATZINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e37"
+  },
+  "clave": "TLX",
+  "nombre": "HUAMANTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e38"
+  },
+  "clave": "MEX",
+  "nombre": "ZUMPANGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e39"
+  },
+  "clave": "COA",
+  "nombre": "FRANCISCO I. MADERO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3a"
+  },
+  "clave": "COA",
+  "nombre": "SAN PEDRO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3b"
+  },
+  "clave": "VER",
+  "nombre": "CATEMACO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3c"
+  },
+  "clave": "CHS",
+  "nombre": "CINTALAPA DE FIGUEROA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3d"
+  },
+  "clave": "CHS",
+  "nombre": "OCOSINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3e"
+  },
+  "clave": "AGS",
+  "nombre": "PABELLÓN DE ARTEAGA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e3f"
+  },
+  "clave": "MCH",
+  "nombre": "BUENA VISTA TOMATLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e40"
+  },
+  "clave": "ZAC",
+  "nombre": "LORETO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e41"
+  },
+  "clave": "VER",
+  "nombre": "ISLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e42"
+  },
+  "clave": "CHS",
+  "nombre": "OCOZOCOAUTLA DE ESPINOSA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e43"
+  },
+  "clave": "SON",
+  "nombre": "EMPALME"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e44"
+  },
+  "clave": "GRO",
+  "nombre": "TLAPA DE COMONFORT"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e45"
+  },
+  "clave": "CHS",
+  "nombre": "VILLAFLORES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e46"
+  },
+  "clave": "MCH",
+  "nombre": "PARACHO DE VERDUZCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e47"
+  },
+  "clave": "YUC",
+  "nombre": "PROGRESO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e48"
+  },
+  "clave": "GTO",
+  "nombre": "SALVATIERRA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e49"
+  },
+  "clave": "CHS",
+  "nombre": "BERRIOZÁBAL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4a"
+  },
+  "clave": "CHS",
+  "nombre": "TONALÁ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4b"
+  },
+  "clave": "ZAC",
+  "nombre": "RÍO GRANDE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4c"
+  },
+  "clave": "PUE",
+  "nombre": "ZACATLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4d"
+  },
+  "clave": "MEX",
+  "nombre": "IXTAPAN DE LA SAL"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4e"
+  },
+  "clave": "QR",
+  "nombre": "TULUM"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e4f"
+  },
+  "clave": "VER",
+  "nombre": "PÁNUCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e50"
+  },
+  "clave": "VER",
+  "nombre": "SAYULA DE ALEMÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e51"
+  },
+  "clave": "MCH",
+  "nombre": "NUEVA ITALIA DE RUIZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e52"
+  },
+  "clave": "CHS",
+  "nombre": "HUIXTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e53"
+  },
+  "clave": "SIN",
+  "nombre": "ESCUINAPA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e54"
+  },
+  "clave": "GRO",
+  "nombre": "OMETEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e55"
+  },
+  "clave": "VER",
+  "nombre": "NANCHITAL DE LÁZARO CÁRDENAS DEL RÍO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e56"
+  },
+  "clave": "CHS",
+  "nombre": "REFORMA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e57"
+  },
+  "clave": "GTO",
+  "nombre": "ABASOLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e58"
+  },
+  "clave": "HGO",
+  "nombre": "CIUDAD SAHAGÚN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e59"
+  },
+  "clave": "CHS",
+  "nombre": "MOTOZINTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5a"
+  },
+  "clave": "GTO",
+  "nombre": "VILLAGRÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5b"
+  },
+  "clave": "MOR",
+  "nombre": "ATLATLAHUCAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5c"
+  },
+  "clave": "VER",
+  "nombre": "ÁLAMO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5d"
+  },
+  "clave": "VER",
+  "nombre": "IXHUATLANCILLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5e"
+  },
+  "clave": "GRO",
+  "nombre": "ZUMPANGO DEL RÍO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e5f"
+  },
+  "clave": "DGO",
+  "nombre": "EL SALTO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e60"
+  },
+  "clave": "VER",
+  "nombre": "RAFAEL DELGADO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e61"
+  },
+  "clave": "GRO",
+  "nombre": "TIXTLA DE GUERRERO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e62"
+  },
+  "clave": "ZAC",
+  "nombre": "SOMBRERETE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e63"
+  },
+  "clave": "JAL",
+  "nombre": "CHAPALA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e64"
+  },
+  "clave": "VER",
+  "nombre": "NOGALES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e65"
+  },
+  "clave": "PUE",
+  "nombre": "ALTEPEXI"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e66"
+  },
+  "clave": "VER",
+  "nombre": "TEXISTEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e67"
+  },
+  "clave": "MEX",
+  "nombre": "ATOYAC DE ÁLVAREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e68"
+  },
+  "clave": "CHS",
+  "nombre": "CHICONCUAC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e69"
+  },
+  "clave": "MCH",
+  "nombre": "CACAHOATÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6a"
+  },
+  "clave": "JAL",
+  "nombre": "COTIJA DE LA PAZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6b"
+  },
+  "clave": "NAY",
+  "nombre": "SAN IGNACIO CERRO GORDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6c"
+  },
+  "clave": "NAY",
+  "nombre": "SANTIAGO IXCUINTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6d"
+  },
+  "clave": "PUE",
+  "nombre": "TEPATLAXCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6e"
+  },
+  "clave": "VER",
+  "nombre": "MECAYAPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e6f"
+  },
+  "clave": "MCH",
+  "nombre": "NUEVO SAN JUAN PARANGARICUTIRO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e70"
+  },
+  "clave": "VER",
+  "nombre": "TATAHUICAPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e71"
+  },
+  "clave": "GRO",
+  "nombre": "AYUTLA DE LOS LIBRES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e72"
+  },
+  "clave": "CHS",
+  "nombre": "PICHUCALCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e73"
+  },
+  "clave": "CHS",
+  "nombre": "ACALA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e74"
+  },
+  "clave": "TLX",
+  "nombre": "TLAXCALA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e75"
+  },
+  "clave": "GRO",
+  "nombre": "TÉCPAN DE GALEANA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e76"
+  },
+  "clave": "MOR",
+  "nombre": "TEPOZTLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e77"
+  },
+  "clave": "CHS",
+  "nombre": "SAN FERNANDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e78"
+  },
+  "clave": "MOR",
+  "nombre": "SAN NICOLÁS DE LOS RANCHOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e79"
+  },
+  "clave": "GRO",
+  "nombre": "ALTAMIRANO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7a"
+  },
+  "clave": "MEX",
+  "nombre": "MEXICALTZINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7b"
+  },
+  "clave": "DGO",
+  "nombre": "CUENCAMÉ DE CENICEROS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7c"
+  },
+  "clave": "MEX",
+  "nombre": "RAYÓN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7d"
+  },
+  "clave": "JAL",
+  "nombre": "EL BOSQUE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7e"
+  },
+  "clave": "NL",
+  "nombre": "GENERAL ZUAZUA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e7f"
+  },
+  "clave": "MEX",
+  "nombre": "LOS REYES ACAQUILPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e80"
+  },
+  "clave": "MEX",
+  "nombre": "SAN ANTONIO LA ISLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e81"
+  },
+  "clave": "MEX",
+  "nombre": "XICO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e82"
+  },
+  "clave": "JAL",
+  "nombre": "EL SALTO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e83"
+  },
+  "clave": "JAL",
+  "nombre": "ARANDAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e84"
+  },
+  "clave": "TMS",
+  "nombre": "CARMEN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e85"
+  },
+  "clave": "MEX",
+  "nombre": "EMILIANO ZAPATA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e86"
+  },
+  "clave": "NAY",
+  "nombre": "XALISCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e87"
+  },
+  "clave": "JAL",
+  "nombre": "SAN MIGUEL EL ALTO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e88"
+  },
+  "clave": "MCH",
+  "nombre": "HERÓICA ZITÁCUARO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e89"
+  },
+  "clave": "PUE",
+  "nombre": "CUAUTLANCINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8a"
+  },
+  "clave": "GTO",
+  "nombre": "ROMITA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8b"
+  },
+  "clave": "NAY",
+  "nombre": "VALLE DE BANDERAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8c"
+  },
+  "clave": "PUE",
+  "nombre": "AMOZOC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8d"
+  },
+  "clave": "MOR",
+  "nombre": "PUENTE DE IXTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8e"
+  },
+  "clave": "TLX",
+  "nombre": "VILLA VICENTE GUERRERO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e8f"
+  },
+  "clave": "JAL",
+  "nombre": "JALOSTOTITLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e90"
+  },
+  "clave": "PUE",
+  "nombre": "ZINACATEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e91"
+  },
+  "clave": "MCH",
+  "nombre": "TARÍMBARO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e92"
+  },
+  "clave": "MEX",
+  "nombre": "TENANGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e93"
+  },
+  "clave": "PUE",
+  "nombre": "AJALPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e94"
+  },
+  "clave": "JAL",
+  "nombre": "TEOCALTICHE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e95"
+  },
+  "clave": "MEX",
+  "nombre": "TONANITLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e96"
+  },
+  "clave": "SLP",
+  "nombre": "VILLA ZARAGOZA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e97"
+  },
+  "clave": "TAB",
+  "nombre": "CÁRDENAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e98"
+  },
+  "clave": "GTO",
+  "nombre": "MOROLEÓN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e99"
+  },
+  "clave": "TLX",
+  "nombre": "MAZATECOCHCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9a"
+  },
+  "clave": "VER",
+  "nombre": "COATZINTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9b"
+  },
+  "clave": "VER",
+  "nombre": "COSOLEACAQUE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9c"
+  },
+  "clave": "VER",
+  "nombre": "CIUDAD MENDOZA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9d"
+  },
+  "clave": "VER",
+  "nombre": "LAS CHOAPAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9e"
+  },
+  "clave": "MOR",
+  "nombre": "TLAQUILTENANGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317e9f"
+  },
+  "clave": "VER",
+  "nombre": "RÍO BLANCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea0"
+  },
+  "clave": "JAL",
+  "nombre": "EL GRULLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea1"
+  },
+  "clave": "COL",
+  "nombre": "CIUDAD DE ARMERÍA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea2"
+  },
+  "clave": "MEX",
+  "nombre": "ACOLMAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea3"
+  },
+  "clave": "MCH",
+  "nombre": "PURUÁNDIRO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea4"
+  },
+  "clave": "VER",
+  "nombre": "TIERRA BLANCA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea5"
+  },
+  "clave": "JAL",
+  "nombre": "PONCITLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea6"
+  },
+  "clave": "MOR",
+  "nombre": "YAUTEPEC DE ZARAGOZA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea7"
+  },
+  "clave": "NAY",
+  "nombre": "IXTLÁN DEL RÍO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea8"
+  },
+  "clave": "TLX",
+  "nombre": "CIUDAD DE NANACAMILPA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ea9"
+  },
+  "clave": "MOR",
+  "nombre": "JOJUTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eaa"
+  },
+  "clave": "PUE",
+  "nombre": "IZÚCAR DE MATAMOROS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eab"
+  },
+  "clave": "VER",
+  "nombre": "ALTOTONGA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eac"
+  },
+  "clave": "MCH",
+  "nombre": "TINGAMBATO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ead"
+  },
+  "clave": "JAL",
+  "nombre": "AYOTLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eae"
+  },
+  "clave": "GRO",
+  "nombre": "COYUCA DE BENÍTEZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eaf"
+  },
+  "clave": "GTO",
+  "nombre": "SAN JOSÉ ITURBIDE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb0"
+  },
+  "clave": "MCH",
+  "nombre": "SAN JOSÉ DE GRACIA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb1"
+  },
+  "clave": "PUE",
+  "nombre": "CHIGNAHUAPAN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb2"
+  },
+  "clave": "ZAC",
+  "nombre": "VÍCTOR ROSALES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb3"
+  },
+  "clave": "MOR",
+  "nombre": "TEPALCINGO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb4"
+  },
+  "clave": "MCH",
+  "nombre": "ZACAPÚ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb5"
+  },
+  "clave": "MEX",
+  "nombre": "ATLACOMULCO DE FABELA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb6"
+  },
+  "clave": "VER",
+  "nombre": "OLUTA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb7"
+  },
+  "clave": "TAB",
+  "nombre": "HUIMANGUILLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb8"
+  },
+  "clave": "VER",
+  "nombre": "SOCONUSCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eb9"
+  },
+  "clave": "NAY",
+  "nombre": "ACAPONETA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eba"
+  },
+  "clave": "VER",
+  "nombre": "BANDERILLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ebb"
+  },
+  "clave": "MCH",
+  "nombre": "YURÉCUARO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ebc"
+  },
+  "clave": "PUE",
+  "nombre": "LIBRES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ebd"
+  },
+  "clave": "VER",
+  "nombre": "COSCOMATEPEC DE BRAVO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ebe"
+  },
+  "clave": "MCH",
+  "nombre": "CHAPULTEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ebf"
+  },
+  "clave": "VER",
+  "nombre": "CUITLÁHUAC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec0"
+  },
+  "clave": "ZAC",
+  "nombre": "OJOCALIENTE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec1"
+  },
+  "clave": "VER",
+  "nombre": "AGUA DULCE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec2"
+  },
+  "clave": "MCH",
+  "nombre": "ARIO DE ROSALES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec3"
+  },
+  "clave": "GRO",
+  "nombre": "ACAPULCO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec4"
+  },
+  "clave": "AGS",
+  "nombre": "AGUASCALIENTES"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec5"
+  },
+  "clave": "CMP",
+  "nombre": "CAMPECHE"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec6"
+  },
+  "clave": "GTO",
+  "nombre": "CELAYA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec7"
+  },
+  "clave": "CHI",
+  "nombre": "CHIHUAHUA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec8"
+  },
+  "clave": "SON",
+  "nombre": "CIUDAD OBREGON"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ec9"
+  },
+  "clave": "TMS",
+  "nombre": "CIUDAD VICTORIA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eca"
+  },
+  "clave": "VER",
+  "nombre": "COATZACOALCOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ecb"
+  },
+  "clave": "COL",
+  "nombre": "COLIMA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ecc"
+  },
+  "clave": "MOR",
+  "nombre": "CUAUTLA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ecd"
+  },
+  "clave": "MOR",
+  "nombre": "CUERNAVACA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ece"
+  },
+  "clave": "SIN",
+  "nombre": "CULIACÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ecf"
+  },
+  "clave": "TAB",
+  "nombre": "CÁRDENAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed0"
+  },
+  "clave": "VER",
+  "nombre": "CÓRDOBA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed1"
+  },
+  "clave": "BC",
+  "nombre": "ENSENADA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed2"
+  },
+  "clave": "GTO",
+  "nombre": "GUANAJUATO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed3"
+  },
+  "clave": "SON",
+  "nombre": "GUAYMAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed4"
+  },
+  "clave": "SON",
+  "nombre": "HERMOSILLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed5"
+  },
+  "clave": "GTO",
+  "nombre": "IRAPUATO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed6"
+  },
+  "clave": "COA",
+  "nombre": "LA LAGUNA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed7"
+  },
+  "clave": "BCS",
+  "nombre": "LA PAZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed8"
+  },
+  "clave": "GTO",
+  "nombre": "LA PIEDAD"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ed9"
+  },
+  "clave": "GTO",
+  "nombre": "PÉNJAMO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eda"
+  },
+  "clave": "BCS",
+  "nombre": "LOS CABOS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317edb"
+  },
+  "clave": "SIN",
+  "nombre": "LOS MOCHIS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317edc"
+  },
+  "clave": "COL",
+  "nombre": "MANZANILLO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317edd"
+  },
+  "clave": "SIN",
+  "nombre": "MAZATLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ede"
+  },
+  "clave": "VER",
+  "nombre": "MINATITLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317edf"
+  },
+  "clave": "COA",
+  "nombre": "MONCLOVA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee0"
+  },
+  "clave": "COA",
+  "nombre": "FRONTERA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee1"
+  },
+  "clave": "YUC",
+  "nombre": "MÉRIDA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee2"
+  },
+  "clave": "TMS",
+  "nombre": "NUEVO LAREDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee3"
+  },
+  "clave": "OAX",
+  "nombre": "OAXACA DE JUÁREZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee4"
+  },
+  "clave": "OAX",
+  "nombre": "PUERTO ESCONDIDO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee5"
+  },
+  "clave": "OAX",
+  "nombre": "PINOTEPA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee6"
+  },
+  "clave": "OAX",
+  "nombre": "TUXTEPEC"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee7"
+  },
+  "clave": "OAX",
+  "nombre": "LOMA BONITA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee8"
+  },
+  "clave": "JAL",
+  "nombre": "OCOTLÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ee9"
+  },
+  "clave": "VER",
+  "nombre": "ORIZABA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eea"
+  },
+  "clave": "HGO",
+  "nombre": "PACHUCA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eeb"
+  },
+  "clave": "COA",
+  "nombre": "PIEDRS NEGRAS"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eec"
+  },
+  "clave": "VER",
+  "nombre": "POZA RICA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eed"
+  },
+  "clave": "JAL",
+  "nombre": "PUERTO VALLARTA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eee"
+  },
+  "clave": "QRO",
+  "nombre": "QUERÉTARO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317eef"
+  },
+  "clave": "TMS",
+  "nombre": "REYNOSA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef0"
+  },
+  "clave": "TMS",
+  "nombre": "RIO BRAVO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef1"
+  },
+  "clave": "SLP",
+  "nombre": "CIUDAD FERNÁNDEZ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef2"
+  },
+  "clave": "GTO",
+  "nombre": "SALAMANCA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef3"
+  },
+  "clave": "GTO",
+  "nombre": "SAN FRANCISCO DEL RINCÓN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef4"
+  },
+  "clave": "QRO",
+  "nombre": "SAN JUAN DEL RÍO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef5"
+  },
+  "clave": "SLP",
+  "nombre": "SAN LUIS POTOSÍ"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef6"
+  },
+  "clave": "SLP",
+  "nombre": "SOLEDAD"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef7"
+  },
+  "clave": "TMS",
+  "nombre": "TAMPICO"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef8"
+  },
+  "clave": "CHS",
+  "nombre": "TAPACHULA"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317ef9"
+  },
+  "clave": "COL",
+  "nombre": "TECOMÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317efa"
+  },
+  "clave": "PUE",
+  "nombre": "TEHUACÁN"
+},
+{
+  "_id": {
+    "$oid": "669855ee986109a9d4317efb"
+  },
+  "clave": "OAX",
+  "nombre": "TEHUNTEPEC"
+}]
