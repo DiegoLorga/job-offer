@@ -121,7 +121,7 @@ export default function PerfilUsuarios() {
                         if (response.ok) {
                             setCambios(true); // Actualizar el estado para reflejar cambios
                             console.log(data);
-                            
+
                             Swal.fire({
                                 title: "Éxito",
                                 text: "Habilidades agregadas correctamente",
@@ -585,11 +585,7 @@ export default function PerfilUsuarios() {
         // Inicializar segundo modal
         const modalElement2 = document.getElementById('modalHab');
         const modalInstance2 = modalElement2 ? M.Modal.init(modalElement2) : null;
-        if (modalInstance2) {
-            modalInstance2.options.onOpenStart = () => {
 
-            };
-        }
 
         // Inicializar tercer modal
         const modalElement3 = document.getElementById('modalEdu');
@@ -1174,7 +1170,7 @@ export default function PerfilUsuarios() {
                     </div>
                 </div>
 
-                <div id="modalHab" className="modal">
+                <div id="modalHab" className="modal" aria-hidden="false">
                     <div className="modal-contentperfil">
                         <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
                         <form className="col s12" onSubmit={(e) => e.preventDefault()}>
