@@ -283,28 +283,12 @@
 
 .input-fieldEdu i {
   position: absolute;
-  left: -30px;
+  left: -35px;
   /* Ajusta la posición horizontal del ícono */
   top: 63%;
-  transform: translateY(-50%);
   color: #5f5757;
 }
 
-.input-fieldEdu input {
-  max-width: 450px;
-  /* Limita el ancho de los campos de entrada */
-  width: 100%;
-  /* Asegura que respondan al diseño responsive */
-  margin-bottom: 20px;
-  /* Añade un margen debajo de cada campo de entrada */
-}
-
-.modal-contentEdu {
-  max-width: 450px;
-  /* Establece el ancho del contenido del modal */
-  margin: 20 auto;
-  /* Centra el contenido del modal */
-}
 
 .modal-contentIdi {
   max-width: 450px; /* Establece el ancho del contenido del modal */
@@ -312,12 +296,10 @@
  
 }
 #modalIdiomas {
-  width: 100%;
-  /* Cambia el valor según tus necesidades */
-  max-width: 650px;
-  /* Ancho máximo del modal */
-  overflow-y: auto;
-  /* Permite el desplazamiento si el contenido excede la altura */
+  margin-top: 60px;
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 650px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 .select-container-wrapper {
@@ -347,7 +329,7 @@
   position: absolute;
   left: 63px; 
   top: 39%;
-  transform: translateY(-50%);
+  transform: translateY(-10%);
   color: #5f5757;
 }
 
@@ -372,14 +354,7 @@
   overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
 }
 
-.input-cert i {
-  position: absolute;
-  left: -30px;
-  /* Ajusta la posición horizontal del ícono */
-  top: 63%;
-  transform: translateY(-50%);
-  color: #5f5757;
-}
+
 
 .input-fieldEdu input {
   max-width: 450px;
@@ -393,7 +368,7 @@
 .modal-contentEdu {
   max-width: 450px;
   /* Establece el ancho del contenido del modal */
-  margin: 20 auto;
+  margin: auto;
   /* Centra el contenido del modal */
 }
 

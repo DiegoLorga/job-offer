@@ -651,6 +651,25 @@ export default function PerfilUsuarios() {
 
             }
         }
+
+         // Inicializar el modal de certificaciones
+         const modalElement4 = document.getElementById('modalCert');
+         let modalInstance4 = modalElement4 ? M.Modal.init(modalElement4) : null;
+         if (modalInstance4) {
+             modalInstance4.options.onOpenStart = () => {
+                 setCertificado(null);
+             }
+         }
+ 
+         // Inicializar el modal de certificaciones actualizar
+         const modalElement5 = document.getElementById('modalCertAct');
+         let modalInstance5 = modalElement5 ? M.Modal.init(modalElement5) : null;
+         if (modalInstance5) {
+             modalInstance5.options.onOpenStart = () => {
+                 
+             }
+         }
+
         const fetchIdiomas = async () => {
             try {
                 const response = await fetch(`${API_URL}/perfilUsuario/listIdiomas`);
@@ -1680,7 +1699,6 @@ const handleActCertificacion = async () => {
                 </div>
 
 
-                {/* Modal para experiencia */}
         {/* Modal para experiencia */}
                 <div id="modalExp" className="modal">
                     <div className="modal-contentperfil">
@@ -1869,7 +1887,7 @@ const handleActCertificacion = async () => {
                             </div>
 
 
-                            <br /><div className="modal-footer">
+                            <br /><div className="modal-footerHab">
                                 <button
                                     type="submit"
                                     className="waves-effect waves-light btn "
@@ -1890,12 +1908,15 @@ const handleActCertificacion = async () => {
                     </div>
                 </div>
 
+                {/* Modal para idiomas */}
                 <div id="modalIdiomas" className="modal" ref={modalRefIdiomas}>
                     <div className="modal-contentIdi">
-                        <h4 style={{ textAlign: "center" }}>Idiomas</h4>
+                    <br/><h4 style={{ textAlign: "center" }}>Idiomas</h4>
                         <div className="select-container-wrapper">
                             <div className="select-container">
-                                <p className="info-title4">Idioma</p>
+                                <p className="info-title4">
+                                <i className="material-icons left">language</i>Idioma
+                                </p>
                                 <select
                                     value={selectedIdioma}
                                     onChange={(e) => setSelectedIdioma(e.target.value)}
@@ -1908,7 +1929,9 @@ const handleActCertificacion = async () => {
                                 </select>
                             </div>
                             <div className="select-container">
-                                <p className="info-title4">Nivel</p>
+                                <p className="info-title4">
+                                <i className="material-icons left">school</i>Nivel
+                                </p>
                                 <select
                                     value={selectedNivel}
                                     onChange={(e) => setSelectedNivel(e.target.value)}
@@ -1923,7 +1946,7 @@ const handleActCertificacion = async () => {
                         </div>
                         <br />
                         <div className="modal-footer">
-                            <button
+                        <button
                                 type="button"
                                 className="btn"
                                 style={{ marginRight: '15px' }}
@@ -1931,7 +1954,9 @@ const handleActCertificacion = async () => {
                             >
                                 Agregar
                                 <i className="material-icons right">add</i>
-                            </button>
+                        </button>
+                        </div>
+                        <div className="modal-footerHab">
                             <button
                                 type="submit"
                                 className="waves-effect waves-light btn"
@@ -1974,7 +1999,7 @@ const handleActCertificacion = async () => {
             <div className="modal-contentEdu">
                 <br/><h4 style={{ textAlign: 'center' }}>Agregar Certificación</h4><br/>
                 <form className="col s12" onSubmit={(e) => e.preventDefault()}>
-                    <div className="input-cert col s12">
+                    <div className="input-fieldEdu col s12">
                         <label htmlFor="nombre">Nombre de la Certificación</label>
                         <i className="material-icons prefix">card_membership</i>
                         <input
@@ -1986,7 +2011,7 @@ const handleActCertificacion = async () => {
                             required
                         />
                     </div>
-                    <div className="input-cert col s12">
+                    <div className="input-fieldEdu col s12">
                         <br/><label htmlFor="descripcion">Descripción</label>
                         <i className="material-icons prefix">description</i>
                         <input
@@ -1998,7 +2023,7 @@ const handleActCertificacion = async () => {
                             required
                         />
                     </div>
-                    <div className="input-cert col s12">
+                    <div className="input-fieldEdu col s12">
                         <br/><label htmlFor="enlace">Enlace</label>
                         <i className="material-icons prefix">link</i>
                         <input
