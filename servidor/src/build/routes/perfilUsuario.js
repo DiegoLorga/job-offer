@@ -16,6 +16,11 @@ class perfilUsuarioRoutes {
         this.router.delete('/eliminarHabilidad/:id_habilidad', perfilUsuarioController_1.perfilUsuarioController.eliminarHabilidad);
         this.router.put("/actualizarEducacion/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarEducacion);
         this.router.get("/buscarEducacionUsuario/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarEduUsu);
+        this.router.post("/crearCertificado/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.agregarCertificacion);
+        this.router.delete('/eliminarCertificado/:id_certificado', perfilUsuarioController_1.perfilUsuarioController.eliminarCertificado);
+        this.router.get("/buscarCertificaciones/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarCertificaciones);
+        this.router.get("/buscarCertificacion/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarCertificacion);
+        this.router.put("/actualizarCertificado/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarCertificado);
     }
 }
 const administradorRoutes = new perfilUsuarioRoutes();

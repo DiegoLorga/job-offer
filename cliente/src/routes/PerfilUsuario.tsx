@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
 import '../estilos/estiloPerfilUsuario.css';
 import { Navigate, useNavigate } from "react-router-dom";
 import { AuthResponseError, perfilUsuario } from '../types/types';
-import { Estado, Ciudad, Usuario, Experiencia, Educacion, Habilidad, EducacionUsuario } from '../types/types';
+import { Estado, Ciudad, Usuario, Experiencia, Educacion, Habilidad, EducacionUsuario, Certificado } from '../types/types';
 
 
 export default function PerfilUsuarios() {
@@ -45,8 +45,9 @@ export default function PerfilUsuarios() {
     const [educacion, setEducacion] = useState<Educacion[]>([]);
     const [selectedEducacion, setSelectedEducacion] = useState<string>("");
     const [educacionUsuario, setEduUsu] = useState<EducacionUsuario | null>(null);
+    const  [certificado, setCertificado] = useState<Certificado | null>(null);
 
-
+    
     //agregar al cliente habilidades
     const handleAgregarHabilidad = () => {
         if (habilidad.trim()) {
@@ -303,18 +304,19 @@ export default function PerfilUsuarios() {
                             // Cerrar el modal después de mostrar el mensaje de éxito
                             const modalElement = document.getElementById('modal1');
                             if (modalElement) {
-                                const modalInstance = M.Modal.getInstance(modalElement);
-                                if (modalInstance) {
-                                    modalInstance.close();
-                                }
+                                M.Modal.getInstance(modalElement).close();
+                                document.body.style.overflow = '';
+                                document.body.style.position = '';
+                                document.body.style.top = '';
+                                //window.scrollTo(0, 0);
                             }
-                            // Opcional: Limpiar los campos del formulario
                             setSelectedNombre('');
                             setSelectedCorreo('');
                             setSelectedDireccion('');
                             setSelectedEstado('');
                             setSelectedCiudad('');
                             setErrorNombre("");
+                          
                         });
 
                     } else {
@@ -500,9 +502,7 @@ export default function PerfilUsuarios() {
                                 } else {
                                     console.error('La respuesta del servidor no es un array');
                                 }
-                            } else {
-                                console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
-                            }
+                            } 
                         }
                     }
 
@@ -522,10 +522,8 @@ export default function PerfilUsuarios() {
     //inicializar modal1
     useEffect(() => {
         const modalElement = document.getElementById('modal1');
-
-
+    
         if (modalElement) {
-            // Inicializar el modal solo si el elemento existe
             const modalInstance = M.Modal.init(modalElement, {
                 onOpenStart: () => {
                     setSelectedNombre(nombre);
@@ -535,20 +533,15 @@ export default function PerfilUsuarios() {
                     setSelectedCorreo(correo);
                 },
                 onCloseEnd: () => {
-                    // Opcional: resetear el modal cuando se cierra
                 }
             });
-
+    
             return () => {
-                // Destruir la instancia del modal para evitar fugas de memoria
-                if (modalInstance) {
-                    modalInstance.destroy();
-                }
+                modalInstance.destroy();
             };
         }
     }, [nombre, direccion, estado, ciudad]);
-
-
+    
 
     //para inicalizar modales
     useEffect(() => {
@@ -607,11 +600,30 @@ export default function PerfilUsuarios() {
             }
         }
 
+        // Inicializar el modal de certificaciones
+        const modalElement4 = document.getElementById('modalCert');
+        let modalInstance4 = modalElement4 ? M.Modal.init(modalElement4) : null;
+        if (modalInstance4) {
+            modalInstance4.options.onOpenStart = () => {
+                setCertificado(null);
+            }
+        }
+
+        // Inicializar el modal de certificaciones actualizar
+        const modalElement5 = document.getElementById('modalCertAct');
+        let modalInstance5 = modalElement5 ? M.Modal.init(modalElement5) : null;
+        if (modalInstance5) {
+            modalInstance5.options.onOpenStart = () => {
+                
+            }
+        }
+
         // Cleanup function
         return () => {
             if (modalInstance1) modalInstance1.destroy();
             if (modalInstance2) modalInstance2.destroy();
             if (modalInstance3) modalInstance3.destroy();
+            if (modalInstance4) modalInstance4.destroy();
         };
     }, []);
 
@@ -895,7 +907,7 @@ export default function PerfilUsuarios() {
                         },
                         body: JSON.stringify({
                             empresa,
-                            puesto,
+                             puesto,
                             descripcion,
                         }),
                     });
@@ -997,7 +1009,7 @@ export default function PerfilUsuarios() {
                             text: 'Educacion actualizada correctamente',
                         });
                         // Cierra el modal si es necesario
-                        const modal = document.querySelector('#modalExp');
+                        const modal = document.querySelector('#modalEdu');
                         if (modal) {
                             M.Modal.getInstance(modal).close();
                         }
@@ -1021,6 +1033,305 @@ export default function PerfilUsuarios() {
         }
     };
 
+    //obtener los datos del formulario paracrear una certificacion
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (certificado) {
+            setCertificado({
+                ...certificado,
+                [e.target.id]: e.target.value,
+            });
+        } else {
+            setCertificado({
+                _id: '',
+                nombre: '',
+                descripcion: '',
+                enlace: '',
+                [e.target.id]: e.target.value,
+            } as Certificado);
+        }
+    };
+
+   // Agregar una certificación
+const handleSubmitCertificacion = async () => {
+    if (!certificado || !certificado.nombre || !certificado.descripcion || !certificado.enlace) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Todos los campos son requeridos',
+            text: 'Por favor, completa todos los campos antes de enviar.',
+        });
+        return;
+    }
+
+    // Mensaje de confirmación antes de agregar
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Deseas agregar esta certificación?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, agregar',
+        cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const storedUser2 = localStorage.getItem('usuario');
+                if (storedUser2) {
+                    const usuario = JSON.parse(storedUser2);
+                    const response = await fetch(`${API_URL}/perfilUsuario/crearCertificado/${usuario.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(certificado),
+                    });
+
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Certificación agregada exitosamente',
+                            showConfirmButton: true,
+                        });
+                        setCertificado(null); // Limpiar el estado después de enviar
+                        
+                        // Cierra el modal si es necesario
+                        const modal = document.querySelector('#modalCert');
+                        if (modal) {
+                            const container = document.getElementById('certificacionesContainer');
+                        if (container) {
+                            container.style.display = 'none'; // Ocultar el contenedor
+                        }
+                            M.Modal.getInstance(modal).close();
+                        }
+                    } else {
+                        const data = await response.json();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al agregar certificación',
+                            text: data.message || 'Revise que los campos que ingresó sean correctos e inténtelo nuevamente.',
+                        });
+                    }
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de red',
+                    text: 'No se pudo conectar al servidor. Por favor, inténtalo de nuevo.',
+                });
+            }
+        }
+    });
+};
+
+    async function enlistarCertificaciones() {
+        try {
+            const storedUser2 = localStorage.getItem('usuario');
+            if (storedUser2) {
+                const usuario = JSON.parse(storedUser2);
+    
+                const response = await fetch(`${API_URL}/perfilUsuario/buscarCertificaciones/${usuario.id}`);
+                
+                if (!response.ok) {
+                    throw new Error('Error al buscar certificaciones');
+                }
+    
+                const certificaciones: Certificado[] = await response.json();
+    
+                const container = document.getElementById('certificacionesContainer');
+    
+                if (container) { // Verifica que el contenedor no sea null
+                    container.innerHTML = ''; // Limpiar contenedor
+                    if (certificaciones.length > 0) {
+                        certificaciones.forEach((cert: Certificado) => { // Usa la interfaz Certificacion
+                            const certElement = document.createElement('div');
+                            certElement.className = 'certificacion';
+                            certElement.innerHTML = `
+                            <div>
+                                <h5>${cert.nombre}</h5>
+                                <div class="cert-buttons">
+                                <a class="btn-floating waves-effect waves-light btn-add right edit-cert-btn">
+                                <i class="material-icons">edit</i>
+                                </a>
+                                <a class="btn-floating waves-effect waves-light btn-deleteCert right btn-add" data-id="${cert._id}">
+                                <i class="material-icons">delete</i>
+                                </a>
+                                </div>
+                            </div>
+                            
+                            <p>${cert.descripcion}</p>
+                            <a href="${cert.enlace}" target="_blank">Ver Enlace</a>
+                        `; 
+                            
+                            container.appendChild(certElement);
+                            const editButton = certElement.querySelector('.edit-cert-btn');
+                            if (editButton) {
+                                editButton.addEventListener('click', () => openEditModal(cert));
+                            }
+
+                            container.appendChild(certElement);
+                            const deleteButton = certElement.querySelector('.btn-deleteCert');
+                            if (deleteButton) {
+                                deleteButton.addEventListener('click', () =>  handleDeleteCertificacion(cert._id));
+                            }
+                        });
+    
+                        // Agregar botón para ocultar la lista
+                        const ocultarBtn = document.createElement('button');
+                        ocultarBtn.textContent = 'Ocultar Certificaciones';
+                        ocultarBtn.className = 'btn ocultar-certificaciones';
+                        ocultarBtn.onclick = () => {
+                            container.style.display = 'none';
+                        };
+
+                        container.appendChild(ocultarBtn);
+    
+                        container.style.display = 'block'; // Mostrar el contenedor
+                    } else {
+                        container.innerHTML = '<p>No se encontraron certificaciones.</p>';
+                        container.style.display = 'block'; // Mostrar el contenedor
+                    }
+                } else {
+                    console.error('El contenedor de certificaciones no se encontró en el DOM.');
+                }
+            }
+        } catch (error) {
+            console.error("Error al enlistar certificaciones:", error);
+        }
+    }
+    
+    //para eliminar certificaciones 
+    const handleDeleteCertificacion = async (idCertificado: string) => {
+        // Mostrar una alerta de confirmación antes de eliminar
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¿Deseas eliminar esta certificación?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                const response = await fetch(`${API_URL}/perfilUsuario/eliminarCertificado/${idCertificado}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+    
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Certificación eliminada exitosamente',
+                        showConfirmButton: true,
+                    });
+                    enlistarCertificaciones();
+                } else {
+                    const data = await response.json();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al eliminar certificación',
+                        text: data.message || 'Revise que los campos sean correctos e inténtelo nuevamente.',
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de red',
+                    text: 'No se pudo conectar al servidor. Por favor, inténtalo de nuevo.',
+                });
+            }
+        }
+    };
+
+    // ver certificaciones
+    const verCertificacionesBtn = document.getElementById('verCertificaciones');
+    if (verCertificacionesBtn) {
+        verCertificacionesBtn.addEventListener('click', enlistarCertificaciones);
+    } 
+    function openEditModal(cert: Certificado) {
+        setCertificado(cert);
+
+        const modalElement = document.getElementById('modalCertAct');
+        if (modalElement) {
+            const modalInstance = M.Modal.getInstance(modalElement);
+            if (modalInstance) {
+                modalInstance.open(); // Abre el modal
+            }
+        }
+    }
+
+  // Actualizar una certificación
+const handleActCertificacion = async () => {
+    if (!certificado || !certificado.nombre || !certificado.descripcion || !certificado.enlace) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Todos los campos son requeridos',
+            text: 'Por favor, completa todos los campos antes de enviar.',
+        });
+        return;
+    }
+
+    // Mensaje de confirmación antes de actualizar
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¿Deseas actualizar esta certificación?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, actualizar',
+        cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                const storedUser2 = localStorage.getItem('usuario');
+                if (storedUser2) {
+                    const usuario = JSON.parse(storedUser2);
+                    const response = await fetch(`${API_URL}/perfilUsuario/actualizarCertificado/${usuario.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(certificado),
+                    });
+
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Certificación actualizada exitosamente',
+                            showConfirmButton: true,
+                        });
+                        const modal = document.querySelector('#modalCertAct');
+                        if (modal) {
+                            enlistarCertificaciones();
+                            M.Modal.getInstance(modal).close();
+                        }
+                    } else {
+                        const data = await response.json();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error al actualizar certificación',
+                            text: data.message || 'Revise que los campos que ingresó sean correctos e inténtelo nuevamente.',
+                        });
+                    }
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de red',
+                    text: 'No se pudo conectar al servidor. Por favor, inténtalo de nuevo.',
+                });
+            }
+        }
+    });
+};
+
+    
+    
 
     return (
         <DefaultLayout showNav={true}>
@@ -1033,6 +1344,8 @@ export default function PerfilUsuarios() {
             </div>
 
             {/* para perfil  */}
+
+
             <div id="perfil" className="container2">
                 <br /><br />
 
@@ -1188,7 +1501,7 @@ export default function PerfilUsuarios() {
             </div>
 
 
-            {/*modal de informacion  */}
+            {/* informacion  */}
             <div id="info" className="containerinfo">
                 <h2>Información Adicional</h2><br />
                 <div className="card">
@@ -1262,13 +1575,27 @@ export default function PerfilUsuarios() {
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Cursos y certificaciones</span>
-                        <a className="btn-floating btn-medium waves-effect waves-light right btn-add">
+                        <a
+                            className=" btn-floating waves-effect waves-light btn-add right modal-trigger  "
+                            data-target="modalCert"
+                            style={{ display: 'flex', alignItems: 'center' }}>
                             <i className="material-icons">add</i>
                         </a>
+                        <button
+                            className="btn waves-effect waves-light right"
+                            style={{ marginRight: '30px' }}
+                            onClick={enlistarCertificaciones}
+                        >
+                            Ver cursos
+                            <i className="material-icons right">visibility</i>
+                        </button>
                         <p>Cursos adicionales o certificados que respalden sus conocimientos.</p><br />
+
+                        <div id="certificacionesContainer" className="certificaciones-container">
+                            {/* Aquí se inyectarán las certificaciones */}
+                        </div>
                     </div>
                 </div>
-
 
         {/* Modal para experiencia */}
                 <div id="modalExp" className="modal">
@@ -1330,19 +1657,18 @@ export default function PerfilUsuarios() {
                                 >
                                     Cerrar
                                 </a>
-                            </div>
+                            </div><br />
                         </form>
                     </div>
                 </div>
 
-
-
+        {/* Modal para habilidades */}
                 <div id="modalHab" className="modal">
                     <div className="modal-contentperfil">
-                        <h4 style={{ textAlign: 'center' }}>Habilidades</h4>
+                    <br /><h4 style={{ textAlign: 'center' }}>Habilidades</h4><br />
                         <form className="col s12" onSubmit={(e) => e.preventDefault()}>
-                            <div className="input-fieldModal col s12">
-                                <i className="material-icons prefix">format_list_bulleted</i>
+                            <div className="input-fieldHab col s12">
+                            <label htmlFor="habilidad">Habilidad</label>
                                 <input
                                     id="habilidad"
                                     type="text"
@@ -1351,36 +1677,20 @@ export default function PerfilUsuarios() {
                                     onChange={(e) => setHabilidad(e.target.value)}
                                     required
                                 />
-                                <label htmlFor="habilidad">Habilidad</label>
+                                <i className="material-icons prefix">format_list_bulleted</i>
                             </div>
 
                             <div className="modal-footer">
                                 <button
                                     type="button"
                                     className="btn"
-                                    style={{ marginRight: '15px' }}
+                                    style={{ marginRight: '35px' }}
                                     onClick={handleAgregarHabilidad}
                                 >
                                     Agregar
                                     <i className="material-icons right">add</i>
                                 </button>
-                                <button
-                                    type="button"
-                                    className="btn"
-                                    style={{ marginRight: '15px' }}
-                                    onClick={handleEnviarHabilidades}
-                                >
-                                    Enviar
-                                    <i className="material-icons right">send</i>
-                                </button>
-                                <a
-                                    href="#!"
-                                    className="modal-close btn"
-                                    style={{ marginRight: '30px' }}
-                                    onClick={handleCloseHab}
-                                >
-                                    Cerrar
-                                </a>
+                                
                             </div>
                         </form>
 
@@ -1398,21 +1708,36 @@ export default function PerfilUsuarios() {
                                 </div>
                             ))}
                         </div>
-
+                        <div className="modal-footerHab"><br />
+                                <button
+                                    type="button"
+                                    className="btn"
+                                    style={{ marginRight: '30px' }}
+                                    onClick={handleEnviarHabilidades}
+                                >
+                                    Enviar
+                                    <i className="material-icons right">send</i>
+                                </button>
+                                <a
+                                    href="#!"
+                                    className="modal-close btn"
+                                    style={{ marginRight: '30px' }}
+                                    onClick={handleCloseHab}
+                                >
+                                    Cerrar
+                                </a>
+                        </div><br />
 
                     </div>
                 </div>
-
-
 
                 {/* Modal para Educacion */}
                 <div id="modalEdu" className="modal">
                     <div className="modal-contentEdu">
                         <br /><h4 style={{ textAlign: 'center' }}>Último nivel de estudios cursado</h4><br />
                         <form className="col s12" onSubmit={actualizarEdu}>
-                            <div className="input-fieldEdu col s12">
+                            <div className="input-fieldEdu2 col s12">
                                 <label htmlFor="nivel" className={educacionUsuario?.nivel ? 'active' : ''}>Nivel</label>
-                                <i className="material-icons prefix">school</i>
                                 <select
                                     id="nivel"
                                     value={selectedEducacion}
@@ -1431,10 +1756,11 @@ export default function PerfilUsuarios() {
                                         </option>
                                     ))}
                                 </select>
+                                <i className="material-icons prefix">school</i>
                             </div>
                             
                             <div className="input-fieldEdu col s12">
-                                <br /><label htmlFor="institucion" className={educacionUsuario?.institucion ? 'active' : ''}>Institución</label>
+                                <label htmlFor="institucion" className={educacionUsuario?.institucion ? 'active' : ''}>Institución</label>
                                 <i className="material-icons prefix">location_city</i>
                                 <input
                                     id="institucion"
@@ -1480,8 +1806,135 @@ export default function PerfilUsuarios() {
                     </div>
                 </div>
 
+       {/* Modal para Agregar Certificación */}
+       <div id="modalCert" className="modal">
+            <div className="modal-contentEdu">
+                <br/><h4 style={{ textAlign: 'center' }}>Agregar Certificación</h4><br/>
+                <form className="col s12" onSubmit={(e) => e.preventDefault()}>
+                    <div className="input-cert col s12">
+                        <label htmlFor="nombre">Nombre de la Certificación</label>
+                        <i className="material-icons prefix">card_membership</i>
+                        <input
+                            id="nombre"
+                            type="text"
+                            className="validate"
+                            value={certificado?.nombre || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-cert col s12">
+                        <br/><label htmlFor="descripcion">Descripción</label>
+                        <i className="material-icons prefix">description</i>
+                        <input
+                            id="descripcion"
+                            type="text"
+                            className="validate"
+                            value={certificado?.descripcion || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-cert col s12">
+                        <br/><label htmlFor="enlace">Enlace</label>
+                        <i className="material-icons prefix">link</i>
+                        <input
+                            id="enlace"
+                            type="url"
+                            className="validate"
+                            value={certificado?.enlace || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                </form>
 
+                <br/><div className="modal-footerHab">
+                    <button
+                        type="button"
+                        className="btn"
+                        style={{ marginRight: '30px' }}
+                        onClick={handleSubmitCertificacion}
+                    >
+                        Agregar
+                        <i className="material-icons right">add</i>
+                    </button>
+                    <a
+                        href="#!"
+                        className="modal-close btn"
+                    >
+                        Cerrar
+                        <i className="material-icons right">close</i>
+                    </a>
+                </div><br/>
             </div>
+        </div>
+
+ {/* Modal para actualizar Certificación */}
+ <div id="modalCertAct" className="modal">
+            <div className="modal-contentEdu">
+                <br/><h4 style={{ textAlign: 'center' }}>Actualizar Certificación</h4><br/>
+                <form className="col s12" onSubmit={(e) => e.preventDefault()}>
+                    <div className="input-cert col s12">
+                        <label htmlFor="nombre">Nombre de la Certificación</label>
+                        <i className="material-icons prefix">card_membership</i>
+                        <input
+                            id="nombre"
+                            type="text"
+                            className="validate"
+                            value={certificado?.nombre || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-cert col s12">
+                        <br/><label htmlFor="descripcion">Descripción</label>
+                        <i className="material-icons prefix">description</i>
+                        <input
+                            id="descripcion"
+                            type="text"
+                            className="validate"
+                            value={certificado?.descripcion || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-cert col s12">
+                        <br/><label htmlFor="enlace">Enlace</label>
+                        <i className="material-icons prefix">link</i>
+                        <input
+                            id="enlace"
+                            type="url"
+                            className="validate"
+                            value={certificado?.enlace || ''}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                </form>
+
+                <br/><div className="modal-footerHab">
+                    <button
+                        type="button"
+                        className="btn"
+                        style={{ marginRight: '30px' }}
+                        onClick={handleActCertificacion}
+                    >
+                        Agregar
+                        <i className="material-icons right">add</i>
+                    </button>
+                    <a
+                        href="#!"
+                        className="modal-close btn"
+                    >
+                        Cerrar
+                        <i className="material-icons right">close</i>
+                    </a>
+                </div><br/>
+            </div>
+        </div>  
+    
+    </div>
 
 
         </DefaultLayout>

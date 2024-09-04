@@ -7,10 +7,7 @@
 }
 
 
-body {
-  padding: 0;
-  margin: 0;
-}
+
 
 
 
@@ -379,7 +376,6 @@ input[readonly] {
 }
 
 .card:hover {
-  transform: translateY(-5px);
   /* Movimiento hacia arriba */
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.45);
   /* Sombra más intensa al pasar el mouse */

@@ -161,3 +161,10 @@ export interface EducacionUsuario {
     institucion: string;
     carrera: string;
 }
+
+export interface Certificado {
+    _id: string;
+    nombre: string;
+    descripcion: string;
+    enlace: string;
+}

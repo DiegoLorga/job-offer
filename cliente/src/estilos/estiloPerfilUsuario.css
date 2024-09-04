@@ -87,25 +87,6 @@
   background-color:#666666; /* Gris más oscuro al pasar el mouse */
 }
 
-.btn-add {
-  background-color: #bdbdbd; /* Gris */
-    border-radius: 50%; /* Redondeado */
-    color: white;
-  margin-right: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.btn-add-text {
-  margin-top: 0;
-  font-size: 14px;
-  margin-right: 8px;
-  color: #007bff;
-  cursor: pointer;
-}
-
-.btn-add:hover {
-  background-color:#666666; /* Gris más oscuro al pasar el mouse */
-}
 
 /* Ajustar el modal en general usando ID */
 #modal1 {
@@ -251,3 +232,108 @@
   max-width: 450px; /* Establece el ancho del contenido del modal */
   margin: 0 auto; /* Centra el contenido del modal */
 }
+
+.input-fieldEdu2 i {
+  position: absolute;
+  left: 63px; 
+  top: 39%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.input-fieldHab i {
+  position: absolute;
+  left: 112px; 
+  top: 43%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.modal-footerHab {
+  display: flex;
+  justify-content: center; /* Centra los botones horizontalmente */
+  align-items: center; /* Opcional: centra los botones verticalmente */
+  gap: 10px; /* Opcional: espacio entre los botones */
+}
+
+#modalCert {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 650px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.input-cert i {
+  position: absolute;
+  left: -30px; /* Ajusta la posición horizontal del ícono */
+  top: 63%;
+  transform: translateY(-50%);
+  color: #5f5757;
+}
+
+.input-cert {
+  position: relative;
+}
+
+.input-cert input {
+  max-width: 450px; /* Limita el ancho de los campos de entrada */
+  width: 100%; /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+}
+
+.modal-footercert {
+  padding: 15px; /* Ajusta el relleno según tus necesidades */
+  justify-content: center; 
+  align-items: center;
+}
+
+/* certificaciones.css */
+
+.certificaciones-container {
+  display: none; /* Oculta el contenedor por defecto */
+  margin-top: 20px;
+}
+
+.certificacion {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+}
+
+.certificacion:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15 );
+}
+
+.certificacion h5 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.certificacion a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.ocultar-certificaciones {
+  margin-top: 20px;
+}
+
+/*.ocultar-certificaciones {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.ocultar-certificaciones:hover {
+  background-color: #d32f2f;
+} */
+
