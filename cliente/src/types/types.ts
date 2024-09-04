@@ -1,3 +1,4 @@
+
 export interface AuthResponse {
     body: {
         user: User;
@@ -160,4 +161,21 @@ export interface EducacionUsuario {
     nivel: string;
     institucion: string;
     carrera: string;
+}
+
+export interface Idioma{
+    _id: string;
+    idioma: string;
+}
+
+export interface Nivel{
+    _id: string;
+    nivel: string
+}
+
+export interface UsuarioIdioma{
+    _id:string;
+    id_usuario: string;
+    id_idioma: string;
+    id_nivel: string;
 }

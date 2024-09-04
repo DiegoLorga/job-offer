@@ -4,7 +4,9 @@ import { jsonResponse } from '../lib/jsonResponse';
 import PerfilUsuario from '../models/perfilUsuario.model';
 import Habilidad from '../models/habilidades.model';
 import EducacionUsuario from '../models/educacionUsuario.model';
-
+import Idioma from '../models/idioma.model';
+import idiomaNivel from '../models/idiomaNivel.model';
+import UsuarioIdioma from '../models/idiomaUsuario.model';
 
 class PerfilUsuarioController {
 
@@ -198,7 +200,7 @@ class PerfilUsuarioController {
             }
         }
     }
-    
+
 
 
     public async eliminarHabilidad(req: Request, res: Response): Promise<void> {
@@ -248,7 +250,7 @@ class PerfilUsuarioController {
             }));
         }
     }
-    
+
     public async buscarEduUsu(req: Request, res: Response): Promise<void> {
         const { id_usuario } = req.params;
 
@@ -268,7 +270,7 @@ class PerfilUsuarioController {
                 nivel: eduUsu.nivel,
                 institucion: eduUsu.institucion,
                 carrera: eduUsu.carrera
-                
+
             });
         } catch (error: any) {
             res.status(500).json(jsonResponse(500, {
@@ -276,6 +278,146 @@ class PerfilUsuarioController {
             }));
         }
     }
+
+    public async createIdioma(req: Request, res: Response): Promise<void> {
+        console.log("Creado un idioma");
+        const { idioma } = req.body;
+        try {
+            const nuevoIdioma = new Idioma({
+                idioma
+            })
+            const IdiomaGuardado = await nuevoIdioma.save();
+
+            res.json({
+                nombre: IdiomaGuardado.idioma
+            })
+        } catch {
+            res.status(400).json(jsonResponse(400, {
+                error: "No se pudo crear la red social"
+
+            })
+            )
+
+        }
+    }
+
+    public async listIdiomas(req: Request, res: Response): Promise<void> {
+        console.log("Listando idiomas");
+        try {
+            const idiomas = await Idioma.find();
+            res.json(idiomas);
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un error al obtener los idiomas"
+            }))
+        }
+    }
+
+    public async createNivelIdioma(req: Request, res: Response): Promise<void> {
+        console.log("Creando un enlace a una red social");
+        const { nivel } = req.body;
+        try {
+            const nuevoNivelIdioma = new idiomaNivel({
+                nivel
+            });
+            const NivelIdiomaGuardado = await nuevoNivelIdioma.save();
+            res.json({
+                nivel: NivelIdiomaGuardado.nivel,
+            });
+        } catch {
+            res.status(400).json(jsonResponse(400, {
+                error: "No se pudo crear el enlace"
+            }));
+        }
+    }
+
+    public async listNivelIdiomas(req: Request, res: Response): Promise<void> {
+        console.log("Listando niveles de idioma");
+        try {
+            const niveles = await idiomaNivel.find();
+            res.json(niveles);
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, {
+                error: "Hubo un error al obtener los niveles de idioma"
+            }))
+        }
+    }
+
+    public async agregarIdiomasNiveles(req: Request, res: Response): Promise<void> {
+        const idiomasNiveles = req.body; // Array de idiomas con niveles a agregar
+        const { id_usuario } = req.params; // ID del usuario
     
+        try {
+            if (!Array.isArray(idiomasNiveles)) {
+                res.status(400).json({ message: "El cuerpo de la solicitud debe ser un array de idiomas y niveles" });
+                return;
+            }
+    
+            // Verificar que cada entrada tenga un idioma y nivel válido
+            for (const item of idiomasNiveles) {
+                if (!item.id_idioma || !item.id_nivel) {
+                    res.status(400).json({ message: "Cada entrada debe tener un id_idioma y un id_nivel válidos" });
+                    return;
+                }
+            }
+    
+            // Filtrar las combinaciones de idioma y nivel que ya existen para el usuario
+            const combinacionesExistentes = await UsuarioIdioma.find({
+                id_usuario,
+                id_idioma: { $in: idiomasNiveles.map((item) => item.id_idioma) }
+            }).exec();
+    
+            const combinacionesExistentesIds = combinacionesExistentes.map(item => item.id_idioma.toString() + item.id_nivel.toString());
+    
+            // Filtrar las nuevas combinaciones que no están en la base de datos
+            const nuevasCombinaciones = idiomasNiveles.filter(item => 
+                !combinacionesExistentesIds.includes(item.id_idioma.toString() + item.id_nivel.toString())
+            );
+    
+            if (nuevasCombinaciones.length > 0) {
+                // Crear nuevas combinaciones
+                const nuevasRelaciones = await UsuarioIdioma.insertMany(
+                    nuevasCombinaciones.map(item => ({
+                        id_usuario,
+                        id_idioma: item.id_idioma,
+                        id_nivel: item.id_nivel
+                    }))
+                );
+    
+                // Actualizar el campo "idioma" en el modelo de usuario
+                await PerfilUsuario.findByIdAndUpdate(id_usuario, { idioma: true });
+    
+                res.status(201).json({ message: "Idiomas y niveles agregados exitosamente", datos: nuevasRelaciones });
+            } else {
+                res.status(200).json({ message: "No hay nuevos idiomas o niveles para agregar" });
+            }
+        } catch (error) {
+            console.error('Error al agregar idiomas y niveles:', error);
+            res.status(500).json({ message: "Error al agregar idiomas y niveles", error });
+        }
+    }
+
+    public async eliminarUsuarioIdioma(req: Request, res: Response): Promise<void> {
+        try {
+            const usuarioIdiomaId = req.params.id;
+
+            // Verifica si es un UUID o ObjectId
+            const resultado = await UsuarioIdioma.findByIdAndDelete(usuarioIdiomaId);
+
+            if (!resultado) {
+                res.status(404).json({ message: 'Idioma no encontrado' });
+            }
+
+            res.status(200).json({ message: 'Idioma eliminado correctamente' });
+        } catch (error) {
+            console.error('Error al eliminar idioma:', error);
+            res.status(500).json({ message: 'Error al eliminar idioma' });
+        }
+    };
+
+    
+
+
+
 }
 export const perfilUsuarioController = new PerfilUsuarioController();

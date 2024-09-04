@@ -55,7 +55,6 @@ export default function Navigation() {
             <nav className="nav-extended">
                 <div className="nav-wrapper">
                     <a href="#" className="brand-logo">Logo</a>
-                    <a href="#" data-target="mobile-demo" className="sidenav-trigger"><i className="material-icons">menu</i></a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li>
                             <a className="dropdown-trigger btn" href="#!" data-target="dropdown1">
