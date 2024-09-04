@@ -3,47 +3,62 @@
 
 /* Custom modal styles */
 .modal-contentperfil {
-    max-width: 450px; /* Establece el ancho del contenido del modal */
-    margin: 0 auto; /* Centra el contenido del modal */
-  }
-  
-  .input-fieldperfil input {
-    max-width: 500px; /* Limita el ancho de los campos de entrada */
-    width: 100%; /* Asegura que respondan al diseño responsive */
-    margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
-  }
-  
-  .custom-modal {
-    width: 10% !important; /* Ajusta el valor según lo necesites */
-  }
-
-  .modal-contentperfil .input-fieldperfil select {
-    max-width: 300px; /* Ajusta el ancho máximo del select según sea necesario */
+  max-width: 450px;
+  /* Establece el ancho del contenido del modal */
+  margin: 0 auto;
+  /* Centra el contenido del modal */
 }
 
-.input-fieldperfil2  {
-  max-width: 300px; /* Limita el ancho de los campos de entrada */
-  width: 100%; /* Asegura que respondan al diseño responsive */
+.input-fieldperfil input {
+  max-width: 500px;
+  /* Limita el ancho de los campos de entrada */
+  width: 100%;
+  /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px;
+  /* Añade un margen debajo de cada campo de entrada */
+}
+
+.custom-modal {
+  width: 10% !important;
+  /* Ajusta el valor según lo necesites */
+}
+
+.modal-contentperfil .input-fieldperfil select {
+  max-width: 300px;
+  /* Ajusta el ancho máximo del select según sea necesario */
+}
+
+.input-fieldperfil2 {
+  max-width: 300px;
+  /* Limita el ancho de los campos de entrada */
+  width: 100%;
+  /* Asegura que respondan al diseño responsive */
 }
 
 .input-fieldperfil2 select {
-  font-family: 'Roboto', sans-serif; /* Reemplaza 'Roboto' con tu tipografía */
-  font-size: 15px; /* Ajusta el tamaño de la fuente si es necesario */
+  font-family: 'Roboto', sans-serif;
+  /* Reemplaza 'Roboto' con tu tipografía */
+  font-size: 15px;
+  /* Ajusta el tamaño de la fuente si es necesario */
   color: rgb(59, 59, 59);
 }
 
 .input-fieldperfil2 input.validate:not(.error) {
-  border-bottom: 1px solid #9e9e9e; /* Gris para campos válidos */
+  border-bottom: 1px solid #9e9e9e;
+  /* Gris para campos válidos */
 }
 
 .containerinfo {
-  max-width: 1000px; /* Puedes ajustar este valor según lo necesites */
+  max-width: 1000px;
+  /* Puedes ajustar este valor según lo necesites */
   margin: 0 auto;
-  padding: 20px; /* Espacio en las orillas */
+  padding: 20px;
+  /* Espacio en las orillas */
 }
 
 .card {
-  margin-bottom: 40px; /* Espacio entre las tarjetas */
+  margin-bottom: 40px;
+  /* Espacio entre las tarjetas */
 }
 
 .containerinfo {
@@ -58,19 +73,24 @@
 /* BOTONES ESTILOS AAAAAH */
 .btn-upload {
   margin-top: 0;
-  background-color:  #757575; /* Color del botón de subir */
+  background-color: #757575;
+  /* Color del botón de subir */
   color: white;
-  transition: background-color 0.3s ease; /* Transición suave para el cambio de color */
+  transition: background-color 0.3s ease;
+  /* Transición suave para el cambio de color */
 }
 
 .btn-upload:hover {
-  background-color: #413e3e; /* Azul más oscuro al pasar el mouse */
+  background-color: #413e3e;
+  /* Azul más oscuro al pasar el mouse */
 }
 
 .btn-add {
-  background-color: #bdbdbd; /* Gris */
-    border-radius: 50%; /* Redondeado */
-    color: white;
+  background-color: #bdbdbd;
+  /* Gris */
+  border-radius: 50%;
+  /* Redondeado */
+  color: white;
   margin-right: 8px;
   transition: background-color 0.3s ease;
 }
@@ -84,48 +104,82 @@
 }
 
 .btn-add:hover {
-  background-color:#666666; /* Gris más oscuro al pasar el mouse */
+  background-color: #666666;
+  /* Gris más oscuro al pasar el mouse */
 }
 
+.btn-add {
+  background-color: #bdbdbd;
+  /* Gris */
+  border-radius: 50%;
+  /* Redondeado */
+  color: white;
+  margin-right: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-text {
+  margin-top: 0;
+  font-size: 14px;
+  margin-right: 8px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.btn-add:hover {
+  background-color: #666666;
+  /* Gris más oscuro al pasar el mouse */
+}
 
 /* Ajustar el modal en general usando ID */
 #modal1 {
-  width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 650px; /* Ancho máximo del modal */
-  max-height: 500px; /* Altura fija del modal */
-  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 650px;
+  /* Ancho máximo del modal */
+  max-height: 500px;
+  /* Altura fija del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 /* Ajustar el contenido del footer del modal usando ID */
 .modal-footer {
   margin-left: 45px;
-  padding: 10px 20px; /* Ajusta el relleno según tus necesidades */
+  padding: 10px 20px;
+  /* Ajusta el relleno según tus necesidades */
 }
 
 /* Ajustar el contenido del modal usando ID */
 #modal1 .modal-contentperfil {
-  padding: 20px; /* Ajusta el relleno según tus necesidades */
+  padding: 20px;
+  /* Ajusta el relleno según tus necesidades */
 }
 
 #modalExp {
-  width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 600px; /* Ancho máximo del modal */
-  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 600px;
+  /* Ancho máximo del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 .input-fieldperfil2 select {
-  padding-left: 60px; /* Asegúrate de que el texto no se superponga con el ícono */
+  padding-left: 60px;
+  /* Asegúrate de que el texto no se superponga con el ícono */
 }
 
 /* Asegúrate de que los íconos y los campos de entrada estén alineados */
 .input-fieldperfil {
   position: relative;
- 
+
 }
 
 .input-fieldperfil i {
   position: absolute;
-  left: -25px; /* Ajusta la posición horizontal del ícono */
+  left: -25px;
+  /* Ajusta la posición horizontal del ícono */
   top: 60%;
   transform: translateY(-50%);
   color: #5f5757;
@@ -133,26 +187,31 @@
 
 .input-fieldExp {
   position: relative;
- 
+
 }
 
 .input-fieldExp i {
   position: absolute;
-  left: -30px; /* Ajusta la posición horizontal del ícono */
+  left: -30px;
+  /* Ajusta la posición horizontal del ícono */
   top: 63%;
   transform: translateY(-50%);
   color: #5f5757;
 }
 
 .input-fieldExp input {
-  max-width: 500px; /* Limita el ancho de los campos de entrada */
-  width: 100%; /* Asegura que respondan al diseño responsive */
-  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+  max-width: 500px;
+  /* Limita el ancho de los campos de entrada */
+  width: 100%;
+  /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px;
+  /* Añade un margen debajo de cada campo de entrada */
 }
 
-#descrip  {
+#descrip {
   position: absolute;
-  left: -30px; /* Ajusta la posición horizontal del ícono */
+  left: -30px;
+  /* Ajusta la posición horizontal del ícono */
   top: 55%;
   transform: translateY(-50%);
   color: #5f5757;
@@ -162,12 +221,13 @@
 
 .input-fieldModal {
   position: relative;
- 
+
 }
 
 .input-fieldModal i {
   position: absolute;
-  left: -25px; /* Este también gg */
+  left: -25px;
+  /* Este también gg */
   top: 60%;
   transform: translateY(-50%);
   color: #5f5757;
@@ -175,15 +235,19 @@
 
 /* Este es para ajustar el tamaño del modal */
 #modalHab {
-  width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 750px; /* Ancho máximo del modal */
-  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 750px;
+  /* Ancho máximo del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 .habilidades-list {
   margin-top: 20px;
   flex-direction: column;
-  gap: 10px; /* Espacio entre los elementos */
+  gap: 10px;
+  /* Espacio entre los elementos */
 }
 
 .habilidad-item {
@@ -204,33 +268,79 @@
 }
 
 #modalEdu {
-  width: 100%; /* Cambia el valor según tus necesidades */
-  max-width: 650px; /* Ancho máximo del modal */
-  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 650px;
+  /* Ancho máximo del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
 }
 
 .input-fieldEdu {
   position: relative;
- 
+
 }
 
 .input-fieldEdu i {
   position: absolute;
-  left: -30px; /* Ajusta la posición horizontal del ícono */
+  left: -30px;
+  /* Ajusta la posición horizontal del ícono */
   top: 63%;
   transform: translateY(-50%);
   color: #5f5757;
 }
 
 .input-fieldEdu input {
-  max-width: 450px; /* Limita el ancho de los campos de entrada */
-  width: 100%; /* Asegura que respondan al diseño responsive */
-  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
+  max-width: 450px;
+  /* Limita el ancho de los campos de entrada */
+  width: 100%;
+  /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px;
+  /* Añade un margen debajo de cada campo de entrada */
 }
 
 .modal-contentEdu {
+  max-width: 450px;
+  /* Establece el ancho del contenido del modal */
+  margin: 20 auto;
+  /* Centra el contenido del modal */
+}
+
+.modal-contentIdi {
   max-width: 450px; /* Establece el ancho del contenido del modal */
-  margin: 0 auto; /* Centra el contenido del modal */
+  margin:  0 auto; /* Centra el contenido del modal */
+ 
+}
+#modalIdiomas {
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 650px;
+  /* Ancho máximo del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.select-container-wrapper {
+  display: flex; /* Utiliza flexbox para alinear los select en la misma fila */
+  justify-content: space-between; /* Distribuye el espacio entre los select */
+  align-items: center; /* Alinea los select verticalmente en el centro */
+}
+
+.select-container {
+  margin-right: 60px; /* Ajusta el margen derecho de cada select */
+}
+
+.info-title4 {
+  margin-bottom: 5px; /* Espacio debajo del título */
+  font-weight: bold;
+  color: #333;
+}
+
+.idiomas-list {
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 10px;
+  /* Espacio entre los elementos */
 }
 
 .input-fieldEdu2 i {
@@ -264,76 +374,62 @@
 
 .input-cert i {
   position: absolute;
-  left: -30px; /* Ajusta la posición horizontal del ícono */
+  left: -30px;
+  /* Ajusta la posición horizontal del ícono */
   top: 63%;
   transform: translateY(-50%);
   color: #5f5757;
 }
 
-.input-cert {
-  position: relative;
-}
-
-.input-cert input {
-  max-width: 450px; /* Limita el ancho de los campos de entrada */
-  width: 100%; /* Asegura que respondan al diseño responsive */
-  margin-bottom: 20px; /* Añade un margen debajo de cada campo de entrada */
-}
-
-.modal-footercert {
-  padding: 15px; /* Ajusta el relleno según tus necesidades */
-  justify-content: center; 
-  align-items: center;
-}
-
-/* certificaciones.css */
-
-.certificaciones-container {
-  display: none; /* Oculta el contenedor por defecto */
-  margin-top: 20px;
-}
-
-.certificacion {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
-  margin-top: 20px;
-}
-
-.certificacion:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15 );
-}
-
-.certificacion h5 {
-  margin: 0;
-  font-size: 1.2em;
-}
-
-.certificacion a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.ocultar-certificaciones {
-  margin-top: 20px;
-}
-
-/*.ocultar-certificaciones {
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: block;
+.input-fieldEdu input {
+  max-width: 450px;
+  /* Limita el ancho de los campos de entrada */
   width: 100%;
-  text-align: center;
+  /* Asegura que respondan al diseño responsive */
+  margin-bottom: 20px;
+  /* Añade un margen debajo de cada campo de entrada */
 }
 
-.ocultar-certificaciones:hover {
-  background-color: #d32f2f;
-} */
+.modal-contentEdu {
+  max-width: 450px;
+  /* Establece el ancho del contenido del modal */
+  margin: 20 auto;
+  /* Centra el contenido del modal */
+}
 
+.modal-contentIdi {
+  max-width: 450px; /* Establece el ancho del contenido del modal */
+  margin:  0 auto; /* Centra el contenido del modal */
+ 
+}
+#modalIdiomas {
+  width: 100%;
+  /* Cambia el valor según tus necesidades */
+  max-width: 650px;
+  /* Ancho máximo del modal */
+  overflow-y: auto;
+  /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.select-container-wrapper {
+  display: flex; /* Utiliza flexbox para alinear los select en la misma fila */
+  justify-content: space-between; /* Distribuye el espacio entre los select */
+  align-items: center; /* Alinea los select verticalmente en el centro */
+}
+
+.select-container {
+  margin-right: 60px; /* Ajusta el margen derecho de cada select */
+}
+
+.info-title4 {
+  margin-bottom: 5px; /* Espacio debajo del título */
+  font-weight: bold;
+  color: #333;
+}
+
+.idiomas-list {
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 10px;
+  /* Espacio entre los elementos */
+}

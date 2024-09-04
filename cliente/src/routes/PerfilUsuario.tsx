@@ -8,7 +8,7 @@ import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import Swal from 'sweetalert2';
 import '../estilos/estiloPerfilUsuario.css';
 import { Navigate, useNavigate } from "react-router-dom";
-import { AuthResponseError, perfilUsuario } from '../types/types';
+import { AuthResponseError, perfilUsuario, Idioma, Nivel, UsuarioIdioma } from '../types/types';
 import { Estado, Ciudad, Usuario, Experiencia, Educacion, Habilidad, EducacionUsuario, Certificado } from '../types/types';
 
 
@@ -36,6 +36,7 @@ export default function PerfilUsuarios() {
     const [errorNombre, setErrorNombre] = useState("");
     const auth = useAuth();
     const goTo = useNavigate();
+    const modalRefIdiomas = useRef<HTMLDivElement | null>(null); // Tipo explícito para TypeScript
     const [selectedFileDoc, setSelectedFileDoc] = useState<File | null>(null);
     const [habilidad, setHabilidad] = useState('');
     const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
@@ -48,8 +49,23 @@ export default function PerfilUsuarios() {
     const  [certificado, setCertificado] = useState<Certificado | null>(null);
 
     
+    const [idioma, setIdioma] = useState<Idioma[]>([]);
+    const [selectedIdioma, setSelectedIdioma] = useState<string>("");
+    const [nivel, setNivel] = useState<Nivel[]>([]);
+    const [selectedNivel, setSelectedNivel] = useState<string>("");
+    const [usuarioIdiomas, setUsuarioIdiomas] = useState<UsuarioIdioma[]>([]);
+    const [usuarioIdioma, setUsuarioIdioma] = useState('');
+
+    useEffect(() => {
+        if (selectedIdioma && selectedNivel) {
+            setUsuarioIdioma(`${selectedIdioma} - ${selectedNivel}`);
+        }
+    }, [selectedIdioma, selectedNivel]);
+
     //agregar al cliente habilidades
     const handleAgregarHabilidad = () => {
+        console.log("habilidades: ", habilidad);
+
         if (habilidad.trim()) {
             if (habilidades.length >= 5) {
                 Swal.fire('Error', 'Puedes agregar solo 5 habilidades', 'error');
@@ -75,6 +91,42 @@ export default function PerfilUsuarios() {
             }
         }
     };
+
+
+    const handleAgregarIdioma = () => {
+        console.log(selectedIdioma, selectedNivel);
+
+        if (selectedIdioma.trim() && selectedNivel.trim()) {
+            if (perfilUsuario) {
+                const nuevaUsuarioIdioma: UsuarioIdioma = {
+                    _id: crypto.randomUUID(),
+                    id_idioma: selectedIdioma,
+                    id_usuario: perfilUsuario._id,
+                    id_nivel: selectedNivel
+                };
+
+                // Verifica si ya existe un idioma con el mismo nombre
+                const idiomaExistente = usuarioIdiomas.find(
+                    (idioma) => idioma.id_idioma === selectedIdioma
+                );
+
+                if (idiomaExistente) {
+                    Swal.fire('Error', 'El idioma ya ha sido agregado. No puedes agregar el mismo idioma con diferentes niveles.', 'error');
+                    return; // Sal de la función para evitar agregar un idioma duplicado
+                }
+
+                // Agrega el nuevo idioma
+                setUsuarioIdiomas((prevIdiomas) => [...prevIdiomas, nuevaUsuarioIdioma]);
+
+            } else {
+                console.error('perfilUsuario es null, no se puede agregar el idioma');
+            }
+        } else {
+            console.error('El campo de idioma o nivel está vacío');
+            Swal.fire('Error', 'Por favor selecciona un idioma y un nivel', 'error');
+        }
+    };
+
 
     //para actualizar/agregar habilidades
     const handleEnviarHabilidades = async (e: React.FormEvent) => {
@@ -123,7 +175,7 @@ export default function PerfilUsuarios() {
                         if (response.ok) {
                             setCambios(true); // Actualizar el estado para reflejar cambios
                             console.log(data);
-                            
+
                             Swal.fire({
                                 title: "Éxito",
                                 text: "Habilidades agregadas correctamente",
@@ -353,7 +405,7 @@ export default function PerfilUsuarios() {
         return () => {
             M.FormSelect.getInstance(elems[0])?.destroy();
         };
-    }, [educacion]);
+    }, [educacion, idioma, nivel]);
 
     useEffect(() => {
         const dropdownElems = document.querySelectorAll('.dropdown-trigger');
@@ -472,17 +524,17 @@ export default function PerfilUsuarios() {
                         const data = await response.json() as perfilUsuario;
                         setFoto(data.foto);
                         setPerfilUsuario(data);
-                       // console.log("Datos del usuario en peerfil ", perfilUsuario);
-                        
-                        
+                        // console.log("Datos del usuario en peerfil ", perfilUsuario);
+
+
                         if (data.habilidades) {
                             const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
-                           // console.log('Datos recibidos:', habilidadesResponse);
+                            // console.log('Datos recibidos:', habilidadesResponse);
                             if (habilidadesResponse.ok) {
                                 setCambios(true); // Actualizar el estado para reflejar cambios
                                 // Extrae el array de habilidades
                                 const habilidadesData = await habilidadesResponse.json();
-                               // console.log("Habilidades: ", habilidadesData);
+                                // console.log("Habilidades: ", habilidadesData);
 
 
 
@@ -596,35 +648,58 @@ export default function PerfilUsuarios() {
         if (modalInstance3) {
             modalInstance3.options.onOpenStart = () => {
                 handleOpenEduModal()
-                
+
             }
         }
-
-        // Inicializar el modal de certificaciones
-        const modalElement4 = document.getElementById('modalCert');
-        let modalInstance4 = modalElement4 ? M.Modal.init(modalElement4) : null;
-        if (modalInstance4) {
-            modalInstance4.options.onOpenStart = () => {
-                setCertificado(null);
+        const fetchIdiomas = async () => {
+            try {
+                const response = await fetch(`${API_URL}/perfilUsuario/listIdiomas`);
+                if (response.ok) {
+                    const data = await response.json() as Idioma[];
+                    setIdioma(data)
+                    console.log('Idiomas:', data);
+                    if (data.length > 0) {
+                        setSelectedIdioma(data[0].idioma);
+                    }
+                }
+            } catch (error) {
+                console.error('Error al obtener los idiomas:', error);
             }
-        }
-
-        // Inicializar el modal de certificaciones actualizar
-        const modalElement5 = document.getElementById('modalCertAct');
-        let modalInstance5 = modalElement5 ? M.Modal.init(modalElement5) : null;
-        if (modalInstance5) {
-            modalInstance5.options.onOpenStart = () => {
-                
-            }
-        }
-
-        // Cleanup function
-        return () => {
-            if (modalInstance1) modalInstance1.destroy();
-            if (modalInstance2) modalInstance2.destroy();
-            if (modalInstance3) modalInstance3.destroy();
-            if (modalInstance4) modalInstance4.destroy();
         };
+
+        const fetchNiveles = async () => {
+            try {
+                const response = await fetch(`${API_URL}/perfilUsuario/listNivelIdiomas`);
+                if (response.ok) {
+                    const data = await response.json() as Nivel[];
+                    setNivel(data);
+                    console.log('Niveles:', data);
+                    if (data.length > 0) {
+                        setSelectedNivel(data[0].nivel)
+                    }
+                }
+            } catch (error) {
+                console.error('Error al obtener los niveles:', error);
+            }
+        };
+
+        if (modalRefIdiomas.current) {
+            const instance = M.Modal.init(modalRefIdiomas.current, {
+                onOpenStart: () => {
+                    fetchIdiomas();
+                    fetchNiveles();
+                },
+            });
+
+
+            // Cleanup function
+            return () => {
+                if (modalInstance1) modalInstance1.destroy();
+                if (modalInstance2) modalInstance2.destroy();
+                if (modalInstance3) modalInstance3.destroy();
+                instance && instance.destroy();
+            };
+        }
     }, []);
 
     async function fetchEducacionUsuario() {
@@ -657,7 +732,7 @@ export default function PerfilUsuarios() {
                 console.log("Datos de la educaciónnnnnnn: ", data);
                 if (data.length > 0) {
                     //setSelectedEducacion(educacionUsuario?.nivel || '');
-                    
+
                 }
             } else {
                 console.error('Error al obtener los datos de nivel:', response.statusText);
@@ -671,34 +746,34 @@ export default function PerfilUsuarios() {
         const storedUser2 = localStorage.getItem('usuario');
         if (storedUser2) {
             const usuario = JSON.parse(storedUser2);
-        try {
-            const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
-            
-            if (habilidadesResponse.ok) {
-                setCambios(true); // Actualizar el estado para reflejar cambios
-    
-                const habilidadesData = await habilidadesResponse.json();
-    
-                if (Array.isArray(habilidadesData)) {
-                    const habilidades1 = habilidadesData.map((hab: Habilidad) => ({
-                        _id: hab._id,
-                        descripcion: hab.descripcion,
-                        id_usuario: hab.id_usuario
-                    }));
-                    setHabilidades(habilidades1);
+            try {
+                const habilidadesResponse = await fetch(`${API_URL}/perfilUsuario/buscarHabilidades/${usuario.id}`);
+
+                if (habilidadesResponse.ok) {
+                    setCambios(true); // Actualizar el estado para reflejar cambios
+
+                    const habilidadesData = await habilidadesResponse.json();
+
+                    if (Array.isArray(habilidadesData)) {
+                        const habilidades1 = habilidadesData.map((hab: Habilidad) => ({
+                            _id: hab._id,
+                            descripcion: hab.descripcion,
+                            id_usuario: hab.id_usuario
+                        }));
+                        setHabilidades(habilidades1);
+                    } else {
+                        console.error('La respuesta del servidor no es un array');
+                    }
                 } else {
-                    console.error('La respuesta del servidor no es un array');
+                    console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
                 }
-            } else {
-                console.error('Error al obtener habilidades:', habilidadesResponse.statusText);
+            } catch (error) {
+                console.error('Error al realizar la solicitud:', error);
             }
-        } catch (error) {
-            console.error('Error al realizar la solicitud:', error);
-        }
 
         }
     }
-    
+
 
     //para obtener imágenes
     const storedUser = localStorage.getItem('usuario');
@@ -748,15 +823,15 @@ export default function PerfilUsuarios() {
                     return;
                 }
 
-            const usuario = JSON.parse(storedUser);
+                const usuario = JSON.parse(storedUser);
 
-            try {
-                const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
+                try {
+                    const response = await fetch(`${API_URL}/perfilUsuario/eliminarHabilidad/${habilidad._id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
 
                     if (response.ok) {
                         // Si la eliminación en la base de datos fue exitosa, elimínala también de la interfaz
@@ -773,6 +848,11 @@ export default function PerfilUsuarios() {
             }
         }
     };
+
+    const handleEliminarIdioma = (idiomaId: string) => {
+        setUsuarioIdiomas((prevIdiomas) => prevIdiomas.filter(idioma => idioma._id !== idiomaId));
+    };
+    
 
 
     if (!auth.isAuthenticated) {
@@ -1565,13 +1645,15 @@ const handleActCertificacion = async () => {
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Idioma</span>
-                        <a className="btn-floating btn-medium waves-effect waves-light right btn-add">
+                        <a
+                            className="btn-floating waves-effect waves-light btn-add right modal-trigger  "
+                            data-target="modalIdiomas">
                             <i className="material-icons">add</i>
                         </a>
 
                         <p>Idiomas y nivel de conocimiento</p><br />
                     </div>
-                </div> 
+                </div>
                 <div className="card">
                     <div className="card-content">
                         <span className="card-title">Cursos y certificaciones</span>
@@ -1597,6 +1679,8 @@ const handleActCertificacion = async () => {
                     </div>
                 </div>
 
+
+                {/* Modal para experiencia */}
         {/* Modal para experiencia */}
                 <div id="modalExp" className="modal">
                     <div className="modal-contentperfil">
@@ -1631,7 +1715,7 @@ const handleActCertificacion = async () => {
                             <br /><br />
                             <div className="input-fieldExp col s12">
                                 <label htmlFor="descripcion" className={experiencia?.descripcion ? 'active' : ''}>Descripción de actividades</label>
-                                <i id= "descrip" className="material-icons prefix">description</i>
+                                <i id="descrip" className="material-icons prefix">description</i>
                                 <textarea
                                     id="descripcion"
                                     className="materialize-textarea validate"
@@ -1662,7 +1746,7 @@ const handleActCertificacion = async () => {
                     </div>
                 </div>
 
-        {/* Modal para habilidades */}
+              {/* Modal para habilidades */}
                 <div id="modalHab" className="modal">
                     <div className="modal-contentperfil">
                     <br /><h4 style={{ textAlign: 'center' }}>Habilidades</h4><br />
@@ -1758,7 +1842,7 @@ const handleActCertificacion = async () => {
                                 </select>
                                 <i className="material-icons prefix">school</i>
                             </div>
-                            
+
                             <div className="input-fieldEdu col s12">
                                 <label htmlFor="institucion" className={educacionUsuario?.institucion ? 'active' : ''}>Institución</label>
                                 <i className="material-icons prefix">location_city</i>
@@ -1806,6 +1890,85 @@ const handleActCertificacion = async () => {
                     </div>
                 </div>
 
+                <div id="modalIdiomas" className="modal" ref={modalRefIdiomas}>
+                    <div className="modal-contentIdi">
+                        <h4 style={{ textAlign: "center" }}>Idiomas</h4>
+                        <div className="select-container-wrapper">
+                            <div className="select-container">
+                                <p className="info-title4">Idioma</p>
+                                <select
+                                    value={selectedIdioma}
+                                    onChange={(e) => setSelectedIdioma(e.target.value)}
+                                >
+                                    {idioma.map((idiomas) => (
+                                        <option key={idiomas._id} value={idiomas.idioma}>
+                                            {idiomas.idioma}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="select-container">
+                                <p className="info-title4">Nivel</p>
+                                <select
+                                    value={selectedNivel}
+                                    onChange={(e) => setSelectedNivel(e.target.value)}
+                                >
+                                    {nivel.map((niveles) => (
+                                        <option key={niveles._id} value={niveles.nivel}>
+                                            {niveles.nivel}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn"
+                                style={{ marginRight: '15px' }}
+                                onClick={handleAgregarIdioma}
+                            >
+                                Agregar
+                                <i className="material-icons right">add</i>
+                            </button>
+                            <button
+                                type="submit"
+                                className="waves-effect waves-light btn"
+                                style={{ marginRight: '15px' }}
+                            >
+                                Enviar
+                                <i className="material-icons right">send</i>
+                            </button>
+                            <a
+                                href="#!"
+                                className="modal-close btn"
+                                style={{ marginRight: '30px' }}
+                            >
+                                Cerrar
+                            </a>
+                            <div className="idiomas-list">
+                                {usuarioIdiomas.map((idiomaNivel, index) => (
+                                    <div key={index} className="habilidad-item">
+                                        {idiomaNivel.id_idioma} {idiomaNivel.id_nivel}
+                                        <i
+                                        className="material-icons delete-icon"
+                                        onClick={() =>handleEliminarIdioma(idiomaNivel._id)}
+                                    >
+                                        close
+                                    </i>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <br />
+                    </div>
+                </div>
+
+
+
+
+           
        {/* Modal para Agregar Certificación */}
        <div id="modalCert" className="modal">
             <div className="modal-contentEdu">
