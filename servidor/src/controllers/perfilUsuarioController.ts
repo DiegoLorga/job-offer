@@ -7,7 +7,9 @@ import EducacionUsuario from '../models/educacionUsuario.model';
 import Idioma from '../models/idioma.model';
 import idiomaNivel from '../models/idiomaNivel.model';
 import UsuarioIdioma from '../models/idiomaUsuario.model';
-import { Types } from 'mongoose'; // Importar Types de mongoose para la validación de ObjectId
+import Certificado from '../models/certificado.model';
+import validator from 'validator';
+
 class PerfilUsuarioController {
 
     public async actualizarExperiencia(req: Request, res: Response): Promise<void> {
@@ -46,9 +48,6 @@ class PerfilUsuarioController {
             const experiencia = await Experiencia.findOne({ id_usuario });
 
             if (!experiencia) {
-                res.status(404).json(jsonResponse(404, {
-                    Error: "No se encontró la experiencia para el usuario dado"
-                }));
                 return;
             }
 
@@ -73,9 +72,6 @@ class PerfilUsuarioController {
 
         try {
             if (!Array.isArray(habilidades)) {
-                res.status(400).json(jsonResponse(400, {
-                    Error: "No hay habilidades para mostrar"
-                }));
                 return;
             }
 
@@ -90,9 +86,6 @@ class PerfilUsuarioController {
             const habilidadesActualizadas = await Promise.all(actualizaciones);
 
             if (habilidadesActualizadas.includes(null)) {
-                res.status(404).json(jsonResponse(404, {
-                    Error: "Una o más habilidades no se encontraron para el usuario dado"
-                }));
                 return;
             }
 
@@ -100,36 +93,6 @@ class PerfilUsuarioController {
         } catch (error: any) {
             res.status(500).json(jsonResponse(500, {
                 Error: "Error al actualizar las habilidades"
-            }));
-        }
-    }
-
-    public async buscarHabilidades(req: Request, res: Response): Promise<void> {
-        const { id_usuario } = req.params;
-
-        try {
-            const habilidades = await Habilidad.find({ id_usuario });
-
-            if (!habilidades || habilidades.length === 0) {
-                res.status(404).json(jsonResponse(404, {
-                    Error: "No se encontraron habilidades para el usuario dado"
-                }));
-                return;
-            }
-
-            //console.log(habilidades)
-            const habilidadesFormateadas = habilidades.map(habilidad => ({
-                _id: habilidad._id.toString(),
-                descripcion: habilidad.descripcion,
-                id_usuario: habilidad.id_usuario.toString()
-            }));
-            console.log(habilidadesFormateadas)
-
-            res.status(200).json(habilidadesFormateadas);
-
-        } catch (error: any) {
-            res.status(500).json(jsonResponse(500, {
-                Error: "Error al buscar las habilidades"
             }));
         }
     }
@@ -202,6 +165,33 @@ class PerfilUsuarioController {
     }
 
 
+    public async buscarHabilidades(req: Request, res: Response): Promise<void> {
+        const { id_usuario } = req.params;
+
+        try {
+            const habilidades = await Habilidad.find({ id_usuario });
+
+            if (!habilidades || habilidades.length === 0) {
+                return;
+            }
+
+            //console.log(habilidades)
+            const habilidadesFormateadas = habilidades.map(habilidad => ({
+                _id: habilidad._id.toString(),
+                descripcion: habilidad.descripcion,
+                id_usuario: habilidad.id_usuario.toString()
+            }));
+            console.log(habilidadesFormateadas)
+
+            res.status(200).json(habilidadesFormateadas);
+
+        } catch (error: any) {
+            res.status(500).json(jsonResponse(500, {
+                Error: "Error al buscar las habilidades"
+            }));
+        }
+    }
+
 
     public async eliminarHabilidad(req: Request, res: Response): Promise<void> {
         try {
@@ -209,6 +199,13 @@ class PerfilUsuarioController {
 
             // Verifica si es un UUID o ObjectId
             const resultado = await Habilidad.findByIdAndDelete(habilidadId);
+            
+            const id_usuario = resultado?.id_usuario;
+            
+            const habilidades = await Habilidad.find({ id_usuario });
+            if (!habilidades || habilidades.length === 0) {
+                await PerfilUsuario.findOneAndUpdate({ id_usuario }, { habilidades: false }, { new: true });
+            }
 
             if (!resultado) {
                 res.status(404).json({ message: 'Habilidad no encontrada' });
@@ -431,26 +428,138 @@ class PerfilUsuarioController {
             console.error('Error al eliminar idioma:', error);
             res.status(500).json({ message: 'Error al eliminar idioma' });
         }
-    }
+    };
+
     
 
-    public async obtenerIdiomasDelUsuario (req: Request, res: Response): Promise<void> {
+
+
+    
+    public async agregarCertificacion(req: Request, res: Response): Promise<void> {
+        const { nombre, enlace, descripcion } = req.body;
         const { id_usuario } = req.params;
     
         try {
-            // Buscar todos los idiomas del usuario
-            const idiomasDelUsuario = await UsuarioIdioma.find({ id_usuario }).exec();
+            // Verificar si el enlace es una URL válida
+            if (!validator.isURL(enlace, { protocols: ['http', 'https'], require_protocol: true })) {
+                res.status(404).json(jsonResponse(404, {
+                    Error: "Enlace no válido"
+                }));
+                return;
+            }
     
-            // Enviar los datos encontrados como respuesta
-            res.status(200).json(idiomasDelUsuario);
+            const certificado = new Certificado({
+                id_usuario: id_usuario,
+                nombre: nombre,
+                descripcion: descripcion,
+                enlace: enlace
+            });
+    
+            const CertificadoGuardado = await certificado.save();
+            await PerfilUsuario.findOneAndUpdate({ id_usuario }, { certificaciones: true }, { new: true });
+    
+            res.json({
+                id: CertificadoGuardado._id,
+                nombre: CertificadoGuardado.nombre,
+                descripcion: CertificadoGuardado.descripcion,
+                enlace: CertificadoGuardado.enlace
+            });
         } catch (error) {
-            console.error('Error al obtener idiomas del usuario:', error);
-            res.status(500).json({ message: 'Error al obtener idiomas del usuario', error });
+            res.status(400).json({ error: "No se pudo crear el certificado" });
         }
-    };
+    }
+
+    public async eliminarCertificado(req: Request, res: Response): Promise<Response> {
+        try {
+            const certificadoId = req.params.id_certificado;
+            // Buscar y eliminar el certificado por su ID
+            const resultado = await Certificado.findByIdAndDelete(certificadoId);
+    
+            if (!resultado) {
+                return res.status(404).json({ message: 'Certificado no encontrado' });
+            }else{
+                const id_usuario = resultado?.id_usuario
+                const certificaciones = await Certificado.find({ id_usuario });
+                if (!certificaciones || certificaciones.length === 0) {
+                    await PerfilUsuario.findOneAndUpdate({ id_usuario }, { certificaciones: false }, { new: true });
+                }
+            }
+
+            return res.status(200).json({ message: 'Certificado eliminado correctamente' });
+        } catch (error) {
+            console.error('Error al eliminar certificado:', error);
+            return res.status(500).json({ message: 'Error al eliminar certificado' });
+        }
+    }
+
+    public async buscarCertificaciones(req: Request, res: Response): Promise<Response> {
+        const { id_usuario } = req.params;
+    
+        try {
+            const certificaciones = await Certificado.find({ id_usuario });
+    
+            const certificacionesFormateadas = certificaciones.map(certificado => ({
+                _id: certificado._id.toString(),
+                nombre: certificado.nombre,
+                descripcion: certificado.descripcion,
+                enlace: certificado.enlace,
+            }));
+            console.log(certificacionesFormateadas);
+    
+            return res.status(200).json(certificacionesFormateadas);
+    
+        } catch (error: any) {
+            return res.status(500).json({
+                Error: "Error al buscar las certificaciones"
+            });
+        }
+    }
+
+    public async actualizarCertificado(req: Request, res: Response): Promise<void> {
+        const { nombre, descripcion, enlace, _id } = req.body;
+    
+        try {
+            const certificado = await Certificado.findByIdAndUpdate(
+                _id,
+                { nombre, descripcion, enlace },
+                { new: true, runValidators: true }
+            );
+    
+            if (!certificado) {
+                res.status(404).json({ Error: "No se encontró la certificación con el ID proporcionado" });
+                return;
+            }
+    
+            res.json({ mensaje: "Certificación actualizada correctamente", certificado });
+        } catch (error: any) {
+            res.status(500).json({ Error: "Error al actualizar la certificación" });
+        }
+    }
     
 
+    public async buscarCertificacion(req: Request, res: Response): Promise<void> {
+        const { id_usuario } = req.params;
 
+        try {
+            const certificado = await Certificado.findOne({ id_usuario });
 
+            if (!certificado) {
+                return;
+            }
+
+            // Devuelve la experiencia encontrada
+            res.json({
+                id: certificado._id,
+                nombre: certificado.nombre,
+                descripcion: certificado.descripcion,
+                enlace: certificado.enlace
+
+            });
+        } catch (error: any) {
+            res.status(500).json(jsonResponse(500, {
+                Error: "Error al buscar la experiencia"
+            }));
+        }
+    }
 }
 export const perfilUsuarioController = new PerfilUsuarioController();

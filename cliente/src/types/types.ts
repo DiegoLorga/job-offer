@@ -179,3 +179,9 @@ export interface UsuarioIdioma{
     id_idioma: string;
     id_nivel: string;
 }
+export interface Certificado {
+    _id: string;
+    nombre: string;
+    descripcion: string;
+    enlace: string;
+}

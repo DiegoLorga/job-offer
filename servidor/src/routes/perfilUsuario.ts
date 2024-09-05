@@ -23,6 +23,13 @@ class perfilUsuarioRoutes {
         this.router.post("/agregarIdiomasNiveles/:id_usuario",perfilUsuarioController.agregarIdiomasNiveles)
         this.router.get("/idiomas/:id_usuario",perfilUsuarioController.obtenerIdiomasDelUsuario);
         this.router.delete("/eliminarUsuarioIdioma/:_id",perfilUsuarioController.eliminarUsuarioIdioma)
+        this.router.post("/",)
+        this.router.post("/crearCertificado/:id_usuario", perfilUsuarioController.agregarCertificacion);
+        this.router.delete('/eliminarCertificado/:id_certificado', perfilUsuarioController.eliminarCertificado);
+        this.router.get("/buscarCertificaciones/:id_usuario", perfilUsuarioController.buscarCertificaciones);
+        this.router.get("/buscarCertificacion/:id_usuario", perfilUsuarioController.buscarCertificacion);
+        this.router.put("/actualizarCertificado/:id_usuario", perfilUsuarioController.actualizarCertificado);
+
     }
 
 

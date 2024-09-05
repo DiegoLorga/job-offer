@@ -23,6 +23,12 @@ class perfilUsuarioRoutes {
         this.router.post("/agregarIdiomasNiveles/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.agregarIdiomasNiveles);
         this.router.get("/idiomas/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.obtenerIdiomasDelUsuario);
         this.router.delete("/eliminarUsuarioIdioma/:_id", perfilUsuarioController_1.perfilUsuarioController.eliminarUsuarioIdioma);
+        this.router.post("/");
+        this.router.post("/crearCertificado/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.agregarCertificacion);
+        this.router.delete('/eliminarCertificado/:id_certificado', perfilUsuarioController_1.perfilUsuarioController.eliminarCertificado);
+        this.router.get("/buscarCertificaciones/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarCertificaciones);
+        this.router.get("/buscarCertificacion/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.buscarCertificacion);
+        this.router.put("/actualizarCertificado/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.actualizarCertificado);
     }
 }
 const administradorRoutes = new perfilUsuarioRoutes();
