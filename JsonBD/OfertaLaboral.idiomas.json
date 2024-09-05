@@ -1,0 +1,28 @@
+[{
+  "_id": {
+    "$oid": "66cfc2fd9dcc54cb3517f7da"
+  },
+  "idioma": "Inglés",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66cfc3509dcc54cb3517f7de"
+  },
+  "idioma": "Español",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66cfc39d9dcc54cb3517f7e4"
+  },
+  "idioma": "Alemán",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66cfc3ba9dcc54cb3517f7e6"
+  },
+  "idioma": "Francés",
+  "__v": 0
+}]

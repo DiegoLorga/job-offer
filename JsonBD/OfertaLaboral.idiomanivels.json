@@ -1,0 +1,35 @@
+[{
+  "_id": {
+    "$oid": "66d20f190a33d2e7c8e68210"
+  },
+  "nivel": "no hablado",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d20f310a33d2e7c8e68212"
+  },
+  "nivel": "básico",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d20f380a33d2e7c8e68214"
+  },
+  "nivel": "intermedio",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d20f4d0a33d2e7c8e68218"
+  },
+  "nivel": "lengua nativa",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66d2104d0a33d2e7c8e6821c"
+  },
+  "nivel": "avanzado",
+  "__v": 0
+}]
