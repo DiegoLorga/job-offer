@@ -91,38 +91,46 @@ export default function PerfilUsuarios() {
 
 
     const handleAgregarIdioma = () => {
-        console.log(selectedIdioma, selectedNivel);
+        console.log('Idioma seleccionado:', selectedIdioma);
+        console.log('Nivel seleccionado:', selectedNivel);
 
-        if (selectedIdioma.trim() && selectedNivel.trim()) {
+        if (selectedIdioma && selectedNivel) { // Verifica que ambos valores no estén vacíos
             if (perfilUsuario) {
-                const nuevaUsuarioIdioma: UsuarioIdioma = {
-                    _id: crypto.randomUUID(),
+                // Crear un nuevo objeto para el idioma
+                const nuevaUsuarioIdioma = {
+                    _id: crypto.randomUUID(), // Generar un ID único para el nuevo idioma
                     id_idioma: selectedIdioma,
                     id_usuario: perfilUsuario._id,
                     id_nivel: selectedNivel
                 };
 
-                // Verifica si ya existe un idioma con el mismo nombre
+                // Verificar si ya existe el idioma con el mismo ID
                 const idiomaExistente = usuarioIdiomas.find(
                     (idioma) => idioma.id_idioma === selectedIdioma
                 );
 
                 if (idiomaExistente) {
-                    Swal.fire('Error', 'El idioma ya ha sido agregado. No puedes agregar el mismo idioma con diferentes niveles.', 'error');
-                    return; // Sal de la función para evitar agregar un idioma duplicado
+                    Swal.fire(
+                        'Error',
+                        'El idioma ya ha sido agregado. No puedes agregar el mismo idioma con diferentes niveles.',
+                        'error'
+                    );
+                    return; // Salir de la función para evitar agregar un idioma duplicado
                 }
 
-                // Agrega el nuevo idioma
+                // Agregar el nuevo idioma al estado
                 setUsuarioIdiomas((prevIdiomas) => [...prevIdiomas, nuevaUsuarioIdioma]);
 
             } else {
                 console.error('perfilUsuario es null, no se puede agregar el idioma');
+                Swal.fire('Error', 'No se puede agregar el idioma, perfil de usuario no disponible.', 'error');
             }
         } else {
             console.error('El campo de idioma o nivel está vacío');
-            Swal.fire('Error', 'Por favor selecciona un idioma y un nivel', 'error');
+            Swal.fire('Error', 'Por favor selecciona un idioma y un nivel.', 'error');
         }
     };
+
 
 
     //para actualizar/agregar habilidades
@@ -200,6 +208,81 @@ export default function PerfilUsuarios() {
             });
         }
     };
+
+    const handleEnviarIdiomas = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Verifica si hay idiomas en la lista
+        if (usuarioIdiomas.length === 0) {
+            Swal.fire('Error', 'Debes agregar al menos un idioma con nivel', 'error');
+            return;
+        }
+
+        // Verifica si el perfil del usuario está disponible
+        if (!perfilUsuario) {
+            Swal.fire('Error', 'Perfil del usuario no encontrado', 'error');
+            return;
+        }
+
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+
+            // Muestra un mensaje de confirmación
+            Swal.fire({
+                title: 'Confirmar',
+                text: "¿Deseas agregar los nuevos idiomas y niveles?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, agregar',
+                cancelButtonText: 'Cancelar'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    try {
+                        // Realiza la solicitud al servidor con los ObjectIds correctos
+                        const response = await fetch(`${API_URL}/perfilUsuario/agregarIdiomasNiveles/${usuario.id}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(usuarioIdiomas.map(idiomaNivel => ({
+                                id_idioma: idiomaNivel.id_idioma, // Asegúrate de que este sea un ObjectId
+                                id_nivel: idiomaNivel.id_nivel
+                            })))
+                        });
+
+                        const data = await response.json();
+                        if (response.ok) {
+                            setCambios(true); // Actualiza el estado para reflejar cambios
+                            console.log(data);
+
+                            Swal.fire({
+                                title: "Éxito",
+                                text: "Idiomas y niveles agregados correctamente",
+                                icon: "success"
+                            }).then(() => {
+                                // Cierra el modal después de mostrar el mensaje de éxito
+                                const modalElement = document.getElementById('modalIdiomas');
+                                if (modalElement) {
+                                    const modalInstance = M.Modal.getInstance(modalElement);
+                                    if (modalInstance) {
+                                        modalInstance.close();
+                                    }
+                                }
+                            });
+
+                        } else {
+                            Swal.fire('Error', data.message || 'No se pudieron agregar los idiomas y niveles', 'error');
+                        }
+                    } catch (error) {
+                        Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+                    }
+                }
+            });
+        }
+    };
+
+
 
     //para limpiar los campos de habilidades
     const handleCloseHab = () => {
@@ -688,11 +771,33 @@ export default function PerfilUsuarios() {
             }
         };
 
+        const fetchIdiomasDelUsuario = async () => {
+            const storedUser2 = localStorage.getItem('usuario');
+            if (storedUser2) {
+                const usuario = JSON.parse(storedUser2);
+                auth.setIsAuthenticated(true);
+                try {
+                    const response = await fetch(`${API_URL}/perfilUsuario/idiomas/${usuario.id}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        setUsuarioIdiomas(data);
+                        console.log('Idiomas del usuario:', data);
+                    } else {
+                        console.error('Error al obtener los idiomas del usuario:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error al obtener los idiomas del usuario:', error);
+                    Swal.fire('Error', 'No se pudo cargar los idiomas del usuario.', 'error');
+                }
+            }
+        };
+
         if (modalRefIdiomas.current) {
             const instance = M.Modal.init(modalRefIdiomas.current, {
                 onOpenStart: () => {
                     fetchIdiomas();
                     fetchNiveles();
+                    fetchIdiomasDelUsuario();
                 },
             });
 
@@ -854,10 +959,58 @@ export default function PerfilUsuarios() {
         }
     };
 
-    const handleEliminarIdioma = (idiomaId: string) => {
-        setUsuarioIdiomas((prevIdiomas) => prevIdiomas.filter(idioma => idioma._id !== idiomaId));
+    const handleEliminarIdioma = async (index: number) => {
+        const idioma = usuarioIdiomas[index];
+    
+        // Mostrar alerta de confirmación
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Estás seguro de que deseas eliminar este idioma?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        console.log(idioma);
+        
+        if (result.isConfirmed) {
+            if (!idioma.id_usuario) {
+                // Si el idioma no tiene _id, elimínalo solo de la interfaz
+                setUsuarioIdiomas((prevIdiomas) => prevIdiomas.filter((_, i) => i !== index));
+                Swal.fire('Éxito', 'Idioma eliminado de la lista', 'success');
+            } else {
+                // Si el idioma tiene _id, intenta eliminarlo de la base de datos
+                try {
+                    const response = await fetch(`${API_URL}/perfilUsuario/eliminarUsuarioIdioma/${idioma._id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+    
+                    if (response.ok) {
+                        // Si la eliminación en la base de datos fue exitosa, elimínalo también de la interfaz
+                        setUsuarioIdiomas((prevIdiomas) => prevIdiomas.filter((_, i) => i !== index));
+                        Swal.fire('Éxito', 'Idioma eliminado correctamente', 'success');
+                    } else {
+                        const errorData = await response.json();
+                        Swal.fire('Error', errorData.Error || 'No se pudo eliminar el idioma', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error al eliminar el idioma:', error);
+                    Swal.fire('Error', 'Error al conectar con el servidor', 'error');
+                }
+            }
+        }
     };
     
+    
+
+
+
 
 
     if (!auth.isAuthenticated) {
@@ -1587,10 +1740,14 @@ export default function PerfilUsuarios() {
                                 <p className="info-title4">Idioma</p>
                                 <select
                                     value={selectedIdioma}
-                                    onChange={(e) => setSelectedIdioma(e.target.value)}
+                                    onChange={(e) => {
+                                        console.log('Idioma cambiado:', e.target.value); // Verifica el valor seleccionado
+                                        setSelectedIdioma(e.target.value);
+                                    }}
                                 >
+                                    <option value="">Selecciona un idioma</option> {/* Valor vacío predeterminado */}
                                     {idioma.map((idiomas) => (
-                                        <option key={idiomas._id} value={idiomas.idioma}>
+                                        <option key={idiomas._id} value={idiomas._id}>
                                             {idiomas.idioma}
                                         </option>
                                     ))}
@@ -1600,10 +1757,14 @@ export default function PerfilUsuarios() {
                                 <p className="info-title4">Nivel</p>
                                 <select
                                     value={selectedNivel}
-                                    onChange={(e) => setSelectedNivel(e.target.value)}
+                                    onChange={(e) => {
+                                        console.log('Nivel cambiado:', e.target.value); // Verifica el valor seleccionado
+                                        setSelectedNivel(e.target.value);
+                                    }}
                                 >
+                                    <option value="">Selecciona un nivel</option> {/* Valor vacío predeterminado */}
                                     {nivel.map((niveles) => (
-                                        <option key={niveles._id} value={niveles.nivel}>
+                                        <option key={niveles._id} value={niveles._id}>
                                             {niveles.nivel}
                                         </option>
                                     ))}
@@ -1617,6 +1778,7 @@ export default function PerfilUsuarios() {
                                 className="btn"
                                 style={{ marginRight: '15px' }}
                                 onClick={handleAgregarIdioma}
+                                disabled={!selectedIdioma || !selectedNivel}
                             >
                                 Agregar
                                 <i className="material-icons right">add</i>
@@ -1625,6 +1787,8 @@ export default function PerfilUsuarios() {
                                 type="submit"
                                 className="waves-effect waves-light btn"
                                 style={{ marginRight: '15px' }}
+                                onClick={handleEnviarIdiomas}
+                                disabled={!selectedIdioma || !selectedNivel}
                             >
                                 Enviar
                                 <i className="material-icons right">send</i>
@@ -1637,22 +1801,31 @@ export default function PerfilUsuarios() {
                                 Cerrar
                             </a>
                             <div className="idiomas-list">
-                                {usuarioIdiomas.map((idiomaNivel, index) => (
-                                    <div key={index} className="habilidad-item">
-                                        {idiomaNivel.id_idioma} {idiomaNivel.id_nivel}
-                                        <i
-                                        className="material-icons delete-icon"
-                                        onClick={() =>handleEliminarIdioma(idiomaNivel._id)}
-                                    >
-                                        close
-                                    </i>
-                                    </div>
-                                ))}
+                                {usuarioIdiomas.map((idiomaNivel, index) => {
+                                    // Buscar el nombre del idioma usando el ID
+                                    const idiomaNombre = idioma.find((idiomaItem) => idiomaItem._id === idiomaNivel.id_idioma)?.idioma || "Idioma no encontrado";
+
+                                    // Buscar el nombre del nivel usando el ID
+                                    const nivelNombre = nivel.find((nivelItem) => nivelItem._id === idiomaNivel.id_nivel)?.nivel || "Nivel no encontrado";
+
+                                    return (
+                                        <div key={index} className="habilidad-item">
+                                            {idiomaNombre} {nivelNombre}
+                                            <i
+                                                className="material-icons delete-icon"
+                                                onClick={() => handleEliminarIdioma(index)}
+                                            >
+                                                close
+                                            </i>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                         <br />
                     </div>
                 </div>
+
 
 
 

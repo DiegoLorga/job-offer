@@ -7,7 +7,7 @@ import EducacionUsuario from '../models/educacionUsuario.model';
 import Idioma from '../models/idioma.model';
 import idiomaNivel from '../models/idiomaNivel.model';
 import UsuarioIdioma from '../models/idiomaUsuario.model';
-
+import { Types } from 'mongoose'; // Importar Types de mongoose para la validación de ObjectId
 class PerfilUsuarioController {
 
     public async actualizarExperiencia(req: Request, res: Response): Promise<void> {
@@ -347,9 +347,18 @@ class PerfilUsuarioController {
         const idiomasNiveles = req.body; // Array de idiomas con niveles a agregar
         const { id_usuario } = req.params; // ID del usuario
     
+        console.log('IdiomasNiveles recibidos:', idiomasNiveles);
+        console.log('ID de usuario recibido:', id_usuario);
+
         try {
             if (!Array.isArray(idiomasNiveles)) {
                 res.status(400).json({ message: "El cuerpo de la solicitud debe ser un array de idiomas y niveles" });
+                return;
+            }
+    
+            // Validar que id_usuario sea un ObjectId válido
+            if (!Types.ObjectId.isValid(id_usuario)) {
+                res.status(400).json({ message: "El id_usuario no es un ObjectId válido" });
                 return;
             }
     
@@ -357,6 +366,12 @@ class PerfilUsuarioController {
             for (const item of idiomasNiveles) {
                 if (!item.id_idioma || !item.id_nivel) {
                     res.status(400).json({ message: "Cada entrada debe tener un id_idioma y un id_nivel válidos" });
+                    return;
+                }
+    
+                // Validar que id_idioma y id_nivel sean ObjectId válidos
+                if (!Types.ObjectId.isValid(item.id_idioma) || !Types.ObjectId.isValid(item.id_nivel)) {
+                    res.status(400).json({ message: "Cada id_idioma y id_nivel deben ser ObjectIds válidos" });
                     return;
                 }
             }
@@ -399,22 +414,40 @@ class PerfilUsuarioController {
 
     public async eliminarUsuarioIdioma(req: Request, res: Response): Promise<void> {
         try {
-            const usuarioIdiomaId = req.params.id;
-
-            // Verifica si es un UUID o ObjectId
+            const usuarioIdiomaId = req.params._id;
+            console.log("id a eliminar: ", usuarioIdiomaId);
+            
+    
+            // Busca y elimina el idioma en la base de datos
             const resultado = await UsuarioIdioma.findByIdAndDelete(usuarioIdiomaId);
-
+    
             if (!resultado) {
                 res.status(404).json({ message: 'Idioma no encontrado' });
+                return;
             }
-
+    
             res.status(200).json({ message: 'Idioma eliminado correctamente' });
         } catch (error) {
             console.error('Error al eliminar idioma:', error);
             res.status(500).json({ message: 'Error al eliminar idioma' });
         }
-    };
+    }
+    
 
+    public async obtenerIdiomasDelUsuario (req: Request, res: Response): Promise<void> {
+        const { id_usuario } = req.params;
+    
+        try {
+            // Buscar todos los idiomas del usuario
+            const idiomasDelUsuario = await UsuarioIdioma.find({ id_usuario }).exec();
+    
+            // Enviar los datos encontrados como respuesta
+            res.status(200).json(idiomasDelUsuario);
+        } catch (error) {
+            console.error('Error al obtener idiomas del usuario:', error);
+            res.status(500).json({ message: 'Error al obtener idiomas del usuario', error });
+        }
+    };
     
 
 

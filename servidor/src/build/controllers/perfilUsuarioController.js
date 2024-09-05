@@ -21,6 +21,7 @@ const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsu
 const idioma_model_1 = __importDefault(require("../models/idioma.model"));
 const idiomaNivel_model_1 = __importDefault(require("../models/idiomaNivel.model"));
 const idiomaUsuario_model_1 = __importDefault(require("../models/idiomaUsuario.model"));
+const mongoose_1 = require("mongoose"); // Importar Types de mongoose para la validación de ObjectId
 class PerfilUsuarioController {
     actualizarExperiencia(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -321,15 +322,27 @@ class PerfilUsuarioController {
         return __awaiter(this, void 0, void 0, function* () {
             const idiomasNiveles = req.body; // Array de idiomas con niveles a agregar
             const { id_usuario } = req.params; // ID del usuario
+            console.log('IdiomasNiveles recibidos:', idiomasNiveles);
+            console.log('ID de usuario recibido:', id_usuario);
             try {
                 if (!Array.isArray(idiomasNiveles)) {
                     res.status(400).json({ message: "El cuerpo de la solicitud debe ser un array de idiomas y niveles" });
+                    return;
+                }
+                // Validar que id_usuario sea un ObjectId válido
+                if (!mongoose_1.Types.ObjectId.isValid(id_usuario)) {
+                    res.status(400).json({ message: "El id_usuario no es un ObjectId válido" });
                     return;
                 }
                 // Verificar que cada entrada tenga un idioma y nivel válido
                 for (const item of idiomasNiveles) {
                     if (!item.id_idioma || !item.id_nivel) {
                         res.status(400).json({ message: "Cada entrada debe tener un id_idioma y un id_nivel válidos" });
+                        return;
+                    }
+                    // Validar que id_idioma y id_nivel sean ObjectId válidos
+                    if (!mongoose_1.Types.ObjectId.isValid(item.id_idioma) || !mongoose_1.Types.ObjectId.isValid(item.id_nivel)) {
+                        res.status(400).json({ message: "Cada id_idioma y id_nivel deben ser ObjectIds válidos" });
                         return;
                     }
                 }
@@ -365,17 +378,34 @@ class PerfilUsuarioController {
     eliminarUsuarioIdioma(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const usuarioIdiomaId = req.params.id;
-                // Verifica si es un UUID o ObjectId
+                const usuarioIdiomaId = req.params._id;
+                console.log("id a eliminar: ", usuarioIdiomaId);
+                // Busca y elimina el idioma en la base de datos
                 const resultado = yield idiomaUsuario_model_1.default.findByIdAndDelete(usuarioIdiomaId);
                 if (!resultado) {
                     res.status(404).json({ message: 'Idioma no encontrado' });
+                    return;
                 }
                 res.status(200).json({ message: 'Idioma eliminado correctamente' });
             }
             catch (error) {
                 console.error('Error al eliminar idioma:', error);
                 res.status(500).json({ message: 'Error al eliminar idioma' });
+            }
+        });
+    }
+    obtenerIdiomasDelUsuario(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id_usuario } = req.params;
+            try {
+                // Buscar todos los idiomas del usuario
+                const idiomasDelUsuario = yield idiomaUsuario_model_1.default.find({ id_usuario }).exec();
+                // Enviar los datos encontrados como respuesta
+                res.status(200).json(idiomasDelUsuario);
+            }
+            catch (error) {
+                console.error('Error al obtener idiomas del usuario:', error);
+                res.status(500).json({ message: 'Error al obtener idiomas del usuario', error });
             }
         });
     }

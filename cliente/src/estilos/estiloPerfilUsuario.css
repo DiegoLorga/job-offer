@@ -283,12 +283,78 @@
 
 .input-fieldEdu i {
   position: absolute;
-  left: -30px;
+  left: -35px;
   /* Ajusta la posición horizontal del ícono */
   top: 63%;
+  color: #5f5757;
+}
+
+
+.modal-contentIdi {
+  max-width: 450px; /* Establece el ancho del contenido del modal */
+  margin:  0 auto; /* Centra el contenido del modal */
+ 
+}
+#modalIdiomas {
+  margin-top: 60px;
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 650px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+.select-container-wrapper {
+  display: flex; /* Utiliza flexbox para alinear los select en la misma fila */
+  justify-content: space-between; /* Distribuye el espacio entre los select */
+  align-items: center; /* Alinea los select verticalmente en el centro */
+}
+
+.select-container {
+  margin-right: 60px; /* Ajusta el margen derecho de cada select */
+}
+
+.info-title4 {
+  margin-bottom: 5px; /* Espacio debajo del título */
+  font-weight: bold;
+  color: #333;
+}
+
+.idiomas-list {
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 10px;
+  /* Espacio entre los elementos */
+}
+
+.input-fieldEdu2 i {
+  position: absolute;
+  left: 63px; 
+  top: 39%;
+  transform: translateY(-10%);
+  color: #5f5757;
+}
+
+.input-fieldHab i {
+  position: absolute;
+  left: 112px; 
+  top: 43%;
   transform: translateY(-50%);
   color: #5f5757;
 }
+
+.modal-footerHab {
+  display: flex;
+  justify-content: center; /* Centra los botones horizontalmente */
+  align-items: center; /* Opcional: centra los botones verticalmente */
+  gap: 10px; /* Opcional: espacio entre los botones */
+}
+
+#modalCert {
+  width: 100%; /* Cambia el valor según tus necesidades */
+  max-width: 650px; /* Ancho máximo del modal */
+  overflow-y: auto; /* Permite el desplazamiento si el contenido excede la altura */
+}
+
+
 
 .input-fieldEdu input {
   max-width: 450px;
@@ -302,7 +368,7 @@
 .modal-contentEdu {
   max-width: 450px;
   /* Establece el ancho del contenido del modal */
-  margin: 20 auto;
+  margin: auto;
   /* Centra el contenido del modal */
 }
 

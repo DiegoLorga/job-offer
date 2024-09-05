@@ -20,7 +20,9 @@ class perfilUsuarioRoutes {
         this.router.get("/listIdiomas", perfilUsuarioController_1.perfilUsuarioController.listIdiomas);
         this.router.post("/crearNivelIdioma", perfilUsuarioController_1.perfilUsuarioController.createNivelIdioma);
         this.router.get("/listNivelIdiomas", perfilUsuarioController_1.perfilUsuarioController.listNivelIdiomas);
-        this.router.post("/");
+        this.router.post("/agregarIdiomasNiveles/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.agregarIdiomasNiveles);
+        this.router.get("/idiomas/:id_usuario", perfilUsuarioController_1.perfilUsuarioController.obtenerIdiomasDelUsuario);
+        this.router.delete("/eliminarUsuarioIdioma/:_id", perfilUsuarioController_1.perfilUsuarioController.eliminarUsuarioIdioma);
     }
 }
 const administradorRoutes = new perfilUsuarioRoutes();

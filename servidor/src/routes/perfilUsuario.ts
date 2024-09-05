@@ -20,8 +20,12 @@ class perfilUsuarioRoutes {
         this.router.get("/listIdiomas", perfilUsuarioController.listIdiomas);
         this.router.post("/crearNivelIdioma", perfilUsuarioController.createNivelIdioma);
         this.router.get("/listNivelIdiomas", perfilUsuarioController.listNivelIdiomas);
-        this.router.post("/",)
+        this.router.post("/agregarIdiomasNiveles/:id_usuario",perfilUsuarioController.agregarIdiomasNiveles)
+        this.router.get("/idiomas/:id_usuario",perfilUsuarioController.obtenerIdiomasDelUsuario);
+        this.router.delete("/eliminarUsuarioIdioma/:_id",perfilUsuarioController.eliminarUsuarioIdioma)
     }
+
+
 }
 const administradorRoutes = new perfilUsuarioRoutes();
 export default administradorRoutes.router;
