@@ -9,6 +9,7 @@ import idiomaNivel from '../models/idiomaNivel.model';
 import UsuarioIdioma from '../models/idiomaUsuario.model';
 import Certificado from '../models/certificado.model';
 import validator from 'validator';
+import { Types } from 'mongoose';
 
 class PerfilUsuarioController {
 
@@ -430,7 +431,20 @@ class PerfilUsuarioController {
         }
     };
 
+    public async obtenerIdiomasDelUsuario(req: Request, res: Response): Promise<void>{
+        const { id_usuario } = req.params;
     
+        try {
+            // Buscar todos los idiomas del usuario
+            const idiomasDelUsuario = await UsuarioIdioma.find({ id_usuario }).exec();
+    
+            // Enviar los datos encontrados como respuesta
+            res.status(200).json(idiomasDelUsuario);
+        } catch (error) {
+            console.error('Error al obtener idiomas del usuario:', error);
+            res.status(500).json({ message: 'Error al obtener idiomas del usuario', error });
+        }
+    };
 
 
 

@@ -21,7 +21,9 @@ const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsu
 const idioma_model_1 = __importDefault(require("../models/idioma.model"));
 const idiomaNivel_model_1 = __importDefault(require("../models/idiomaNivel.model"));
 const idiomaUsuario_model_1 = __importDefault(require("../models/idiomaUsuario.model"));
-const mongoose_1 = require("mongoose"); // Importar Types de mongoose para la validación de ObjectId
+const certificado_model_1 = __importDefault(require("../models/certificado.model"));
+const validator_1 = __importDefault(require("validator"));
+const mongoose_1 = require("mongoose");
 class PerfilUsuarioController {
     actualizarExperiencia(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -387,6 +389,7 @@ class PerfilUsuarioController {
             }
         });
     }
+    ;
     obtenerIdiomasDelUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id_usuario } = req.params;
