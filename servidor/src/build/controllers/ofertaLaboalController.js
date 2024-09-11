@@ -229,7 +229,6 @@ class ofertaLaboralController {
                 // Consulta a la base de datos usando los filtros combinados
                 const ofertas = yield OfertaLaboral_model_1.default.find(filtros);
                 console.log(estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin);
-                //console.log(filtros);
                 if (ofertas.length === 0) {
                     console.log("No hay coincidencias");
                     res.status(404).json({

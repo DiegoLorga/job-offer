@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from "../auth/AuthProvider";
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import DefaultLayout from "../layout/DefaultLayout";
 import Swal from 'sweetalert2';
 import M from 'materialize-css';
@@ -35,8 +35,8 @@ interface Ciudad {
 }
 
 export default function Empleados() {
-    const [errorResponse, setErrorResponse] = useState<string>("");
-    const [successMessage, setSuccessMessage] = useState<string>("");
+    const [errorResponse] = useState<string>("");
+    const [successMessage] = useState<string>("");
     const [empresas, setEmpresas] = useState<Empresa[]>([]);
     const [ofertas, setOfertas] = useState<Oferta1[]>([]);
     const [giros, setGiros] = useState<Giro[]>([]);
@@ -57,7 +57,6 @@ export default function Empleados() {
 
 
     const auth = useAuth();
-    const location = useLocation();
 
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
@@ -77,19 +76,19 @@ export default function Empleados() {
         // Inicializa el selector de fechas de Materialize
         const elemsInicio = document.querySelectorAll('.datepicker-inicio');
         const elemsFin = document.querySelectorAll('.datepicker-fin');
-        
+
         M.Datepicker.init(elemsInicio, {
             format: 'yyyy-mm-dd',
             onSelect: (date) => setFechaInicio(date.toISOString().split('T')[0])
         });
-        
+
         M.Datepicker.init(elemsFin, {
             format: 'yyyy-mm-dd',
             onSelect: (date) => setFechaFin(date.toISOString().split('T')[0])
         });
     }, []);
 
-    
+
     useEffect(() => {
         async function fetchEstados() {
             try {
@@ -303,8 +302,8 @@ export default function Empleados() {
                 body: JSON.stringify({
                     estado: nombreEstado,
                     ciudad: ciudad,
-                    sueldo: parseInt(selectedSueldo,10),
-                    modalidad: parseInt(selectedModalidad,10),
+                    sueldo: parseInt(selectedSueldo, 10),
+                    modalidad: parseInt(selectedModalidad, 10),
                     educacion: selectedEducacion,
                     fechaInicio: fechaInicio,
                     fechaFin: fechaFin
@@ -341,14 +340,12 @@ export default function Empleados() {
         return <Navigate to="/" />;
     }
 
-    const isPerfilUsuario = location.pathname.includes('/Empleado/PerfilUsuario');
-
     return (
         <DefaultLayout showNav={true}>
             <div className="nav-content">
-                <ul id="tabs-swipe-demo" className="tabs">
-                    <li className="tab col s3"><a href="#Empleos">Empleos</a></li>
-                    <li className="tab col s3"><a href="#Empresas">Empresas</a></li>
+                <ul id="tabs-swipe-demo" className="tabs custom-tabs">
+                    <li className="tab col s3"><a href="#Empleos" className="black-text">Empleos</a></li>
+                    <li className="tab col s3"><a href="#Empresas" className="black-text">Empresas</a></li>
                 </ul>
             </div>
             <div className="container">
@@ -356,7 +353,7 @@ export default function Empleados() {
                 {!!errorResponse && <div className="card-panel red lighten-2 white-text">{errorResponse}</div>}
                 {!!successMessage && <div className="card-panel green lighten-2 white-text">{successMessage}</div>}
                 <div className="row">
-                    <div id="Empleos" className="container">
+                    <div id="Empleos" className="container custom-tabs">
                         <ul className="tabs center">
                             <li className="tab col s6"><a className="active" href="#test1"><i className="material-icons">wb_sunny</i>Para ti</a></li>
                             <li className="tab col s6"><a href="#test2"><i className="material-icons">search</i>Buscar</a></li>
@@ -392,7 +389,7 @@ export default function Empleados() {
                                             <div className="oferta-header">
                                                 <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
                                                 <p className="empresa-nombre">{empresaNombre}</p>
-                                                <button className="btn waves-effect waves-light postularme-btn" type="button">
+                                                <button className="btn waves-effect postularme-btn" type="button">
                                                     Postularme
                                                 </button>
                                             </div>
@@ -516,7 +513,6 @@ export default function Empleados() {
                                         value={fechaInicio}
                                         onChange={(e) => setFechaInicio(e.target.value)}
                                     />
-
                                 </div>
 
                                 <div className="select-container">
@@ -527,7 +523,6 @@ export default function Empleados() {
                                         value={fechaFin}
                                         onChange={(e) => setFechaFin(e.target.value)}
                                     />
-
                                 </div>
                             </div>
                             <div className="button-container">

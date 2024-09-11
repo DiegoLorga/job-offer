@@ -14,9 +14,6 @@ import PerfilUsuario from './routes/PerfilUsuario';
 import 'materialize-css/dist/css/materialize.min.css';
 import './index.css';
 
-
-
-
 const router = createBrowserRouter([
   {
     path: "/",

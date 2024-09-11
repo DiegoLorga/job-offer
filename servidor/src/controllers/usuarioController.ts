@@ -49,15 +49,15 @@ class UsuarioController {
 
         const usuarioExistente = await Usuario.findOne({ correo });
         if (usuarioExistente) {
-           correoError = "El correo electrónico ya está en uso"
+            correoError = "El correo electrónico ya está en uso"
         }
 
-       /*const estadoName = await Estado.findOne({ clave: estado });
-        let estadoNom: string = estado; // Definir la variable con el tipo correcto
-
-        if (estadoName) {
-            estadoNom = estadoName.nombre;
-        } */
+        /*const estadoName = await Estado.findOne({ clave: estado });
+         let estadoNom: string = estado; // Definir la variable con el tipo correcto
+ 
+         if (estadoName) {
+             estadoNom = estadoName.nombre;
+         } */
 
         if (camposError || contrasenasError || nombreError || correoError) {
             res.status(400).json(jsonResponse(400, {
@@ -193,10 +193,10 @@ class UsuarioController {
     public async getEstado(req: Request, res: Response): Promise<void> {
         try {
             const clave = req.params.clave;
-    
+
             // Buscar el estado en la colección adecuada
             const estado = await Estado.findOne({ clave: clave });
-    
+
             if (estado) {
                 res.json({ nombre: estado.nombre });
             } else {
@@ -207,7 +207,7 @@ class UsuarioController {
             res.status(500).json({ error: "Error interno del servidor" });
         }
     }
-    
+
 
     public async eliminarUsuario(req: Request, res: Response): Promise<void> {
         try {
@@ -238,19 +238,19 @@ class UsuarioController {
             const id_usuario = req.params.id_usuario;
             const perfilEncontrado = await PerfilUsuario.findOne({ id_usuario: id_usuario });
 
-            
+
             if (perfilEncontrado) {
                 res.json({
                     id: perfilEncontrado._id,
                     cv: perfilEncontrado.cv,
-                    experiencia:perfilEncontrado.experiencia,
+                    experiencia: perfilEncontrado.experiencia,
                     habilidades: perfilEncontrado.habilidades,
-                    educacion:perfilEncontrado.educacion,
-                    idiomas:perfilEncontrado.idiomas,
+                    educacion: perfilEncontrado.educacion,
+                    idiomas: perfilEncontrado.idiomas,
                     certificaciones: perfilEncontrado.certificaciones,
                     status: perfilEncontrado.status,
                     foto: perfilEncontrado.foto
-                   
+
                 });
             } else {
                 res.status(404).json({ message: "Perfil de usuario no encontrado" });
@@ -271,25 +271,25 @@ class UsuarioController {
 
     public async actualizarUsuario(req: Request, res: Response): Promise<void> {
         const { nombre, direccion, ciudad, estado, correo } = req.body;
-    
+
         let nombreError: string | null = null;
-    
+
         const nameRegex = /^[a-zA-ZÀ-ÿ'\s]{1,50}$/;
         if (!nameRegex.test(nombre)) {
             nombreError = "Nombre no válido";
         }
-        
+
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(correo)) {
-                nombreError = "Correo no válido";
-            }
+        if (!emailRegex.test(correo)) {
+            nombreError = "Correo no válido";
+        }
         /*const estadoName = await Estado.findOne({ clave: estado });
         let estadoNom: string = estado;
     
         if (estadoName) {
             estadoNom = estadoName.nombre;
         }*/
-    
+
         if (nombreError) {
             res.status(400).json(jsonResponse(400, {
                 nombreError
@@ -297,12 +297,12 @@ class UsuarioController {
             return;
         }
 
-       
-    
+
+
         try {
             const perfil = await Usuario.findByIdAndUpdate(
-                req.params.id, 
-                { nombre, direccion, ciudad, estado, correo }, 
+                req.params.id,
+                { nombre, direccion, ciudad, estado, correo },
                 { new: true }
             );
             res.json(perfil);
@@ -312,20 +312,20 @@ class UsuarioController {
             }));
         }
     }
-    
+
     public async restablecerContrasena(req: Request, res: Response): Promise<void> {
         const { token, password } = req.body;
-    
+
         if (!token || !password) {
             res.status(400).json({ message: 'Token y contraseña son requeridos.' });
             return;
         }
-    
+
         try {
             // Verifica el token y obtiene el correo
             const decoded: any = jwt.verify(token, process.env.TOKEN_SECRET || 'prueba');
             const email = decoded.email;
-    
+
             // Encuentra el usuario en las tres colecciones posibles
             let user: any = await Usuario.findOne({ correo: email });
             if (!user) {
@@ -334,16 +334,16 @@ class UsuarioController {
             if (!user) {
                 user = await Administrador.findOne({ correo: email });
             }
-    
+
             // Si no se encontró el usuario en ninguna colección
             if (!user) {
                 res.status(404).json({ message: 'Usuario no encontrado.' });
                 return;
             }
-    
+
             // Hashea la nueva contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
-    
+
             // Actualiza la contraseña en la colección correspondiente
             if (user instanceof Usuario) {
                 await Usuario.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
@@ -352,7 +352,7 @@ class UsuarioController {
             } else if (user instanceof Administrador) {
                 await Administrador.findOneAndUpdate({ correo: email }, { contrasena: hashedPassword });
             }
-    
+
             res.status(200).json({ message: 'Contraseña actualizada exitosamente.' });
         } catch (error) {
             console.error(error); // Imprime el error para depuración

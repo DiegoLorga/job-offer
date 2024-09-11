@@ -408,3 +408,43 @@
   gap: 10px;
   /* Espacio entre los elementos */
 }
+
+/* Texto de los tabs en negro */
+.custom-tabs .tab a {
+  color: black !important; /* Asegura que el texto sea negro */
+}
+
+/* Color de la línea indicadora en gris */
+.custom-tabs .indicator {
+  background-color: #7a7a7a !important; /* Cambia la línea a gris claro */
+}
+
+/* Tab activo: quita cualquier color residual y asegura que sea negro */
+.custom-tabs .tab a.active {
+  color: black !important; /* Elimina cualquier color rojo del texto activo */
+}
+
+/* Hover de los tabs: gris claro */
+.custom-tabs .tab a:hover {
+  color: #7a7a7a !important; /* Hover en gris */
+}
+
+/* Elimina el color rojo residual en el borde al seleccionar */
+.custom-tabs .tab a:focus, .custom-tabs .tab a:active {
+  outline: none !important;
+  background-color: #f5f5f5 !important;
+  color: black !important; /* Asegura que el texto activo sea negro */
+}
+
+/* Asegura que el color del borde (focus) no sea rojo */
+.custom-tabs .tab a:focus.active, .custom-tabs .tab a:active.active {
+  color: black !important; /* Color del texto negro incluso cuando está activo */
+}
+
+.btn-curso{
+background-color: #757575;
+}
+
+.btn-curso:hover {
+  background-color: #757575;
+}

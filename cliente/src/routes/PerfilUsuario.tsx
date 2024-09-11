@@ -1589,7 +1589,7 @@ const handleActCertificacion = async () => {
         <DefaultLayout showNav={true}>
 
             <div className="nav-content">
-                <ul id="tabs-swipe-demo" className="tabs">
+                <ul id="tabs-swipe-demo" className="tabs custom-tabs">
                     <li className="tab col s6"><a className="active" href="#perfil">Perfil</a></li>
                     <li className="tab col s6"><a href="#info">Competencias</a></li>
                 </ul>
@@ -1836,7 +1836,7 @@ const handleActCertificacion = async () => {
                             <i className="material-icons">add</i>
                         </a>
                         <button
-                            className="btn waves-effect waves-light right"
+                            className="btn waves-effect waves-light right btn-curso"
                             style={{ marginRight: '30px' }}
                             onClick={enlistarCertificaciones}
                         >

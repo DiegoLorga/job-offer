@@ -221,10 +221,7 @@ class ofertaLaboralController {
 
             console.log(estado, ciudad, sueldo, modalidad, educacion, fechaInicio, fechaFin);
             
-            //console.log(filtros);
-            
-            
-            
+
             if (ofertas.length === 0) {
                 console.log("No hay coincidencias");
     

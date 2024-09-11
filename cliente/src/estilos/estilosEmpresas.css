@@ -230,7 +230,7 @@
 
 .custom-btn2 {
     width: 50%; /* El botón ocupará todo el ancho del contenedor */
-    background-color: #630bde;
+    background-color: #757575;
     color: white;
     padding: 2px 10px; /* Espaciado interno para el botón */
     font-size: 12px;
@@ -242,7 +242,7 @@
 }
 
 .custom-btn2:hover {
-    background-color: #4b08a5; /* Cambia ligeramente el color en hover */
+    background-color: #757575; /* Cambia ligeramente el color en hover */
 }
 
 

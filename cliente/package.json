@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "job-offer": "file:",
     "js-cookie": "^3.0.5",
-    "materialize-css": "^1.0.0-rc.2",
+    "materialize-css": "^1.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",

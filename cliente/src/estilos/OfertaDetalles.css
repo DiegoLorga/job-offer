@@ -51,18 +51,17 @@
 }
 
 .postularme-btn {
-    background-color: #007bff;
+    background-color: #757575;
     color: white;
     font-weight: bold;
     padding: 1px 8px;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
     margin-left: auto; /* Empuja el botón hacia el extremo derecho */
 }
 
 .postularme-btn:hover {
-    background-color: #0056b3;
+    background-color: #757575;
 }
 .oferta-detalles-container {
     display: flex;
@@ -104,7 +103,7 @@
 
 .postularme-btn {
     margin-top: 12px;
-    background-color: #42a5f5;
+    background-color: #757575;
 }
 
 .info-title {

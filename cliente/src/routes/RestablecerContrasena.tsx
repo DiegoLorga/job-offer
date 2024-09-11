@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../auth/apis';
-import { AuthResponseError } from '../types/types';
 import { useNavigate } from 'react-router-dom'
 import '../index.css';
 

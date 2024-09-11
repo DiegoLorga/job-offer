@@ -3,6 +3,7 @@
     gap: 5px;
     /* Espacio entre las columnas, si es necesario */
 }
+
 .main-container2 {
     display: flex;
     gap: 0px;
@@ -194,46 +195,109 @@ body #Empresas {
 }
 
 .btn-custom:hover .material-icons {
-    color: green;
+    color: #757575;
     /* Color del ícono al pasar el cursor */
 }
 
 .btn-custom:active .material-icons {
-    color: purple;
+    color: #757575;
     /* Color del ícono al hacer clic */
 }
 
 .btn-custom.clicked .material-icons {
-    color: purple;
+    color: #757575;
     /* Color del ícono a morado cuando el botón ha sido clickeado */
 }
 
 .header-container {
     display: flex;
-    justify-content: space-between; /* O utiliza 'space-around' si prefieres un espaciado alrededor de cada contenedor */
-    align-items: center; /* Alinea verticalmente en el centro si los elementos tienen diferentes alturas */
-    gap: 10px; /* Espacio entre los elementos */
-    padding: 70px; /* Espacio alrededor del contenedor */
+    justify-content: space-between;
+    /* O utiliza 'space-around' si prefieres un espaciado alrededor de cada contenedor */
+    align-items: center;
+    /* Alinea verticalmente en el centro si los elementos tienen diferentes alturas */
+    gap: 10px;
+    /* Espacio entre los elementos */
+    padding: 70px;
+    /* Espacio alrededor del contenedor */
 }
 
 .select-container {
-    margin-right: 10px; /* Espacio a la derecha de cada contenedor, ajusta según sea necesario */
+    margin-right: 10px;
+    /* Espacio a la derecha de cada contenedor, ajusta según sea necesario */
 }
 
 .select-container:last-child {
-    margin-right: 5px; /* Elimina el margen derecho del último contenedor para evitar un espacio extra */
+    margin-right: 5px;
+    /* Elimina el margen derecho del último contenedor para evitar un espacio extra */
 }
 
 .info-title4 {
-    margin-bottom: 5px; /* Espacio debajo del título, ajusta según sea necesario */
+    margin-bottom: 5px;
+    /* Espacio debajo del título, ajusta según sea necesario */
     font-weight: bold;
     color: #333;
 }
 
 .button-container {
     display: flex;
-    justify-content: center; /* Centra el botón horizontalmente */
-    margin-top: -40px; /* Espacio arriba del botón, ajusta según sea necesario */
+    justify-content: center;
+    /* Centra el botón horizontalmente */
+    margin-top: -40px;
+    /* Espacio arriba del botón, ajusta según sea necesario */
     margin-bottom: 20px;
 }
 
+/* Texto de los tabs en negro */
+.custom-tabs .tab a {
+    color: black !important;
+    /* Asegura que el texto sea negro */
+}
+
+/* Color de la línea indicadora en gris */
+.custom-tabs .indicator {
+    background-color: #7a7a7a !important;
+    /* Cambia la línea a gris claro */
+}
+
+/* Tab activo: quita cualquier color residual y asegura que sea negro */
+.custom-tabs .tab a.active {
+    color: black !important;
+    /* Elimina cualquier color rojo del texto activo */
+}
+
+/* Hover de los tabs: gris claro */
+.custom-tabs .tab a:hover {
+    color: #7a7a7a !important;
+    /* Hover en gris */
+}
+
+/* Elimina el color rojo residual en el borde al seleccionar */
+.custom-tabs .tab a:focus,
+.custom-tabs .tab a:active {
+    outline: none !important;
+    background-color: #f5f5f5 !important;
+    color: black !important;
+    /* Asegura que el texto activo sea negro */
+}
+
+/* Asegura que el color del borde (focus) no sea rojo */
+.custom-tabs .tab a:focus.active,
+.custom-tabs .tab a:active.active {
+    color: black !important;
+    /* Color del texto negro incluso cuando está activo */
+}
+
+.custom-btn {
+    width: 98%;
+    background-color: #757575;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.custom-btn:hover {
+    background-color: #757575;
+}

@@ -6,12 +6,6 @@
   font-weight: 400;
 }
 
-
-
-
-
-
-
 label {
   display: block;
 }
@@ -152,7 +146,7 @@ n
 }
 
 button {
-  background-color: #007bff;
+  background-color: #757575;
   /* Color de fondo del botón */
   color: white;
   /* Color del texto del botón */
@@ -167,7 +161,7 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #757575;
   /* Color de fondo al pasar el ratón */
 }
 
@@ -234,7 +228,7 @@ button:hover {
 
 .custom-btn {
   width: 98%;
-  background-color: #630bde;
+  background-color: #757575;
   color: white;
   padding: 10px;
   font-size: 18px;
@@ -244,7 +238,7 @@ button:hover {
 }
 
 .custom-btn:hover {
-  background-color: #630bde;
+  background-color: #757575;
 }
 
 .form-horizontal {
@@ -408,3 +402,31 @@ input[readonly] {
   font-size: 15px; /* Ajusta el tamaño de la fuente si es necesario */
   color: rgb(129, 129, 129);
 }
+
+.custom-nav {
+  background-color: #ffffff; /* Un tono de blanco */
+}
+
+/* Cambia el botón de "Mi cuenta" a gris */
+/* Forzar el color gris en el botón */
+.grey-btn {
+  background-color: #757575 !important; /* Color gris con !important */
+  color: white !important; /* Texto en blanco con !important */
+}
+
+/* Cambia el color de las opciones del dropdown a negro */
+.black-options li a {
+  color: black !important; /* Texto en negro con !important */
+}
+
+/* Efecto hover sobre las opciones del dropdown */
+.black-options li a:hover {
+  background-color: #e0e0e0 !important; /* Fondo gris claro al hacer hover */
+}
+
+/* Asegurarse de que el texto sea negro en los links */
+.black-text {
+  color: black !important;
+}
+
+

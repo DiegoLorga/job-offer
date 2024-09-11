@@ -52,16 +52,18 @@ export default function Navigation() {
 
     return (
         <>
-            <nav className="nav-extended">
+            <nav className="nav-extended custom-nav">
                 <div className="nav-wrapper">
-                    <a href="#" className="brand-logo">Logo</a>
+                    <a href="#" className="brand-logo">
+                        <img src="https://i.ytimg.com/vi/wKUEGzKXYWM/maxresdefault.jpg" alt="Logo" style={{ height: 'auto', width: '200px' }} />
+                    </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li>
-                            <a className="dropdown-trigger btn" href="#!" data-target="dropdown1">
+                            <a className="dropdown-trigger btn grey-btn" href="#!" data-target="dropdown1">
                                 <i className="material-icons">perm_identity</i>
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
-                            <ul id="dropdown1" className="dropdown-content">
+                            <ul id="dropdown1" className="dropdown-content black-options">
                                 <li>
                                     <Link to="/Empleado/PerfilUsuario">Mi cuenta
                                         <i className="tiny material-icons">perm_identity</i>
@@ -85,6 +87,7 @@ export default function Navigation() {
                             </ul>
                         </li>
                     </ul>
+
                 </div>
             </nav>
 

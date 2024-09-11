@@ -14,7 +14,6 @@ class Server {
         this.app = express();
         this.config();
         this.routes();
-        this.app.use(express.static(__dirname + "/imagenes"));
     }
 
     config(): void {
