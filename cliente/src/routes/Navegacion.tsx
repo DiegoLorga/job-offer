@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../auth/AuthProvider";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import M from 'materialize-css';
 import { API_URL } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
@@ -8,8 +8,23 @@ import '../index.css'; // Importa tus estilos personalizados después
 
 export default function Navigation() {
     const auth = useAuth();
-    const location = useLocation();
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const sidenavElems = document.querySelectorAll('.sidenav');
+        const tabsElems = document.querySelectorAll('.tabs');
+        const dropdownElems = document.querySelectorAll('.dropdown-trigger');
+
+        M.Sidenav.init(sidenavElems);
+        M.Tabs.init(tabsElems);
+        M.Dropdown.init(dropdownElems);
+
+        return () => {
+            M.Sidenav.getInstance(sidenavElems[0])?.destroy();
+            M.Tabs.getInstance(tabsElems[0])?.destroy();
+            M.Dropdown.getInstance(dropdownElems[0])?.destroy();
+        };
+    }, []);
 
     async function handleLogout() {
         try {
@@ -33,22 +48,6 @@ export default function Navigation() {
             console.log(error);
         }
     }
-
-    useEffect(() => {
-        const sidenavElems = document.querySelectorAll('.sidenav');
-        const tabsElems = document.querySelectorAll('.tabs');
-        const dropdownElems = document.querySelectorAll('.dropdown-trigger');
-
-        M.Sidenav.init(sidenavElems);
-        M.Tabs.init(tabsElems);
-        M.Dropdown.init(dropdownElems);
-
-        return () => {
-            M.Sidenav.getInstance(sidenavElems[0])?.destroy();
-            M.Tabs.getInstance(tabsElems[0])?.destroy();
-            M.Dropdown.getInstance(dropdownElems[0])?.destroy();
-        };
-    }, []);
 
     return (
         <>
