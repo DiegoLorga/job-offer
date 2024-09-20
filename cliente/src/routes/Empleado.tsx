@@ -344,7 +344,7 @@ export default function Empleados() {
         <DefaultLayout showNav={true}>
             <div className="nav-content">
                 <ul id="tabs-swipe-demo" className="tabs custom-tabs">
-                    <li className="tab col s3"><a href="#Empleos" className="black-text">Empleos</a></li>
+                    <li className="tab col s3" ><a href="#Empleos" className="black-text">Empleos</a></li>
                     <li className="tab col s3"><a href="#Empresas" className="black-text">Empresas</a></li>
                 </ul>
             </div>

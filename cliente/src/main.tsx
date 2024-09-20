@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from './routes/Login';
@@ -11,6 +10,7 @@ import RecuperarContrasena from './routes/RecuperarContrasena';
 import RestablecerContrasena from './routes/RestablecerContrasena';
 import { AuthProvider } from './auth/AuthProvider';
 import PerfilUsuario from './routes/PerfilUsuario';
+import PerfilEmpresa from './routes/PerfilEmpresa';
 import 'materialize-css/dist/css/materialize.min.css';
 import './index.css';
 
@@ -37,7 +37,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: "Empresa",
-        element: <Empresa />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "",
+            element: <Empresa />,
+          },
+          {
+            path: "PerfilEmpresa",
+            element: <PerfilEmpresa />,
+          }
+        ],
       },
       {
         path: "Empleado",

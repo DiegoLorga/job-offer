@@ -50,7 +50,7 @@ export default function Login() {
             });
 
             if (response.ok) {
-                // console.log("El usuario ingresó");
+                // console.log("El usuario ingresó
                 const json = await response.json() as AuthReponseRegister;
                 console.log(json);
                 console.log("El id_rol", json.body.usuario.id_rol);
