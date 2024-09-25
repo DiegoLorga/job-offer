@@ -94,11 +94,19 @@ export default function Navigation() {
                                     </Link>
                                 </li>
                             ) : null }
+                             {idRol === "6690640c24eacbffd867f333" ? (
                                 <li>
                                     <Link to="/Empresa">Postulaciones
                                         <i className="tiny material-icons">content_paste</i>
                                     </Link>
                                 </li>
+                             ) : idRol === "6690637124eacbffd867f32f" ? (
+                                <li>
+                                <Link to="/Empresa">Postulantes
+                                    <i className="tiny material-icons">content_paste</i>
+                                </Link>
+                            </li>
+                             ) : null }
                                 <li>
                                     <a href="#!" onClick={handleLogout}>Logout
                                         <i className="material-icons">exit_to_app</i>

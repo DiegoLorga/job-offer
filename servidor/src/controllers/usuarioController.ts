@@ -12,6 +12,8 @@ import jwt from 'jsonwebtoken';
 import Empresa from '../models/empresa.model';
 import EducacionUsuario from '../models/educacionUsuario.model';
 import Administrador from '../models/administrador.model';
+import OfertaLaboral from '../models/OfertaLaboral.model';
+import notificacionEmpresa from '../models/notificacionEmpresa.model';
 
 class UsuarioController {
 
@@ -54,9 +56,8 @@ class UsuarioController {
 
         /*const estadoName = await Estado.findOne({ clave: estado });
          let estadoNom: string = estado; // Definir la variable con el tipo correcto
- 
-         if (estadoName) {
-             estadoNom = estadoName.nombre;
+        if (estadoName) {
+            estadoNom = estadoName.nombre;
          } */
 
         if (camposError || contrasenasError || nombreError || correoError) {
@@ -359,6 +360,49 @@ class UsuarioController {
             res.status(400).json({ message: 'Error al actualizar la contraseña.' });
         }
     }
+
+    public async postular(req: Request, res: Response): Promise<void> {
+        console.log("Entrando a Postularme");
+        
+        const { idUsuario, idOferta } = req.body;
+
+        console.log(idUsuario);
+        console.log(idOferta);
+        
+        
+
+        // Obtener la oferta laboral y la empresa relacionada
+        const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
+        const empresa = oferta?.id_empresa
+
+        if (!oferta || !empresa) {
+            res.status(404).json(jsonResponse(404, {
+                error: 'Oferta o empresa no encontrada'
+            }));
+            return;
+        }
+
+        // Crear una notificación para la empresa
+        const nuevaNotificacion = new notificacionEmpresa({
+            recipientId: empresa,
+            senderId: idUsuario,
+            message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+            link: `/empresa/oferta/${idOferta}`,
+            isRead: false  // Inicialmente, la notificación no está leída
+        });
+
+        try {
+            await nuevaNotificacion.save();
+            res.status(200).json(jsonResponse(200, {
+                message: 'Postulación enviada y notificación creada'
+            }));
+        } catch (error: any) {
+            res.status(500).json(jsonResponse(500, {
+                error: 'Error al guardar la notificación'
+            }));
+        }
+    }
+
 }
 
 

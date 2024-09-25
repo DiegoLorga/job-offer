@@ -54,6 +54,8 @@ export default function Empleados() {
     const [selectedModalidad, setSelectedModalidad] = useState<string>("1");
     const [fechaInicio, setFechaInicio] = useState<string>("");
     const [fechaFin, setFechaFin] = useState<string>("");
+    const [id, setId] = useState<string | null>(null);
+
 
 
     const auth = useAuth();
@@ -336,6 +338,36 @@ export default function Empleados() {
         }
     };
 
+    const handlePostularme = async (idOferta: string) => {
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const idUsuario =usuario.id;
+            try {
+                const response = await fetch(`${API_URL}/usuario/postularme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idUsuario,
+                        idOferta
+                    }),
+                });
+
+                if (response.ok) {
+                    alert('Postulación enviada con éxito');
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error al postularse: ${errorData.error}`);
+                }
+            } catch (error) {
+                alert('Error de conexión. Por favor intenta más tarde.');
+            }
+        }
+    };
+
+
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
@@ -389,7 +421,11 @@ export default function Empleados() {
                                             <div className="oferta-header">
                                                 <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
                                                 <p className="empresa-nombre">{empresaNombre}</p>
-                                                <button className="btn waves-effect postularme-btn" type="button">
+                                                <button
+                                                    className="btn waves-effect postularme-btn"
+                                                    type="button"
+                                                    onClick={() => handlePostularme(ofertaSeleccionada._id)}
+                                                >
                                                     Postularme
                                                 </button>
                                             </div>

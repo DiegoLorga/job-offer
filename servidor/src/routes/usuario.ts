@@ -20,7 +20,7 @@ class UsuarioRoutes {
         this.router.post('/restablecerContrasena', usuariosController.restablecerContrasena);
         this.router.get("/getEstado/:clave", usuariosController.getEstado);
         this.router.put("/actualizarUsuario/:id", usuariosController.actualizarUsuario);
-
+        this.router.post("/postularme",usuariosController.postular);
     }
 }
 const usuaioRoutes = new UsuarioRoutes();
