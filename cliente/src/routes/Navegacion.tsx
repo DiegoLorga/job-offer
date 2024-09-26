@@ -74,39 +74,39 @@ export default function Navigation() {
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
                             <ul id="dropdown1" className="dropdown-content black-options">
-                            {idRol === "6690640c24eacbffd867f333" ? (
-                                <li>
-                                    <Link to="/Empleado/PerfilUsuario">Mi cuenta
-                                        <i className="tiny material-icons">perm_identity</i>
-                                    </Link>
-                                </li>
-                            ):  idRol === "6690637124eacbffd867f32f" ? (
-                                <li>
-                                <Link to="/Empresa/PerfilEmpresa">Mi cuenta
-                                    <i className="tiny material-icons">perm_identity</i>
-                                </Link>
-                            </li>
-                            ) : null}
-                            {idRol === "6690640c24eacbffd867f333" ? (
-                                <li>
-                                    <Link to="/Administrador">Guardado
-                                        <i className="tiny material-icons">turned_in</i>
-                                    </Link>
-                                </li>
-                            ) : null }
-                             {idRol === "6690640c24eacbffd867f333" ? (
-                                <li>
-                                    <Link to="/Empresa">Postulaciones
-                                        <i className="tiny material-icons">content_paste</i>
-                                    </Link>
-                                </li>
-                             ) : idRol === "6690637124eacbffd867f32f" ? (
-                                <li>
-                                <Link to="/Empresa">Postulantes
-                                    <i className="tiny material-icons">content_paste</i>
-                                </Link>
-                            </li>
-                             ) : null }
+                                {idRol === "6690640c24eacbffd867f333" ? (
+                                    <li>
+                                        <Link to="/Empleado/PerfilUsuario">Mi cuenta
+                                            <i className="tiny material-icons">perm_identity</i>
+                                        </Link>
+                                    </li>
+                                ) : idRol === "6690637124eacbffd867f32f" ? (
+                                    <li>
+                                        <Link to="/Empresa/PerfilEmpresa">Mi cuenta
+                                            <i className="tiny material-icons">perm_identity</i>
+                                        </Link>
+                                    </li>
+                                ) : null}
+                                {idRol === "6690640c24eacbffd867f333" ? (
+                                    <li>
+                                        <Link to="/Administrador">Guardado
+                                            <i className="tiny material-icons">turned_in</i>
+                                        </Link>
+                                    </li>
+                                ) : null}
+                                {idRol === "6690640c24eacbffd867f333" ? (
+                                    <li>
+                                        <Link to="/Empresa">Postulaciones
+                                            <i className="tiny material-icons">content_paste</i>
+                                        </Link>
+                                    </li>
+                                ) : idRol === "6690637124eacbffd867f32f" ? (
+                                    <li>
+                                        <Link to="/Empresa">Postulantes
+                                            <i className="tiny material-icons">content_paste</i>
+                                        </Link>
+                                    </li>
+                                ) : null}
                                 <li>
                                     <a href="#!" onClick={handleLogout}>Logout
                                         <i className="material-icons">exit_to_app</i>

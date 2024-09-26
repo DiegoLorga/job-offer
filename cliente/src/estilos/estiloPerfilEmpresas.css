@@ -1,0 +1,10 @@
+.notifications{
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: rgb(100, 100, 100);
+    color: black;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+}

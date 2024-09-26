@@ -1,10 +1,54 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import M from 'materialize-css';
 import DefaultLayout from '../layout/DefaultLayout';
 import '../index.css'; // Importa tus estilos personalizados después
-import '../estilos/estiloPerfilEmpresas.css'
+import '../estilos/estiloPerfilEmpresas.css';
+import { io, Socket } from "socket.io-client";
+
+// Define la interfaz para las notificaciones
+interface Notificacion {
+    idOferta: string;
+    idUsuario: string;
+    message: string; // Mensaje de la notificación
+    link: string; // Enlace a la oferta (puedes ajustarlo según tu estructura)
+}
 
 export default function Empresa() {
+    const socketRef = useRef<Socket | null>(null); // `Socket` de `socket.io-client`
+    const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]); // Estado para almacenar las notificaciones
+
+    useEffect(() => {
+        const socket = io("http://localhost:3000"); // Conéctate al servidor
+        socketRef.current = socket; // Guarda la referencia del socket
+
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const empresaId = usuario.id; // ID de la empresa
+
+            socket.emit('joinEmpresa', empresaId); // Únete al room de la empresa
+
+            // Escuchar notificaciones
+            socket.on('nuevaPostulacion', (notificacion) => {
+                console.log('Nueva notificación recibida:', notificacion);
+                setNotificaciones((prevNotificaciones) => [
+                    ...prevNotificaciones,
+                    {
+                        idOferta: notificacion.idOferta,
+                        idUsuario: notificacion.idUsuario,
+                        message: 'Un nuevo usuario se postuló a tu oferta',
+                        link: `/oferta/${notificacion.idOferta}`, // Ajusta según tu ruta de oferta
+                    },
+                ]); // Actualiza el estado
+            });
+        }
+
+        return () => {
+            socket.off('nuevaPostulacion'); // Limpia el listener al desmontar
+            socket.disconnect(); // Desconectar el socket
+        };
+    }, []);
+
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         const tabsElems = document.querySelectorAll('.tabs');
@@ -33,16 +77,6 @@ export default function Empresa() {
         };
     }, []);
 
-
-
-    console.log("Ingreso a empresas");
-    const storedUser = localStorage.getItem('usuario');
-    if (storedUser) {
-        const usuario = JSON.parse(storedUser);
-        console.log(usuario.id_rol);
-    }
-
-
     return (
         <DefaultLayout showNav={true}>
             <div className="container">
@@ -52,13 +86,21 @@ export default function Empresa() {
                         <li className="tab col s3"><a href="#Empresas" className="black-text">Empresas</a></li>
                     </ul>
                 </div>
-                <div id="Ofertas" className="container ">
+                <div className="notifications">
+                    <ul>
+                        {notificaciones.map((notif, index) => (
+                            <li key={index}>
+                                {notif.message} - <a href={notif.link}>Ver Oferta</a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div id="Ofertas" className="container">
                     <h1>Ofertas</h1>
                 </div>
                 <div id="Empresas" className="container">
                     <h1>Empresas</h1>
                 </div>
-
             </div>
         </DefaultLayout>
     );

@@ -6,12 +6,15 @@ import Swal from 'sweetalert2';
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import EmpresaCard from "../routes/EmpresaCard";
-import { Empresa, Oferta1, OfertaCompleta } from '../types/types';
+import { Empresa, Notificacion, Oferta1, OfertaCompleta } from '../types/types';
 import { API_URL } from "../auth/apis";
 import '../index.css';
 import '../estilos/estilosOfertas.css';
 import Oferta from "./Ofertas";
 import '../estilos/OfertaDetalles.css'
+import { io } from "socket.io-client";
+
+
 
 interface Giro {
     _id: string;
@@ -54,11 +57,33 @@ export default function Empleados() {
     const [selectedModalidad, setSelectedModalidad] = useState<string>("1");
     const [fechaInicio, setFechaInicio] = useState<string>("");
     const [fechaFin, setFechaFin] = useState<string>("");
-    const [id, setId] = useState<string | null>(null);
+    const [NotificacionEmpresas, setNotificacionEmpresas] = useState<Notificacion[]>([]);
 
+    useEffect(() => {
+        const socket = io("http://localhost:3000"); // Conéctate al servidor
 
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const empresaId = usuario.id; // ID de la empresa
+
+            socket.emit('joinEmpresa', empresaId); // Únete al room de la empresa
+
+            // Escuchar notificaciones
+            socket.on('nuevaPostulacion', (notificacion) => {
+                console.log('Nueva notificación recibida:', notificacion);
+            });
+        }
+
+        return () => {
+            socket.off('nuevaPostulacion'); // Limpia el listener al desmontar
+            socket.disconnect(); // Desconectar el socket
+        };
+    }, []);
 
     const auth = useAuth();
+    const socket = io("http://localhost:3000"); // Conéctate al servidor
+
 
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
@@ -342,7 +367,9 @@ export default function Empleados() {
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
-            const idUsuario =usuario.id;
+            const idUsuario = usuario.id;
+
+
             try {
                 const response = await fetch(`${API_URL}/usuario/postularme`, {
                     method: 'POST',
@@ -351,12 +378,13 @@ export default function Empleados() {
                     },
                     body: JSON.stringify({
                         idUsuario,
-                        idOferta
+                        idOferta,
                     }),
                 });
 
                 if (response.ok) {
-                    alert('Postulación enviada con éxito');
+                    socket.emit('nuevaPostulacion', { idOferta, idUsuario});
+
                 } else {
                     const errorData = await response.json();
                     alert(`Error al postularse: ${errorData.error}`);
@@ -366,6 +394,8 @@ export default function Empleados() {
             }
         }
     };
+
+
 
 
     if (!auth.isAuthenticated) {

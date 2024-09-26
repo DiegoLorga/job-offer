@@ -14,6 +14,7 @@ import EducacionUsuario from '../models/educacionUsuario.model';
 import Administrador from '../models/administrador.model';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import notificacionEmpresa from '../models/notificacionEmpresa.model';
+import server from '../index';
 
 class UsuarioController {
 
@@ -362,46 +363,52 @@ class UsuarioController {
     }
 
     public async postular(req: Request, res: Response): Promise<void> {
-        console.log("Entrando a Postularme");
-        
         const { idUsuario, idOferta } = req.body;
-
-        console.log(idUsuario);
-        console.log(idOferta);
         
-        
-
-        // Obtener la oferta laboral y la empresa relacionada
-        const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
-        const empresa = oferta?.id_empresa
-
-        if (!oferta || !empresa) {
-            res.status(404).json(jsonResponse(404, {
-                error: 'Oferta o empresa no encontrada'
-            }));
-            return;
-        }
-
-        // Crear una notificación para la empresa
-        const nuevaNotificacion = new notificacionEmpresa({
-            recipientId: empresa,
-            senderId: idUsuario,
-            message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
-            link: `/empresa/oferta/${idOferta}`,
-            isRead: false  // Inicialmente, la notificación no está leída
-        });
-
         try {
+            const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
+            
+            if (!oferta || !oferta.id_empresa) {
+                res.status(404).json({
+                    status: 404,
+                    message: 'Oferta o empresa no encontrada'
+                });
+                return;
+            }
+            
+            const empresa = oferta.id_empresa as any; // Asegúrate de que esto contiene la referencia a la empresa
+            
+            const nuevaNotificacion = new notificacionEmpresa({
+                recipientId: empresa._id, // Cambiar a empresa._id
+                senderId: idUsuario,
+                message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+                link: `/empresa/oferta/${idOferta}`,
+                isRead: false
+            });
+            
             await nuevaNotificacion.save();
-            res.status(200).json(jsonResponse(200, {
-                message: 'Postulación enviada y notificación creada'
-            }));
+            
+            // Emitir el evento al room de la empresa usando su ID
+            server.io.to(`empresa_${empresa._id.toString()}`).emit('nuevaPostulacion', nuevaNotificacion);
+            console.log(empresa._id);
+            
+            
+            res.status(200).json({
+                status: 200,
+                message: 'Postulación enviada y notificación creada',
+                notificacion: nuevaNotificacion
+            });
         } catch (error: any) {
-            res.status(500).json(jsonResponse(500, {
-                error: 'Error al guardar la notificación'
-            }));
+            res.status(500).json({
+                status: 500,
+                message: 'Error al guardar la notificación',
+                error: error.message
+            });
         }
     }
+    
+    
+    
 
 }
 

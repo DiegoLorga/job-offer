@@ -191,4 +191,5 @@ export interface Notificacion{
     _id: string;
     recipientId: string;
     senderId: string;
+    message: string;
 }
