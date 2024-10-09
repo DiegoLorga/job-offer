@@ -1,15 +1,65 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Link, useNavigate } from 'react-router-dom';
 import M from 'materialize-css';
 import { API_URL } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
-import '../index.css'; // Importa tus estilos personalizados despuéss';
+import '../index.css'; // Importa tus estilos personalizados después
+import { io, Socket } from "socket.io-client";
+
+interface Notificacion {
+    idOferta: string;
+    idUsuario: string;
+    message: string; // Mensaje de la notificación
+    link: string; // Enlace a la oferta (puedes ajustarlo según tu estructura)
+}
 
 export default function Navigation() {
     const auth = useAuth();
     const navigate = useNavigate();
     const [idRol, setIdRol] = useState<string | null>(null);
+    const socketRef = useRef<Socket | null>(null); // `Socket` de `socket.io-client`
+    const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]); // Estado para almacenar las notificaciones
+    const [tieneNotificaciones, setTieneNotificaciones] = useState(false);
+
+
+
+    useEffect(() => {
+        const socket = io("http://localhost:3000"); // Conéctate al servidor
+        socketRef.current = socket; // Guarda la referencia del socket
+
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const empresaId = usuario.id; // ID de la empresa
+
+            socket.emit('joinEmpresa', empresaId); // Únete al room de la empresa
+
+            // Escuchar notificaciones
+            socket.on('nuevaPostulacion', (notificacion) => {
+                console.log('Nueva notificación recibida:', notificacion);
+                setNotificaciones((prevNotificaciones) => {
+                    const nuevasNotificaciones = [
+                        ...prevNotificaciones,
+                        {
+                            idOferta: notificacion.idOferta,
+                            idUsuario: notificacion.idUsuario,
+                            message: 'Un nuevo usuario se postuló a tu oferta',
+                            link: `/Empresa/Postulantes/`,
+                        },
+                    ];
+                    // Actualiza el estado de notificaciones
+                    setTieneNotificaciones(nuevasNotificaciones.length > 0);
+                    return nuevasNotificaciones;
+                });
+            });
+        }
+
+        return () => {
+            socket.off('nuevaPostulacion'); // Limpia el listener al desmontar
+            socket.disconnect(); // Desconectar el socket
+        };
+    }, []);
 
     useEffect(() => {
         // Obtener el id_rol del usuario almacenado en localStorage
@@ -47,7 +97,6 @@ export default function Navigation() {
             });
 
             if (response.ok) {
-
                 console.log("El usuario cerró sesión");
                 auth.setIsAuthenticated(false);
                 localStorage.removeItem('usuario'); // Eliminar información del usuario de localStorage
@@ -68,6 +117,24 @@ export default function Navigation() {
                         <img src="https://i.ytimg.com/vi/wKUEGzKXYWM/maxresdefault.jpg" alt="Logo" style={{ height: 'auto', width: '200px' }} />
                     </a>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
+                        <li>
+                            <a className="dropdown-trigger btn grey-btn" href="#!" data-target="dropdown2">
+                                <i className="material-icons">notifications</i>
+                                {tieneNotificaciones && <span className="notification-dot"></span>} {/* Punto rojo */}
+                                <i className="material-icons right">arrow_drop_down</i>
+                            </a>
+                            <ul id="dropdown2" className="dropdown-content black-options">
+                                {notificaciones.length > 0 ? (
+                                    notificaciones.map((notif, index) => (
+                                        <li key={index}>
+                                            <Link to={notif.link}>{notif.message}</Link>
+                                        </li>
+                                    ))
+                                ) : (
+                                    <li><span>No hay notificaciones</span></li>
+                                )}
+                            </ul>
+                        </li>
                         <li>
                             <a className="dropdown-trigger btn grey-btn" href="#!" data-target="dropdown1">
                                 <i className="material-icons">perm_identity</i>
@@ -102,7 +169,7 @@ export default function Navigation() {
                                     </li>
                                 ) : idRol === "6690637124eacbffd867f32f" ? (
                                     <li>
-                                        <Link to="/Empresa">Postulantes
+                                        <Link to="/Empresa/Postulantes">Postulantes
                                             <i className="tiny material-icons">content_paste</i>
                                         </Link>
                                     </li>

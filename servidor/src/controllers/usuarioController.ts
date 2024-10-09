@@ -382,7 +382,7 @@ class UsuarioController {
                 recipientId: empresa._id, // Cambiar a empresa._id
                 senderId: idUsuario,
                 message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
-                link: `/empresa/oferta/${idOferta}`,
+                link: `/Empresa/Postulantes/`,
                 isRead: false
             });
             

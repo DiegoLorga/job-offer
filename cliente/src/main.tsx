@@ -11,6 +11,7 @@ import RestablecerContrasena from './routes/RestablecerContrasena';
 import { AuthProvider } from './auth/AuthProvider';
 import PerfilUsuario from './routes/PerfilUsuario';
 import PerfilEmpresa from './routes/PerfilEmpresa';
+import Postulantes from './routes/Postulantes';
 import 'materialize-css/dist/css/materialize.min.css';
 import './index.css';
 
@@ -46,7 +47,11 @@ const router = createBrowserRouter([
           {
             path: "PerfilEmpresa",
             element: <PerfilEmpresa />,
-          }
+          },
+          {
+            path: "Postulantes",
+            element: <Postulantes />,
+          },
         ],
       },
       {
