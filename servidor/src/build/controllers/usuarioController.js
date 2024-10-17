@@ -28,6 +28,9 @@ const empresa_model_1 = __importDefault(require("../models/empresa.model"));
 const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsuario.model"));
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
+const notificacionEmpresa_model_1 = __importDefault(require("../models/notificacionEmpresa.model"));
+const index_1 = __importDefault(require("../index"));
+const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -64,9 +67,8 @@ class UsuarioController {
             }
             /*const estadoName = await Estado.findOne({ clave: estado });
              let estadoNom: string = estado; // Definir la variable con el tipo correcto
-     
-             if (estadoName) {
-                 estadoNom = estadoName.nombre;
+            if (estadoName) {
+                estadoNom = estadoName.nombre;
              } */
             if (camposError || contrasenasError || nombreError || correoError) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
@@ -339,6 +341,45 @@ class UsuarioController {
             catch (error) {
                 console.error(error); // Imprime el error para depuración
                 res.status(400).json({ message: 'Error al actualizar la contraseña.' });
+            }
+        });
+    }
+    postular(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { idUsuario, idOferta } = req.body;
+            try {
+                const oferta = yield OfertaLaboral_model_1.default.findById(idOferta).populate('id_empresa');
+                if (!oferta || !oferta.id_empresa) {
+                    res.status(404).json({
+                        status: 404,
+                        message: 'Oferta o empresa no encontrada'
+                    });
+                    return;
+                }
+                const empresa = oferta.id_empresa; // Asegúrate de que esto contiene la referencia a la empresa
+                const nuevaNotificacion = new notificacionEmpresa_model_1.default({
+                    recipientId: empresa._id, // Cambiar a empresa._id
+                    senderId: idUsuario,
+                    message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+                    link: `/Empresa/Postulantes/`,
+                    isRead: false
+                });
+                yield nuevaNotificacion.save();
+                // Emitir el evento al room de la empresa usando su ID
+                index_1.default.io.to(`empresa_${empresa._id.toString()}`).emit('nuevaPostulacion', nuevaNotificacion);
+                console.log(empresa._id);
+                res.status(200).json({
+                    status: 200,
+                    message: 'Postulación enviada y notificación creada',
+                    notificacion: nuevaNotificacion
+                });
+            }
+            catch (error) {
+                res.status(500).json({
+                    status: 500,
+                    message: 'Error al guardar la notificación',
+                    error: error.message
+                });
             }
         });
     }

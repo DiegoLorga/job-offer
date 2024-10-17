@@ -35,7 +35,7 @@ const schemaEmpresa = new Schema<Empresa>({
     id_rol: {
         type: Schema.Types.ObjectId,
         ref: 'Rol',
-        requiere: true
+        required: true
 
     },
     direccion:

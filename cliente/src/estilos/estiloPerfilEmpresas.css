@@ -1,0 +1,14 @@
+.dropdown-trigger {
+    position: relative; /* Cambia a relative para que el punto se posicione respecto a este contenedor */
+}
+
+.notification-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    position: absolute; /* Mantén absolute para que se superponga al icono */
+    top: -5px; /* Ajusta la posición vertical */
+    right: -5px; /* Ajusta la posición horizontal */
+}

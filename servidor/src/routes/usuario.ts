@@ -23,7 +23,7 @@ class UsuarioRoutes {
         this.router.post("/guardarOferta", usuariosController.createGuardado);
         this.router.delete("/desguardarOferta/:id", usuariosController.deleteGuardado);
         this.router.get("/getOfertasGuar/:id", usuariosController.getAllGuardados);
-
+        this.router.post("/postularme",usuariosController.postular);
     }
 }
 const usuaioRoutes = new UsuarioRoutes();

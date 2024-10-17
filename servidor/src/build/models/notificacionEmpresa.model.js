@@ -24,47 +24,30 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
-const schemaEmpresa = new mongoose_1.Schema({
-    nombre: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    correo: {
-        type: String,
-        required: true,
-        trim: true,
-        unique: true
-    },
-    contrasena: {
-        type: String,
-        required: true
-    },
-    id_rol: {
+const schemaNotificacion = new mongoose_1.Schema({
+    recipientId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Rol',
-        required: true
+        required: true,
+        ref: 'Empresa', // La empresa que recibe la notificación
     },
-    direccion: {
+    senderId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        required: true,
+        ref: 'Usuario', // El usuario que se postula
+    },
+    message: {
         type: String,
-        required: true
+        required: true,
     },
-    estado: {
+    link: {
         type: String,
-        required: true
+        required: true,
     },
-    ciudad: {
-        type: String,
-        required: true
-    },
-    giro: {
-        type: String,
-        required: true
-    },
-    foto: {
+    isRead: {
         type: Boolean,
+        default: false,
     }
 }, {
     timestamps: true
 });
-exports.default = mongoose_1.default.model('Empresa', schemaEmpresa);
+exports.default = mongoose_1.default.model('Notificacion', schemaNotificacion);

@@ -89,6 +89,7 @@ export interface Oferta1{
 }
 
 export interface OfertaCompleta{
+    _id:string;
     id_empresa: string;
     titulo:string;
     puesto: string;
@@ -200,4 +201,11 @@ export interface Guardado{
     estado: string;
     sueldo: number;
     status: boolean;
+}
+
+export interface Notificacion{
+    _id: string;
+    recipientId: string;
+    senderId: string;
+    message: string;
 }

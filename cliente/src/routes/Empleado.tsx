@@ -6,15 +6,36 @@ import Swal from 'sweetalert2';
 import M from 'materialize-css';
 import 'materialize-css/dist/css/materialize.min.css';
 import EmpresaCard from "../routes/EmpresaCard";
-import { Empresa, Oferta1, OfertaCompleta } from '../types/types';
+import { Empresa, Notificacion, Oferta1, OfertaCompleta } from '../types/types';
 import { API_URL } from "../auth/apis";
 import '../index.css';
 import '../estilos/estilosOfertas.css';
 import Oferta from "./Ofertas";
 import '../estilos/OfertaDetalles.css'
-import { Estado, Ciudad, Educacion, Giro } from '../types/types';
+import { io } from "socket.io-client";
 
 
+
+interface Giro {
+    _id: string;
+    giro: string;
+}
+
+interface Educacion {
+    _id: string;
+    nivel: string;
+}
+interface Estado {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
+
+interface Ciudad {
+    _id: string;
+    nombre: string;
+    clave: string;
+}
 
 export default function Empleados() {
     const [errorResponse] = useState<string>("");
@@ -36,7 +57,33 @@ export default function Empleados() {
     const [selectedModalidad, setSelectedModalidad] = useState<string>("1");
     const [fechaInicio, setFechaInicio] = useState<string>("");
     const [fechaFin, setFechaFin] = useState<string>("");
+    const [NotificacionEmpresas, setNotificacionEmpresas] = useState<Notificacion[]>([]);
+
+    useEffect(() => {
+        const socket = io("http://localhost:3000"); // Conéctate al servidor
+
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const empresaId = usuario.id; // ID de la empresa
+
+            socket.emit('joinEmpresa', empresaId); // Únete al room de la empresa
+
+            // Escuchar notificaciones
+            socket.on('nuevaPostulacion', (notificacion) => {
+                console.log('Nueva notificación recibida:', notificacion);
+            });
+        }
+
+        return () => {
+            socket.off('nuevaPostulacion'); // Limpia el listener al desmontar
+            socket.disconnect(); // Desconectar el socket
+        };
+    }, []);
+
     const auth = useAuth();
+    const socket = io("http://localhost:3000"); // Conéctate al servidor
+
 
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
@@ -316,6 +363,41 @@ export default function Empleados() {
         }
     };
 
+    const handlePostularme = async (idOferta: string) => {
+        const storedUser = localStorage.getItem('usuario');
+        if (storedUser) {
+            const usuario = JSON.parse(storedUser);
+            const idUsuario = usuario.id;
+
+
+            try {
+                const response = await fetch(`${API_URL}/usuario/postularme`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idUsuario,
+                        idOferta,
+                    }),
+                });
+
+                if (response.ok) {
+                    socket.emit('nuevaPostulacion', { idOferta, idUsuario});
+
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error al postularse: ${errorData.error}`);
+                }
+            } catch (error) {
+                alert('Error de conexión. Por favor intenta más tarde.');
+            }
+        }
+    };
+
+
+
+
     if (!auth.isAuthenticated) {
         return <Navigate to="/" />;
     }
@@ -369,7 +451,11 @@ export default function Empleados() {
                                             <div className="oferta-header">
                                                 <h5 className="titulo-oferta">{ofertaSeleccionada.titulo}</h5>
                                                 <p className="empresa-nombre">{empresaNombre}</p>
-                                                <button className="btn waves-effect postularme-btn" type="button">
+                                                <button
+                                                    className="btn waves-effect postularme-btn"
+                                                    type="button"
+                                                    onClick={() => handlePostularme(ofertaSeleccionada._id)}
+                                                >
                                                     Postularme
                                                 </button>
                                             </div>

@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import M from 'materialize-css';
 import DefaultLayout from '../layout/DefaultLayout';
 import '../index.css'; // Importa tus estilos personalizados después
-import '../estilos/estiloPerfilEmpresas.css'
+import '../estilos/estiloPerfilEmpresas.css';
+import { io, Socket } from "socket.io-client";
+
+// Define la interfaz para las notificaciones
 
 export default function Empresa() {
+   
+
     useEffect(() => {
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         const tabsElems = document.querySelectorAll('.tabs');
@@ -33,16 +38,6 @@ export default function Empresa() {
         };
     }, []);
 
-
-
-    console.log("Ingreso a empresas");
-    const storedUser = localStorage.getItem('usuario');
-    if (storedUser) {
-        const usuario = JSON.parse(storedUser);
-        console.log(usuario.id_rol);
-    }
-
-
     return (
         <DefaultLayout showNav={true}>
             <div className="container">
@@ -52,13 +47,13 @@ export default function Empresa() {
                         <li className="tab col s3"><a href="#Empresas" className="black-text">Empresas</a></li>
                     </ul>
                 </div>
-                <div id="Ofertas" className="container ">
+        
+                <div id="Ofertas" className="container">
                     <h1>Ofertas</h1>
                 </div>
                 <div id="Empresas" className="container">
                     <h1>Empresas</h1>
                 </div>
-
             </div>
         </DefaultLayout>
     );

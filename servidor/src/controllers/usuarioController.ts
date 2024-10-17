@@ -13,6 +13,9 @@ import jwt from 'jsonwebtoken';
 import Empresa from '../models/empresa.model';
 import EducacionUsuario from '../models/educacionUsuario.model';
 import Administrador from '../models/administrador.model';
+import OfertaLaboral from '../models/OfertaLaboral.model';
+import notificacionEmpresa from '../models/notificacionEmpresa.model';
+import server from '../index';
 import Oferta from '../models/OfertaLaboral.model';
 
 class UsuarioController {
@@ -56,9 +59,8 @@ class UsuarioController {
 
         /*const estadoName = await Estado.findOne({ clave: estado });
          let estadoNom: string = estado; // Definir la variable con el tipo correcto
- 
-         if (estadoName) {
-             estadoNom = estadoName.nombre;
+        if (estadoName) {
+            estadoNom = estadoName.nombre;
          } */
 
         if (camposError || contrasenasError || nombreError || correoError) {
@@ -354,6 +356,55 @@ class UsuarioController {
             res.status(400).json({ message: 'Error al actualizar la contraseña.' });
         }
     }
+
+    public async postular(req: Request, res: Response): Promise<void> {
+        const { idUsuario, idOferta } = req.body;
+        
+        try {
+            const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
+            
+            if (!oferta || !oferta.id_empresa) {
+                res.status(404).json({
+                    status: 404,
+                    message: 'Oferta o empresa no encontrada'
+                });
+                return;
+            }
+            
+            const empresa = oferta.id_empresa as any; // Asegúrate de que esto contiene la referencia a la empresa
+            
+            const nuevaNotificacion = new notificacionEmpresa({
+                recipientId: empresa._id, // Cambiar a empresa._id
+                senderId: idUsuario,
+                message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+                link: `/Empresa/Postulantes/`,
+                isRead: false
+            });
+            
+            await nuevaNotificacion.save();
+            
+            // Emitir el evento al room de la empresa usando su ID
+            server.io.to(`empresa_${empresa._id.toString()}`).emit('nuevaPostulacion', nuevaNotificacion);
+            console.log(empresa._id);
+            
+            
+            res.status(200).json({
+                status: 200,
+                message: 'Postulación enviada y notificación creada',
+                notificacion: nuevaNotificacion
+            });
+        } catch (error: any) {
+            res.status(500).json({
+                status: 500,
+                message: 'Error al guardar la notificación',
+                error: error.message
+            });
+        }
+    }
+    
+    
+    
+
 
     public async createGuardado(req: Request, res: Response): Promise<void> {
         const { id_oferta, id_usuario } = req.body;
