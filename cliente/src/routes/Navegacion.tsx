@@ -180,9 +180,9 @@ export default function Navigation() {
                                 ) : null}
                                 {idRol === "6690640c24eacbffd867f333" ? (
                                     <li>
-                                        <Link to="/Administrador">Guardado
-                                            <i className="tiny material-icons">turned_in</i>
-                                        </Link>
+                                        <Link to="/Empleado/Guardado">Guardado
+                                        <i className="tiny material-icons">turned_in</i>
+                                    </Link>
                                     </li>
                                 ) : null}
                                 {idRol === "6690640c24eacbffd867f333" ? (

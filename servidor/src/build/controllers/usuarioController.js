@@ -30,7 +30,7 @@ const administrador_model_1 = __importDefault(require("../models/administrador.m
 const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 const notificacionEmpresa_model_1 = __importDefault(require("../models/notificacionEmpresa.model"));
 const index_1 = __importDefault(require("../index"));
-const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
+const OfertaLaboral_model_2 = __importDefault(require("../models/OfertaLaboral.model"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -438,7 +438,7 @@ class UsuarioController {
                 if (guardados.length > 0) {
                     const guardadosConOfertas = [];
                     for (const guardado of guardados) {
-                        const oferta = yield OfertaLaboral_model_1.default.findById(guardado.id_oferta, 'titulo puesto estado sueldo status');
+                        const oferta = yield OfertaLaboral_model_2.default.findById(guardado.id_oferta, 'titulo puesto estado sueldo status');
                         if (oferta) {
                             guardadosConOfertas.push({
                                 id_guardado: guardado._id,
