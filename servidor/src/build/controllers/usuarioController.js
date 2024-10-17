@@ -16,6 +16,7 @@ exports.usuariosController = void 0;
 const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 const estado_model_1 = __importDefault(require("../models/estado.model"));
 const ciudad_model_1 = __importDefault(require("../models/ciudad.model"));
+const guardado_model_1 = __importDefault(require("../models/guardado.model"));
 const experiencia_model_1 = __importDefault(require("../models/experiencia.model"));
 const perfilUsuario_model_1 = __importDefault(require("../models/perfilUsuario.model"));
 const fotosPerfilUsuario_model_1 = __importDefault(require("../models/fotosPerfilUsuario.model"));
@@ -26,6 +27,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const empresa_model_1 = __importDefault(require("../models/empresa.model"));
 const educacionUsuario_model_1 = __importDefault(require("../models/educacionUsuario.model"));
 const administrador_model_1 = __importDefault(require("../models/administrador.model"));
+const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.model"));
 class UsuarioController {
     createUsuario(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -279,12 +281,6 @@ class UsuarioController {
             if (!emailRegex.test(correo)) {
                 nombreError = "Correo no válido";
             }
-            /*const estadoName = await Estado.findOne({ clave: estado });
-            let estadoNom: string = estado;
-        
-            if (estadoName) {
-                estadoNom = estadoName.nombre;
-            }*/
             if (nombreError) {
                 res.status(400).json((0, jsonResponse_1.jsonResponse)(400, {
                     nombreError
@@ -343,6 +339,88 @@ class UsuarioController {
             catch (error) {
                 console.error(error); // Imprime el error para depuración
                 res.status(400).json({ message: 'Error al actualizar la contraseña.' });
+            }
+        });
+    }
+    createGuardado(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id_oferta, id_usuario } = req.body;
+            try {
+                const guardadoExistente = yield guardado_model_1.default.findOne({
+                    id_oferta,
+                    id_usuario
+                });
+                if (guardadoExistente) {
+                    res.status(200).json({ message: 'Oferta guardada exitosamente.' });
+                }
+                else {
+                    const nuevoGuardado = new guardado_model_1.default({
+                        id_oferta,
+                        id_usuario
+                    });
+                    const newGuardado = yield nuevoGuardado.save();
+                    res.json({
+                        id: newGuardado._id,
+                        id_oferta: newGuardado.id_oferta,
+                        id_usuario: newGuardado.id_usuario
+                    });
+                }
+            }
+            catch (error) {
+                res.status(400).json({
+                    error: "No se pudo guardar la oferta."
+                });
+            }
+        });
+    }
+    deleteGuardado(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.params;
+            try {
+                const guardadoExistente = yield guardado_model_1.default.findByIdAndDelete(id);
+                res.json({
+                    message: "Oferta eliminada exitosamente."
+                });
+            }
+            catch (error) {
+                res.status(400).json({
+                    error: "No se pudo eliminar la oferta."
+                });
+            }
+        });
+    }
+    getAllGuardados(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const id_usuario = req.params.id;
+            try {
+                const guardados = yield guardado_model_1.default.find({ id_usuario });
+                if (guardados.length > 0) {
+                    const guardadosConOfertas = [];
+                    for (const guardado of guardados) {
+                        const oferta = yield OfertaLaboral_model_1.default.findById(guardado.id_oferta, 'titulo puesto estado sueldo status');
+                        if (oferta) {
+                            guardadosConOfertas.push({
+                                id_guardado: guardado._id,
+                                id_oferta: oferta._id,
+                                titulo: oferta.titulo,
+                                puesto: oferta.puesto,
+                                estado: oferta.estado,
+                                sueldo: oferta.sueldo,
+                                status: oferta.status
+                            });
+                        }
+                    }
+                    res.json(guardadosConOfertas);
+                }
+                else {
+                    res.status(200).json({ message: 'No existen ofertas guardadas para este usuario.' });
+                }
+            }
+            catch (error) {
+                console.error("Error al obtener las ofertas guardadas:", error);
+                res.status(500).json({
+                    error: "No se pudo obtener la lista de ofertas guardadas."
+                });
             }
         });
     }

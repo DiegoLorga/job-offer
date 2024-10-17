@@ -20,6 +20,9 @@ class UsuarioRoutes {
         this.router.post('/restablecerContrasena', usuariosController.restablecerContrasena);
         this.router.get("/getEstado/:clave", usuariosController.getEstado);
         this.router.put("/actualizarUsuario/:id", usuariosController.actualizarUsuario);
+        this.router.post("/guardarOferta", usuariosController.createGuardado);
+        this.router.delete("/desguardarOferta/:id", usuariosController.deleteGuardado);
+        this.router.get("/getOfertasGuar/:id", usuariosController.getAllGuardados);
 
     }
 }

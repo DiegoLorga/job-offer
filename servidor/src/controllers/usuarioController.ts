@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
+import Guardado from '../models/guardado.model';
 import Experiencia from '../models/experiencia.model';
 import PerfilUsuario from '../models/perfilUsuario.model';
 import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
@@ -12,6 +13,7 @@ import jwt from 'jsonwebtoken';
 import Empresa from '../models/empresa.model';
 import EducacionUsuario from '../models/educacionUsuario.model';
 import Administrador from '../models/administrador.model';
+import Oferta from '../models/OfertaLaboral.model';
 
 class UsuarioController {
 
@@ -181,7 +183,6 @@ class UsuarioController {
     public async getEstados(req: Request, res: Response): Promise<void> {
         const estados = await Estado.find();
         res.json(estados);
-
     }
 
     public async getCiudades(req: Request, res: Response): Promise<void> {
@@ -283,12 +284,6 @@ class UsuarioController {
         if (!emailRegex.test(correo)) {
             nombreError = "Correo no válido";
         }
-        /*const estadoName = await Estado.findOne({ clave: estado });
-        let estadoNom: string = estado;
-    
-        if (estadoName) {
-            estadoNom = estadoName.nombre;
-        }*/
 
         if (nombreError) {
             res.status(400).json(jsonResponse(400, {
@@ -359,6 +354,97 @@ class UsuarioController {
             res.status(400).json({ message: 'Error al actualizar la contraseña.' });
         }
     }
+
+    public async createGuardado(req: Request, res: Response): Promise<void> {
+        const { id_oferta, id_usuario } = req.body;
+    
+        try {
+            const guardadoExistente = await Guardado.findOne({
+                id_oferta,
+                id_usuario
+            });
+    
+            if (guardadoExistente) {
+                res.status(200).json({ message: 'Oferta guardada exitosamente.' });
+            }else{
+                const nuevoGuardado = new Guardado({
+                    id_oferta,
+                    id_usuario
+                });
+        
+                const newGuardado = await nuevoGuardado.save();
+        
+                res.json({
+                    id: newGuardado._id,
+                    id_oferta: newGuardado.id_oferta,
+                    id_usuario: newGuardado.id_usuario
+                });
+            }
+            
+        } catch (error) {
+            res.status(400).json({
+                error: "No se pudo guardar la oferta."
+            });
+        }
+    }
+
+    public async deleteGuardado(req: Request, res: Response): Promise<void> {
+        const { id } = req.params;  
+    
+        try {
+            const guardadoExistente = await Guardado.findByIdAndDelete(id);
+    
+            res.json({
+                message: "Oferta eliminada exitosamente."
+            });
+            
+        } catch (error) {
+            res.status(400).json({
+                error: "No se pudo eliminar la oferta."
+            });
+        }
+    }
+    
+
+
+    public async getAllGuardados(req: Request, res: Response): Promise<void> {
+        const id_usuario = req.params.id;
+    
+        try {
+            const guardados = await Guardado.find({ id_usuario });
+            if (guardados.length > 0) {
+                const guardadosConOfertas = [];
+                for (const guardado of guardados) {
+                    const oferta = await Oferta.findById(guardado.id_oferta, 'titulo puesto estado sueldo status'); 
+                    if (oferta) {
+                        guardadosConOfertas.push({
+                            id_guardado: guardado._id,
+                            id_oferta: oferta._id,
+                            titulo: oferta.titulo,
+                            puesto: oferta.puesto,
+                            estado: oferta.estado,
+                            sueldo: oferta.sueldo,
+                            status: oferta.status
+                        });
+                    }
+                }
+                res.json(guardadosConOfertas);
+            }
+            else{
+                res.status(200).json({ message: 'No existen ofertas guardadas para este usuario.' });
+            }
+            
+        } catch (error) {
+            console.error("Error al obtener las ofertas guardadas:", error);
+            res.status(500).json({
+                error: "No se pudo obtener la lista de ofertas guardadas."
+            });
+        }
+    }
+    
+    
+    
+
 }
 
 

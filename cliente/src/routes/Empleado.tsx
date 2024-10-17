@@ -12,27 +12,9 @@ import '../index.css';
 import '../estilos/estilosOfertas.css';
 import Oferta from "./Ofertas";
 import '../estilos/OfertaDetalles.css'
+import { Estado, Ciudad, Educacion, Giro } from '../types/types';
 
-interface Giro {
-    _id: string;
-    giro: string;
-}
 
-interface Educacion {
-    _id: string;
-    nivel: string;
-}
-interface Estado {
-    _id: string;
-    nombre: string;
-    clave: string;
-}
-
-interface Ciudad {
-    _id: string;
-    nombre: string;
-    clave: string;
-}
 
 export default function Empleados() {
     const [errorResponse] = useState<string>("");
@@ -54,8 +36,6 @@ export default function Empleados() {
     const [selectedModalidad, setSelectedModalidad] = useState<string>("1");
     const [fechaInicio, setFechaInicio] = useState<string>("");
     const [fechaFin, setFechaFin] = useState<string>("");
-
-
     const auth = useAuth();
 
     useEffect(() => {
@@ -369,7 +349,7 @@ export default function Empleados() {
                                                         <Oferta
                                                             _id={oferta._id}
                                                             titulo={oferta.titulo}
-                                                            direccion={oferta.direccion}
+                                                            estado={oferta.estado}
                                                             puesto={oferta.puesto}
                                                             sueldo={oferta.sueldo}
                                                             onClick={() => handleVerDetalles(oferta._id)}
@@ -543,7 +523,7 @@ export default function Empleados() {
                                                         <Oferta
                                                             _id={oferta._id}
                                                             titulo={oferta.titulo}
-                                                            direccion={oferta.direccion}
+                                                            estado={oferta.estado}
                                                             puesto={oferta.puesto}
                                                             sueldo={oferta.sueldo}
                                                             onClick={() => handleVerDetalles(oferta._id)}

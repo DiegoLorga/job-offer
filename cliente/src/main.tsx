@@ -13,6 +13,7 @@ import PerfilUsuario from './routes/PerfilUsuario';
 import PerfilEmpresa from './routes/PerfilEmpresa';
 import 'materialize-css/dist/css/materialize.min.css';
 import './index.css';
+import Guardado from './routes/Guardado';
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
             path: "PerfilUsuario",
             element: <PerfilUsuario />,
           },
+          {
+            path: "Guardado",
+            element: <Guardado />,
+          }
         ],
       },
       {

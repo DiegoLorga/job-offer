@@ -1,0 +1,28 @@
+.custom-cardPos {
+    width: 100%; /* O puedes establecer un valor fijo, como 400px */
+    min-width: 700px; /* Aumentar el tamaño mínimo de la tarjeta */
+    margin-bottom: 20px; /* Espaciado inferior entre tarjetas */
+    border: 1px solid #e0e0e0; /* Borde de la tarjeta */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra de la tarjeta */
+}
+
+.btn-pos {
+    margin-right: 45px; 
+    margin-top: 20px;
+    background-color: #757575;
+    /* Color del botón de subir */
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pos:hover {
+    background-color: #413e3e;
+    /* Azul más oscuro al pasar el mouse */
+  }
+
+.card-contentpos{
+    margin-left: 30px;
+}
+
+
