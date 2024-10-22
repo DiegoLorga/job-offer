@@ -127,6 +127,31 @@ class EmpresaController {
             }
         });
     }
+    getGirosEmpresas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const girosUnicos = yield empresa_model_1.default.distinct('giro');
+                console.log('Giros únicos:', girosUnicos);
+                if (girosUnicos.length === 0) {
+                    res.json([]);
+                    return;
+                }
+                const girosDetalles = yield giro_model_1.default.find({
+                    giro: { $in: girosUnicos }
+                });
+                console.log('Detalles de los giros:', girosDetalles);
+                const resultados = girosDetalles.map(giro => ({
+                    _id: giro._id,
+                    giro: giro.giro
+                }));
+                res.json(resultados);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error al obtener los detalles de los giros' });
+            }
+        });
+    }
     // Controllers/empresaController.ts
     listOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

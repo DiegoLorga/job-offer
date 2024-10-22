@@ -5,10 +5,13 @@ interface DefaultLayoutProps {
     showNav?: boolean;
 }
 
+console.log("DefaultLayout rendered");
+
 export default function DefaultLayout({ children, showNav = false }: DefaultLayoutProps) {
     return (
         <>
             {showNav && <Navigation />}
+            
             <main>{children}</main>
         </>
     );

@@ -179,6 +179,58 @@ class UsuarioController {
             }
         });
     }
+    getEstadosOfertas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const estadosUnicos = yield OfertaLaboral_model_1.default.distinct('estado');
+                console.log('Estados únicos:', estadosUnicos);
+                if (estadosUnicos.length === 0) {
+                    res.json([]);
+                    return;
+                }
+                const estadosDetalles = yield estado_model_1.default.find({
+                    nombre: { $in: estadosUnicos.map(estado => estado.toUpperCase()) }
+                });
+                console.log('Detalles de los estados:', estadosDetalles);
+                const resultados = estadosDetalles.map(estado => ({
+                    _id: estado._id,
+                    clave: estado.clave,
+                    nombre: estado.nombre,
+                }));
+                res.json(resultados);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error al obtener los detalles de los estados' });
+            }
+        });
+    }
+    getEstadosEmpresas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const estadosUnicos = yield empresa_model_1.default.distinct('estado');
+                console.log('Estados únicos:', estadosUnicos);
+                if (estadosUnicos.length === 0) {
+                    res.json([]);
+                    return;
+                }
+                const estadosDetalles = yield estado_model_1.default.find({
+                    nombre: { $in: estadosUnicos.map(estado => estado.toUpperCase()) }
+                });
+                console.log('Detalles de los estados:', estadosDetalles);
+                const resultados = estadosDetalles.map(estado => ({
+                    _id: estado._id,
+                    clave: estado.clave,
+                    nombre: estado.nombre,
+                }));
+                res.json(resultados);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error al obtener los detalles de los estados' });
+            }
+        });
+    }
     getEstados(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const estados = yield estado_model_1.default.find();
@@ -190,6 +242,58 @@ class UsuarioController {
             const clave = req.params.clave;
             const ciudades = yield ciudad_model_1.default.find({ clave: clave });
             res.json(ciudades);
+        });
+    }
+    getCiudadesEmpresas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const clave = req.params.clave;
+                const ciudades = yield ciudad_model_1.default.find({ clave: clave });
+                //console.log(ciudades)
+                if (ciudades.length === 0) {
+                    res.json([]);
+                    return;
+                }
+                const ciudadesFiltradas = [];
+                for (const ciudad of ciudades) {
+                    const existeEnEmpresa = yield empresa_model_1.default.exists({ 'ciudad': ciudad.nombre });
+                    if (existeEnEmpresa) {
+                        ciudadesFiltradas.push(ciudad);
+                    }
+                }
+                console.log(ciudadesFiltradas);
+                res.json(ciudadesFiltradas);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error al filtrar las ciudades' });
+            }
+        });
+    }
+    getCiudadesOfertas(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const clave = req.params.clave;
+                const ciudades = yield ciudad_model_1.default.find({ clave: clave });
+                //console.log(ciudades)
+                if (ciudades.length === 0) {
+                    res.json([]);
+                    return;
+                }
+                const ciudadesFiltradas = [];
+                for (const ciudad of ciudades) {
+                    const existeEnOferta = yield OfertaLaboral_model_1.default.exists({ 'ciudad': ciudad.nombre });
+                    if (existeEnOferta) {
+                        ciudadesFiltradas.push(ciudad);
+                    }
+                }
+                console.log(ciudadesFiltradas);
+                res.json(ciudadesFiltradas);
+            }
+            catch (error) {
+                console.error(error);
+                res.status(500).json({ message: 'Error al filtrar las ciudades' });
+            }
         });
     }
     getEstado(req, res) {

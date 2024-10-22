@@ -46,7 +46,10 @@ export default function Guardados() {
     // Función para manejar el clic en "Ver detalles"
     const onClick = (id: string) => {
         console.log("Ver detalles de la oferta con ID:", id);
-        // Redirigir a /Empleado
+        
+        // Almacenar la información del usuario en localStorage
+        localStorage.setItem('id_oferta', id);
+
         navigate(`/Empleado`);
     };
 
@@ -103,6 +106,7 @@ export default function Guardados() {
 
     return (
         <DefaultLayout showNav={true}>
+            
             <div id="info" className="containerinfo">
                 <h2>Ofertas Guardadas</h2><br />
                 {/* Mostrar el mensaje si no hay ofertas guardadas */}
@@ -155,7 +159,7 @@ export default function Guardados() {
                                             <a
                                                 href="#!"
                                                 // onClick={() => guardado.status && onClick(guardado.id_guardado)} // Deshabilitar si el status es false
-                                                onClick={() => guardado.status && onClick(guardado.id_guardado)} 
+                                                onClick={() => guardado.status && onClick(guardado.id_oferta)} 
                                                 style={{ color: guardado.status ? 'blue' : '#6e6e6e' }} // Enlace en gris más fuerte si es false
                                             >
                                                 Ver detalles
@@ -168,6 +172,6 @@ export default function Guardados() {
                     ) : null
                 )}
             </div>
-        </DefaultLayout>
+            </DefaultLayout>
     );
 }

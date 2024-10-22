@@ -5,7 +5,7 @@ import M from 'materialize-css';
 import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
 import '../index.css'; // Importa tus estilos personalizados despuéss';
-const imageSrc = `${API_URI_IMAGENES}/img/auxiliares/SUNEO.jpg`;
+const imageSrc = `${API_URI_IMAGENES}/img/auxiliares/SUNEO.png`;
 import '../index.css'; // Importa tus estilos personalizados después
 import { io, Socket } from "socket.io-client";
 
@@ -103,7 +103,7 @@ export default function Navigation() {
                 if (instance) instance.destroy();
             });
         };
-    }, []); // Asegúrate de que el array de dependencias esté vacío
+    }, []); 
 
     async function handleLogout() {
         try {
@@ -130,14 +130,15 @@ export default function Navigation() {
 
     return (
         <>
-            <nav className="nav-extended custom-nav">
+            <nav className="nav-extended custom-nav" style={{height: '100px' }}>
                 <div className="nav-wrapper">
                     <Link to="/Empleado" className="brand-logo">
 
                         <img
                             src={imageSrc}
                             alt="Logo"
-                            style={{ height: 'auto', width: '180px' }}
+                            style={{ height: '110px', width: 'auto', marginLeft: '35px' }}
+
                         />
                     </Link>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -210,10 +211,6 @@ export default function Navigation() {
                 </div>
             </nav>
 
-            <ul className="sidenav" id="mobile-demo">
-                <li><Link to="/Empleado">Empleos</Link></li>
-                <li><Link to="http://localhost:5173/Administrador">Administrador</Link></li>
-            </ul>
         </>
     );
 }
