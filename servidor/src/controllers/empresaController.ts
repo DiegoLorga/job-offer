@@ -130,6 +130,36 @@ class EmpresaController {
 
         }
     }
+    public async getGirosEmpresas(req: Request, res: Response): Promise<void> {
+        try {
+            const girosUnicos = await Empresa.distinct('giro');
+    
+            console.log('Giros únicos:', girosUnicos);
+    
+            if (girosUnicos.length === 0) {
+                res.json([]);
+                return;
+            }
+    
+            const girosDetalles = await Giro.find({
+                giro: { $in: girosUnicos }
+            });
+    
+            console.log('Detalles de los giros:', girosDetalles);
+    
+            const resultados = girosDetalles.map(giro => ({
+                _id: giro._id,
+                giro: giro.giro
+            }));
+    
+            res.json(resultados);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener los detalles de los giros' });
+        }
+    }
+    
+    
 
     // Controllers/empresaController.ts
 public async listOne(req: Request, res: Response): Promise<void> {

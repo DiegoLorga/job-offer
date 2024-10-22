@@ -19,7 +19,14 @@ class UsuarioRoutes {
         this.router.post('/restablecerContrasena', usuarioController_1.usuariosController.restablecerContrasena);
         this.router.get("/getEstado/:clave", usuarioController_1.usuariosController.getEstado);
         this.router.put("/actualizarUsuario/:id", usuarioController_1.usuariosController.actualizarUsuario);
+        this.router.post("/guardarOferta", usuarioController_1.usuariosController.createGuardado);
+        this.router.delete("/desguardarOferta/:id", usuarioController_1.usuariosController.deleteGuardado);
+        this.router.get("/getOfertasGuar/:id", usuarioController_1.usuariosController.getAllGuardados);
         this.router.post("/postularme", usuarioController_1.usuariosController.postular);
+        this.router.get("/getEstadosOfertas", usuarioController_1.usuariosController.getEstadosOfertas);
+        this.router.get("/getEstadosEmpresas", usuarioController_1.usuariosController.getEstadosEmpresas);
+        this.router.get("/getCiudadesOfertas/:clave", usuarioController_1.usuariosController.getCiudadesOfertas);
+        this.router.get("/getCiudadesEmpresas/:clave", usuarioController_1.usuariosController.getCiudadesEmpresas);
     }
 }
 const usuaioRoutes = new UsuarioRoutes();

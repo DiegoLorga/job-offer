@@ -10,7 +10,7 @@ interface OfertaLaboral {
     direccion:string;
     ciudad: string;
     estado:string;
-    status:number;
+    status:boolean;
     descripcion: string;
     requisitos:string;
     telefono:number;
@@ -74,7 +74,7 @@ const schemaOfertaLaboral = new Schema<OfertaLaboral>({
     },
     status:
     {
-        type: Number,
+        type: Boolean,
         required: true
     },
     descripcion:

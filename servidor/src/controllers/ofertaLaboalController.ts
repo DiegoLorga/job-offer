@@ -12,7 +12,6 @@ class ofertaLaboralController {
         console.log("Creado una red social");
         const { id_empresa, titulo, puesto, sueldo, horario, modalidad, direccion, ciudad, estado, status,
             descripcion, requisitos, telefono, correo, educacion, idioma, experienciaLaboral, categoria } = req.body;
-        const inicio = 0;
         try {
             const nuevaOfertaLaboral = new OfertaLaboral({
                 id_empresa,
@@ -24,7 +23,7 @@ class ofertaLaboralController {
                 direccion,
                 ciudad,
                 estado,
-                status: inicio,
+                status: true,
                 descripcion,
                 requisitos,
                 telefono,

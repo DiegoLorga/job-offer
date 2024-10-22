@@ -48,8 +48,14 @@ export default function Empleados() {
     const [selectedEducacion, setSelectedEducacion] = useState<string>("");
     const [ofertaSeleccionada, setOfertaSeleccionada] = useState<OfertaCompleta | null>(null);
     const [empresaNombre, setEmpresaNombre] = useState<string | null>(null);
+    const [estadosEmp, setEstadosEmp] = useState<Estado[]>([]); //para filtrar empresas
+    const [ciudadesEmp, setCiudadesEmp] = useState<Ciudad[]>([]);
+    const [ciudadEmp, setCiudadEmp] = useState("");
+    const [estadoEmp, setEstadoEmp] = useState("");
+    const [nombreEstadoEmp, setNombreEstadoEmp] = useState<string>("");
+    const [selectedEstadoEmp, setSelectedEstadoEmp] = useState<string>("");
     const [estados, setEstados] = useState<Estado[]>([]);
-    const [selectedEstado, setSelectedEstado] = useState<string>("");
+    const [selectedEstado, setSelectedEstado] = useState<string>(""); //para filtrar ofertas
     const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const [ciudad, setCiudad] = useState("");
     const [nombreEstado, setNombreEstado] = useState<string>("");
@@ -58,6 +64,8 @@ export default function Empleados() {
     const [fechaInicio, setFechaInicio] = useState<string>("");
     const [fechaFin, setFechaFin] = useState<string>("");
     const [NotificacionEmpresas, setNotificacionEmpresas] = useState<Notificacion[]>([]);
+    const idOferta = localStorage.getItem('id_oferta');
+
 
     useEffect(() => {
         const socket = io("http://localhost:3000"); // Conéctate al servidor
@@ -115,17 +123,39 @@ export default function Empleados() {
         });
     }, []);
 
-
     useEffect(() => {
         async function fetchEstados() {
             try {
-                const response = await fetch(`${API_URL}/usuario/getEstados`);
+                const response = await fetch(`${API_URL}/usuario/getEstadosOfertas`);
                 if (response.ok) {
                     const data = await response.json() as Estado[];
                     setEstados(data);
                     if (data.length > 0) {
                         setSelectedEstado(data[0].clave);
                         setNombreEstado(data[0].nombre); // Guardar el nombre del primer estado
+                    }
+                } else {
+                    console.error('Error al obtener los estados:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener los estados:', error);
+            }
+        }
+
+        fetchEstados();
+    }, []);
+
+    //para filtrar empresas
+    useEffect(() => {
+        async function fetchEstados() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getEstadosEmpresas`);
+                if (response.ok) {
+                    const data = await response.json() as Estado[];
+                    setEstadosEmp(data);
+                    if (data.length > 0) {
+                        setSelectedEstadoEmp(data[0].clave);
+                        setNombreEstadoEmp(data[0].nombre); 
                     }
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
@@ -148,11 +178,23 @@ export default function Empleados() {
         fetchEstadoNombre();
     }, [selectedEstado, estados]);
 
-    // Cargar ciudades al cambiar el estado seleccionado
+
+    //para filtrar empresas
+    useEffect(() => {
+        async function fetchEstadoNombre() {
+            const estado = estadosEmp.find(e => e.clave === selectedEstadoEmp);
+            if (estado) {
+                setNombreEstadoEmp(estado.nombre);
+            }
+        }
+        fetchEstadoNombre();
+    }, [selectedEstadoEmp, estadosEmp]);
+
+    // Cargar ciudades al cambiar el estado seleccionado para empleos
     useEffect(() => {
         async function fetchCiudades() {
             try {
-                const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
+                const response = await fetch(`${API_URL}/usuario/getCiudadesOfertas/${selectedEstado}`);
                 if (response.ok) {
                     const data = await response.json() as Ciudad[];
                     setCiudades(data);
@@ -172,10 +214,35 @@ export default function Empleados() {
         }
     }, [selectedEstado]);
 
+
+    // Cargar ciudades al cambiar el estado seleccionado para empresas
+    useEffect(() => {
+        async function fetchCiudades() {
+            try {
+                const response = await fetch(`${API_URL}/usuario/getCiudadesEmpresas/${selectedEstadoEmp}`);
+                if (response.ok) {
+                    const data = await response.json() as Ciudad[];
+                    setCiudadesEmp(data);
+                    if (data.length > 0) {
+                        setCiudadEmp(data[0].nombre);
+                    }
+                } else {
+                    console.error('Error al obtener las ciudades:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
+            }
+        }
+
+        if (selectedEstadoEmp) {
+            fetchCiudades();
+        }
+    }, [selectedEstadoEmp]);
+
     useEffect(() => {
         async function fetchGiros() {
             try {
-                const response = await fetch(`${API_URL}/empresa/getGiros`);
+                const response = await fetch(`${API_URL}/empresa/getGirosEmpresas`);
                 if (response.ok) {
                     const data = await response.json() as Giro[];
                     setGiros(data);
@@ -234,7 +301,6 @@ export default function Empleados() {
     }, []);
 
 
-
     useEffect(() => {
         async function fetchOfertas() {
             try {
@@ -254,8 +320,19 @@ export default function Empleados() {
         // Reinicializar el select después de que los giros se hayan cargado
         const elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
-    }, [giros, estados, ciudades]);
+    }, [giros, estados, ciudades, estadosEmp, ciudadEmp]);
 
+//función para ver más informacion del guardado 
+useEffect(() => {
+    console.log("obteniendo el valor del id para ver más " );
+    if (idOferta) {
+        console.log("obteniendo el valor del id para ver más ", idOferta );
+        handleVerDetalles(idOferta);
+        // Eliminar el id de la oferta del localStorage
+        localStorage.removeItem('id_oferta');
+    }
+}, []); 
+  
     const handleVerDetalles = async (id: string) => {
         try {
             // Cargar detalles de la oferta seleccionada
@@ -282,14 +359,14 @@ export default function Empleados() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    estado: nombreEstado,
-                    ciudad: ciudad,
+                    estado: nombreEstadoEmp,
+                    ciudad: ciudadEmp,
                     giro: selectedGiro,
                 }),
             });
 
-            console.log("estado: ", nombreEstado);
-            console.log("ciudad: ", ciudad);
+            console.log("estado: ", nombreEstadoEmp);
+            console.log("ciudad: ", ciudadEmp);
             console.log("giro: ", selectedGiro);
 
             if (response.ok) {
@@ -462,7 +539,7 @@ export default function Empleados() {
                                                         <Oferta
                                                             _id={oferta._id}
                                                             titulo={oferta.titulo}
-                                                            direccion={oferta.direccion}
+                                                            estado={oferta.estado}
                                                             puesto={oferta.puesto}
                                                             sueldo={oferta.sueldo}
                                                             onClick={() => handleVerDetalles(oferta._id)}
@@ -640,7 +717,7 @@ export default function Empleados() {
                                                         <Oferta
                                                             _id={oferta._id}
                                                             titulo={oferta.titulo}
-                                                            direccion={oferta.direccion}
+                                                            estado={oferta.estado}
                                                             puesto={oferta.puesto}
                                                             sueldo={oferta.sueldo}
                                                             onClick={() => handleVerDetalles(oferta._id)}
@@ -722,23 +799,23 @@ export default function Empleados() {
                                         <p className='info-title2'>Filtrar empresas</p>
                                     </div>
                                     <div className="oferta-header3">
-                                        <p className='info-title3'>Estado</p>
-                                        <select
-                                            value={selectedEstado}
-                                            onChange={(e) => setSelectedEstado(e.target.value)}
-                                        >
-                                            {estados.map(estado => (
-                                                <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
-                                            ))}
-                                        </select>
+                                    <p className='info-title4'>Estado</p>
+                                    <select
+                                        value={selectedEstadoEmp}
+                                        onChange={(e) => setSelectedEstadoEmp(e.target.value)}
+                                    >
+                                        {estadosEmp.map(estado => (
+                                            <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
+                                        ))}
+                                    </select>
                                     </div>
                                     <div className="oferta-header3">
                                         <p className='info-title3'>Ciudad</p>
                                         <select
-                                            value={ciudad}
-                                            onChange={(e) => setCiudad(e.target.value)}
+                                            value={ciudadEmp}
+                                            onChange={(e) => setCiudadEmp(e.target.value)}
                                         >
-                                            {ciudades.map(ciudad => (
+                                            {ciudadesEmp.map(ciudad => (
                                                 <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
                                             ))}
                                         </select>

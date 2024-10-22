@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import Usuario from '../models/usuario.model';
 import Estado from '../models/estado.model';
 import Ciudad from '../models/ciudad.model';
+import Guardado from '../models/guardado.model';
 import Experiencia from '../models/experiencia.model';
 import PerfilUsuario from '../models/perfilUsuario.model';
 import FotosPerfilUsuario from '../models/fotosPerfilUsuario.model';
@@ -15,6 +16,8 @@ import Administrador from '../models/administrador.model';
 import OfertaLaboral from '../models/OfertaLaboral.model';
 import notificacionEmpresa from '../models/notificacionEmpresa.model';
 import server from '../index';
+import Oferta from '../models/OfertaLaboral.model';
+import { log } from 'node:console';
 
 class UsuarioController {
 
@@ -179,11 +182,71 @@ class UsuarioController {
         }
     }
 
+    public async getEstadosOfertas(req: Request, res: Response): Promise<void> {
+        try {
+            const estadosUnicos = await OfertaLaboral.distinct('estado');
+
+            console.log('Estados únicos:', estadosUnicos);
+
+            if (estadosUnicos.length === 0) {
+                res.json([]);
+                return
+            }
+
+            const estadosDetalles = await Estado.find({
+                nombre: { $in: estadosUnicos.map(estado => estado.toUpperCase()) }
+            });
+
+            console.log('Detalles de los estados:', estadosDetalles);
+
+            const resultados = estadosDetalles.map(estado => ({
+                _id: estado._id,
+                clave: estado.clave,
+                nombre: estado.nombre,
+            }));
+
+            res.json(resultados);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener los detalles de los estados' });
+        }
+    }
+
+    public async getEstadosEmpresas(req: Request, res: Response): Promise<void> {
+        try {
+            const estadosUnicos = await Empresa.distinct('estado');
+
+            console.log('Estados únicos:', estadosUnicos);
+
+            if (estadosUnicos.length === 0) {
+                res.json([]);
+                return
+            }
+
+            const estadosDetalles = await Estado.find({
+                nombre: { $in: estadosUnicos.map(estado => estado.toUpperCase()) }
+            });
+
+            console.log('Detalles de los estados:', estadosDetalles);
+
+            const resultados = estadosDetalles.map(estado => ({
+                _id: estado._id,
+                clave: estado.clave,
+                nombre: estado.nombre,
+            }));
+
+            res.json(resultados);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al obtener los detalles de los estados' });
+        }
+    }
+
+
 
     public async getEstados(req: Request, res: Response): Promise<void> {
         const estados = await Estado.find();
         res.json(estados);
-
     }
 
     public async getCiudades(req: Request, res: Response): Promise<void> {
@@ -191,6 +254,64 @@ class UsuarioController {
         const ciudades = await Ciudad.find({ clave: clave });
         res.json(ciudades)
     }
+
+    public async getCiudadesEmpresas(req: Request, res: Response): Promise<void> {
+        try {
+            const clave = req.params.clave;
+    
+            const ciudades = await Ciudad.find({ clave: clave });
+            //console.log(ciudades)
+            if (ciudades.length === 0) {
+                res.json([]);
+                return
+            }
+    
+            const ciudadesFiltradas = [];
+            for (const ciudad of ciudades) {
+                const existeEnEmpresa = await Empresa.exists({ 'ciudad': ciudad.nombre });
+                if (existeEnEmpresa) {
+                    ciudadesFiltradas.push(ciudad); 
+                }
+            }
+
+            console.log(ciudadesFiltradas)
+    
+            res.json(ciudadesFiltradas);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al filtrar las ciudades' });
+        }
+    }
+
+    public async getCiudadesOfertas(req: Request, res: Response): Promise<void> {
+        try {
+            const clave = req.params.clave;
+    
+            const ciudades = await Ciudad.find({ clave: clave });
+            //console.log(ciudades)
+            if (ciudades.length === 0) {
+                res.json([]);
+                return
+            }
+    
+            const ciudadesFiltradas = [];
+            for (const ciudad of ciudades) {
+                const existeEnOferta = await OfertaLaboral.exists({ 'ciudad': ciudad.nombre });
+                if (existeEnOferta) {
+                    ciudadesFiltradas.push(ciudad); 
+                }
+            }
+
+            console.log(ciudadesFiltradas)
+    
+            res.json(ciudadesFiltradas);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Error al filtrar las ciudades' });
+        }
+    }
+    
+
 
     public async getEstado(req: Request, res: Response): Promise<void> {
         try {
@@ -285,12 +406,6 @@ class UsuarioController {
         if (!emailRegex.test(correo)) {
             nombreError = "Correo no válido";
         }
-        /*const estadoName = await Estado.findOne({ clave: estado });
-        let estadoNom: string = estado;
-    
-        if (estadoName) {
-            estadoNom = estadoName.nombre;
-        }*/
 
         if (nombreError) {
             res.status(400).json(jsonResponse(400, {
@@ -365,6 +480,7 @@ class UsuarioController {
     public async postular(req: Request, res: Response): Promise<void> {
         const { idUsuario, idOferta } = req.body;
     
+
         try {
             // Verificar si el usuario ya se ha postulado a esta oferta
             const postulacionExistente = await notificacionEmpresa.findOne({ idUsuario, idOferta });
@@ -380,6 +496,7 @@ class UsuarioController {
             // Obtener la oferta laboral y la empresa relacionada
             const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
     
+
             if (!oferta || !oferta.id_empresa) {
                 res.status(404).json({
                     status: 404,
@@ -388,6 +505,7 @@ class UsuarioController {
                 return;
             }
     
+
             const empresa = oferta.id_empresa as any; // Asegúrate de que esto contiene la referencia a la empresa
     
             // Obtener el usuario por ID para obtener su nombre
@@ -402,6 +520,7 @@ class UsuarioController {
             }
     
             // Crear la notificación con el nombre del usuario
+
             const nuevaNotificacion = new notificacionEmpresa({
                 recipientId: empresa._id, // Cambiar a empresa._id
                 senderId: usuario._id, // Almacena el ID del usuario para referencia
@@ -410,12 +529,16 @@ class UsuarioController {
                 isRead: false
             });
     
+
             await nuevaNotificacion.save();
     
+
             // Emitir el evento al room de la empresa usando su ID
             server.io.to(`empresa_${empresa._id.toString()}`).emit('nuevaPostulacion', nuevaNotificacion);
             console.log(empresa._id);
     
+
+
             res.status(200).json({
                 status: 200,
                 message: 'Postulación enviada y notificación creada',
@@ -433,6 +556,100 @@ class UsuarioController {
     
     
     
+
+
+
+
+
+    public async createGuardado(req: Request, res: Response): Promise<void> {
+        const { id_oferta, id_usuario } = req.body;
+
+        try {
+            const guardadoExistente = await Guardado.findOne({
+                id_oferta,
+                id_usuario
+            });
+
+            if (guardadoExistente) {
+                res.status(200).json({ message: 'Oferta guardada exitosamente.' });
+            } else {
+                const nuevoGuardado = new Guardado({
+                    id_oferta,
+                    id_usuario
+                });
+
+                const newGuardado = await nuevoGuardado.save();
+
+                res.json({
+                    id: newGuardado._id,
+                    id_oferta: newGuardado.id_oferta,
+                    id_usuario: newGuardado.id_usuario
+                });
+            }
+
+        } catch (error) {
+            res.status(400).json({
+                error: "No se pudo guardar la oferta."
+            });
+        }
+    }
+
+    public async deleteGuardado(req: Request, res: Response): Promise<void> {
+        const { id } = req.params;
+
+        try {
+            const guardadoExistente = await Guardado.findByIdAndDelete(id);
+
+            res.json({
+                message: "Oferta eliminada exitosamente."
+            });
+
+        } catch (error) {
+            res.status(400).json({
+                error: "No se pudo eliminar la oferta."
+            });
+        }
+    }
+
+
+
+    public async getAllGuardados(req: Request, res: Response): Promise<void> {
+        const id_usuario = req.params.id;
+
+        try {
+            const guardados = await Guardado.find({ id_usuario });
+            if (guardados.length > 0) {
+                const guardadosConOfertas = [];
+                for (const guardado of guardados) {
+                    const oferta = await Oferta.findById(guardado.id_oferta, 'titulo puesto estado sueldo status');
+                    if (oferta) {
+                        guardadosConOfertas.push({
+                            id_guardado: guardado._id,
+                            id_oferta: oferta._id,
+                            titulo: oferta.titulo,
+                            puesto: oferta.puesto,
+                            estado: oferta.estado,
+                            sueldo: oferta.sueldo,
+                            status: oferta.status
+                        });
+                    }
+                }
+                res.json(guardadosConOfertas);
+            }
+            else {
+                res.status(200).json({ message: 'No existen ofertas guardadas para este usuario.' });
+            }
+
+        } catch (error) {
+            console.error("Error al obtener las ofertas guardadas:", error);
+            res.status(500).json({
+                error: "No se pudo obtener la lista de ofertas guardadas."
+            });
+        }
+    }
+
+
+
 
 }
 

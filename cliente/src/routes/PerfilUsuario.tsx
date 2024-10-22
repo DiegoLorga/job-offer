@@ -18,16 +18,22 @@ export default function PerfilUsuarios() {
     const [nombre, setNombre] = useState<string>("");
     const [correo, setCorreo] = useState<string>("");
     const [direccion, setDireccion] = useState<string>("");
-    const [selectedEstado, setSelectedEstado] = useState<string>("");
-    const [selectedCiudad, setSelectedCiudad] = useState("");
+    //para datos usuario
+    const [estado, setEstado] = useState<string>(""); 
+    const [ciudad, setCiudad] = useState<string>("");
+
+    //Para el modal y los select
+    const [estados2, setEstados2] = useState<Estado[]>([]);
+    const [ciudades2, setCiudades2] = useState<Ciudad[]>([]);
+    const [estado2, setEstado2] = useState<string>(""); 
+    const [ciudad2, setCiudad2] = useState<string>("");
+    const [estadoNom, setEstNom] = useState<string>("");
+
+
+    
     const [selectedNombre, setSelectedNombre] = useState<string>("");
     const [selectedDireccion, setSelectedDireccion] = useState<string>("");
     const [selectedCorreo, setSelectedCorreo] = useState<string>("")
-    const [ciudad, setCiudad] = useState<string>("");
-    const [estado, setEstado] = useState<string>("");
-    const [estado2, setEstado2] = useState<string>("");
-    const [estados, setEstados] = useState<Estado[]>([]);
-    const [ciudades, setCiudades] = useState<Ciudad[]>([]);
     const [selectedFile, setSelectedFile] = useState<File | null>(null); // Para manejar la imagen
     const [previewImage, setPreviewImage] = useState<string | null>(null); // Asegurarse de que solo sea string o null
     const [previewImageBoton, setPreviewImageBoton] = useState<string | null>(null);
@@ -92,7 +98,6 @@ export default function PerfilUsuarios() {
         }
     };
 
-
     const handleAgregarIdioma = () => {
         console.log('Idioma seleccionado:', selectedIdioma);
         console.log('Nivel seleccionado:', selectedNivel);
@@ -133,7 +138,6 @@ export default function PerfilUsuarios() {
             Swal.fire('Error', 'Por favor selecciona un idioma y un nivel.', 'error');
         }
     };
-
 
 
     //para actualizar/agregar habilidades
@@ -285,8 +289,6 @@ export default function PerfilUsuarios() {
         }
     };
 
-
-
     //para limpiar los campos de habilidades
     const handleCloseHab = () => {
         setHabilidad('');
@@ -397,9 +399,10 @@ export default function PerfilUsuarios() {
 
                 if (selectedNombre) updatedFields.nombre = selectedNombre;
                 if (selectedDireccion) updatedFields.direccion = selectedDireccion;
-                if (selectedEstado) updatedFields.estado = selectedEstado;
-                if (selectedCiudad) updatedFields.ciudad = selectedCiudad;
+                if (estado2) updatedFields.estado = estado2;
+                if (ciudad2) updatedFields.ciudad = ciudad2;
                 if (selectedCorreo) updatedFields.correo = selectedCorreo;
+                console.log("campos de usuario para actualizar:",updatedFields)
                 try {
                     const response = await fetch(`${API_URL}/usuario/actualizarUsuario/${usuario.id}`, {
                         method: "PUT",
@@ -411,7 +414,13 @@ export default function PerfilUsuarios() {
 
                     if (response.ok) {
                         const updatedUser = await response.json(); // Obtener la respuesta actualizada
-                        const nuevoEstado = updatedUser.estado || estado;
+                        //como el estado se manejó por clave, se obtiene el nombre nuevamente
+                        const estadoResponse = await fetch(`${API_URL}/usuario/getEstado/${updatedUser.estado}`);
+                                if (estadoResponse.ok) {
+                                    const estadoData = await estadoResponse.json() as Usuario;
+                                    setEstNom(estadoData.nombre)
+                                }
+                        console.log(estadoNom)
                         setNombre(updatedUser.nombre || nombre);
                         setDireccion(updatedUser.direccion || direccion);
                         setEstado(updatedUser.estado || estado);
@@ -419,7 +428,7 @@ export default function PerfilUsuarios() {
                         setCiudad(updatedUser.ciudad || ciudad);
 
 
-                        try {
+                        /*try {
                             const response = await fetch(`${API_URL}/usuario/getEstado/${nuevoEstado}`);
                             if (response.ok) {
                                 const data = await response.json() as Usuario;
@@ -428,7 +437,7 @@ export default function PerfilUsuarios() {
                             }
                         } catch (error) {
                             console.error('Error al obtener el usuario:', error);
-                        }
+                        } */
 
                         // Mostrar mensaje de éxito y cerrar el modal
                         Swal.fire({
@@ -445,12 +454,6 @@ export default function PerfilUsuarios() {
                                 document.body.style.top = '';
                                 //window.scrollTo(0, 0);
                             }
-                            setSelectedNombre('');
-                            setSelectedCorreo('');
-                            setSelectedDireccion('');
-                            setSelectedEstado('');
-                            setSelectedCiudad('');
-                            setErrorNombre("");
 
                         });
 
@@ -488,7 +491,7 @@ export default function PerfilUsuarios() {
         return () => {
             M.FormSelect.getInstance(elems[0])?.destroy();
         };
-    }, [educacion, idioma, nivel]);
+    }, [educacion, idioma, nivel, ciudades2]);
 
     useEffect(() => {
         const dropdownElems = document.querySelectorAll('.dropdown-trigger');
@@ -506,10 +509,10 @@ export default function PerfilUsuarios() {
                 const response = await fetch(`${API_URL}/usuario/getEstados`);
                 if (response.ok) {
                     const data = await response.json() as Estado[];
-                    setEstados(data);
-                    /*if (data.length > 0) {
-                        setSelectedEstado(data[0].clave);
-                    } */
+                    setEstados2(data);
+                    if (data.length > 0) {
+                        setEstado2(data[0].clave);
+                    }
                 } else {
                     console.error('Error al obtener los estados:', response.statusText);
                 }
@@ -524,74 +527,68 @@ export default function PerfilUsuarios() {
     //setSelectedCiudad(ciudad);
     useEffect(() => {
         async function fetchCiudades() {
-            if (selectedEstado) {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getCiudades/${selectedEstado}`);
-                    if (response.ok) {
-                        const data = await response.json() as Ciudad[];
-                        setCiudades(data);
-                    } else {
-                        console.error('Error al obtener las ciudades:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error al obtener las ciudades:', error);
+            try {
+                const response = await fetch(`${API_URL}/usuario/getCiudades/${estado2}`);
+                if (response.ok) {
+                    const data = await response.json() as Ciudad[];
+                    console.log(data)
+                    setCiudades2(data);
+                    
+                } else {
+                    console.error('Error al obtener las ciudades:', response.statusText);
                 }
-            } else {
-                setCiudades([]); // Limpiar ciudades si no hay un estado seleccionado
+            } catch (error) {
+                console.error('Error al obtener las ciudades:', error);
             }
-
         }
 
-        fetchCiudades();
-    }, [selectedEstado]);
+        if (estado2) {
+            fetchCiudades();
+        }
+    }, [estado2]);
 
     //para consultas en perfil
+    async function fetchUsuarioYEstado(usuarioId: string, estadoFallback: string) {
+        try {
+                const usuarioResponse = await fetch(`${API_URL}/usuario/getUsuario/${usuarioId}`);
+            if (usuarioResponse.ok) {
+                const usuarioData = await usuarioResponse.json() as Usuario;
+                setNombre(usuarioData.nombre);
+                setCorreo(usuarioData.correo);
+                setDireccion(usuarioData.direccion);
+                setEstado(usuarioData.estado);
+                setCiudad(usuarioData.ciudad);
+                
+                
+    
+                const estadoParaBuscar = usuarioData.estado || estadoFallback;
+    
+                const estadoResponse = await fetch(`${API_URL}/usuario/getEstado/${estadoParaBuscar}`);
+                if (estadoResponse.ok) {
+                    const estadoData = await estadoResponse.json() as Usuario;
+                    //setEstado(estadoData.nombre);
+                    setEstNom(estadoData.nombre)
+                }
+            }
+        } catch (error) {
+            console.error('Error en el proceso de obtener usuario y estado:', error);
+        }
+    }
+    
     useEffect(() => {
-
         M.Sidenav.init(document.querySelectorAll('.sidenav'));
         M.Tabs.init(document.querySelectorAll('.tabs'));
+    
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
             auth.setIsAuthenticated(true);
-
-            async function fetchUsuario() {
-                try {
-                    const response = await fetch(`${API_URL}/usuario/getUsuario/${usuario.id}`);
-                    if (response.ok) {
-                        const data = await response.json() as Usuario;
-                        setNombre(data.nombre);
-                        setCorreo(data.correo);
-                        setDireccion(data.direccion);
-                        setEstado(data.estado);
-                        setCiudad(data.ciudad);
-                    }
-                } catch (error) {
-                    console.error('Error al obtener el usuario:', error);
-                }
-
-            }
-
-            async function fetchEstado() {
-                try {
-                    const nuevoEstado = usuario.estado || estado;
-                    const response = await fetch(`${API_URL}/usuario/getEstado/${nuevoEstado}`);
-                    if (response.ok) {
-                        const data = await response.json() as Usuario;
-                        setEstado2(data.nombre);
-
-                        // console.log("Estado", data);
-                    }
-                } catch (error) {
-                    //console.error('Error al obtener el usuario:', error);
-                }
-            }
-
-            fetchUsuario();
-            fetchEstado();
+    
+            // Llamar a la función unificada
+            fetchUsuarioYEstado(usuario.id, estado);
         }
-
     }, [auth]);
+    
 
     //para usuario perfil 
     useEffect(() => {
@@ -661,21 +658,32 @@ export default function PerfilUsuarios() {
         if (modalElement) {
             const modalInstance = M.Modal.init(modalElement, {
                 onOpenStart: () => {
+                    
                     setSelectedNombre(nombre);
                     setSelectedDireccion(direccion);
-                    setSelectedEstado(estado);
-                    setSelectedCiudad(ciudad);
+                    console.log(estado, ciudad)
+                    setEstado2(estado);
+                    setCiudad2(ciudad);
+                    console.log("actualñizados", estado2, ciudad2)
                     setSelectedCorreo(correo);
                 },
                 onCloseEnd: () => {
+                    document.body.style.overflow = '';
+                    document.body.style.position = '';
+                    document.body.style.top = '';
+                    //window.scrollTo(0, 0);
                 }
             });
 
             return () => {
                 modalInstance.destroy();
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.top = '';
+                //window.scrollTo(0, 0);
             };
         }
-    }, [nombre, direccion, estado, ciudad]);
+    }, [nombre, direccion, correo, estado, ciudad]);
 
 
     //para inicalizar modales
@@ -1651,7 +1659,7 @@ export default function PerfilUsuarios() {
                     </div>
                     <label htmlFor="estado">Estado</label>
                     <div className="input-field1">
-                        <input type="text" id="estado" name="estado" value={estado2} readOnly />
+                        <input type="text" id="estado" name="estado" value={estadoNom} readOnly />
                     </div>
                     <label htmlFor="ciudad">Ciudad</label>
                     <div className="input-field1">
@@ -1712,27 +1720,24 @@ export default function PerfilUsuarios() {
                             <div className="input-fieldperfil2">
                                 <label>Estado</label>
                                 <div className="input-fieldperfil2 col s12">
-                                    <select
-                                        value={selectedEstado}
-                                        onChange={(e) => setSelectedEstado(e.target.value)}
-                                        className="browser-default"
+                                <select
+                                        value={estado2}
+                                        onChange={(e) => setEstado2(e.target.value)}
                                     >
-                                        <option value="">Seleccione un estado</option> {/* Opción por defecto */}
-                                        {estados.map(estado => (
+                                        {estados2.map(estado => (
                                             <option key={estado._id} value={estado.clave}>{estado.nombre}</option>
                                         ))}
-                                    </select>
+                                </select>
                                 </div>
                             </div>
                             <div className="input-fieldperfil2">
                                 <label>Ciudad</label>
                                 <div className="input-fieldperfil2 col s12">
-                                    <select
-                                        value={selectedCiudad}
-                                        onChange={(e) => setSelectedCiudad(e.target.value)}
-                                        className="browser-default"
+                                <select
+                                        value={ciudad2}
+                                        onChange={(e) => setCiudad2(e.target.value)}
                                     >
-                                        {ciudades.map(ciudad => (
+                                        {ciudades2.map(ciudad => (
                                             <option key={ciudad._id} value={ciudad.nombre}>{ciudad.nombre}</option>
                                         ))}
                                     </select>

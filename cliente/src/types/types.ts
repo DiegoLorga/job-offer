@@ -84,7 +84,7 @@ export interface Oferta1{
     _id: string;
     titulo: string;
     puesto: string;
-    direccion: string;
+    estado: string;
     sueldo: number;
 }
 
@@ -185,6 +185,22 @@ export interface Certificado {
     nombre: string;
     descripcion: string;
     enlace: string;
+}
+
+export interface Giro {
+    _id: string;
+    giro: string;
+}
+
+export interface Guardado{
+    _id:string;
+    id_guardado: string;
+    id_oferta: string;
+    titulo: string;
+    puesto: string;
+    estado: string;
+    sueldo: number;
+    status: boolean;
 }
 
 export interface Notificacion{

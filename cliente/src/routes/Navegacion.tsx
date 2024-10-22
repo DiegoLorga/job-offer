@@ -2,8 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Link, useNavigate } from 'react-router-dom';
 import M from 'materialize-css';
-import { API_URL } from "../auth/apis";
+import { API_URL, API_URI_IMAGENES } from "../auth/apis";
 import 'materialize-css/dist/css/materialize.min.css';
+import '../index.css'; // Importa tus estilos personalizados despuéss';
+const imageSrc = `${API_URI_IMAGENES}/img/auxiliares/SUNEO.png`;
 import '../index.css'; // Importa tus estilos personalizados después
 import { io, Socket } from "socket.io-client";
 
@@ -85,16 +87,33 @@ export default function Navigation() {
         const tabsElems = document.querySelectorAll('.tabs');
         const dropdownElems = document.querySelectorAll('.dropdown-trigger');
 
-        M.Sidenav.init(sidenavElems);
-        M.Tabs.init(tabsElems);
-        M.Dropdown.init(dropdownElems);
+        // Verificar que los elementos existen antes de inicializarlos
+        if (sidenavElems.length) {
+            M.Sidenav.init(sidenavElems);
+        }
+        if (tabsElems.length) {
+            M.Tabs.init(tabsElems);
+        }
+        if (dropdownElems.length) {
+            M.Dropdown.init(dropdownElems);
+        }
 
         return () => {
-            M.Sidenav.getInstance(sidenavElems[0])?.destroy();
-            M.Tabs.getInstance(tabsElems[0])?.destroy();
-            M.Dropdown.getInstance(dropdownElems[0])?.destroy();
+            // Destruir instancias solo si existen
+            sidenavElems.forEach(elem => {
+                const instance = M.Sidenav.getInstance(elem);
+                if (instance) instance.destroy();
+            });
+            tabsElems.forEach(elem => {
+                const instance = M.Tabs.getInstance(elem);
+                if (instance) instance.destroy();
+            });
+            dropdownElems.forEach(elem => {
+                const instance = M.Dropdown.getInstance(elem);
+                if (instance) instance.destroy();
+            });
         };
-    }, []);
+    }, []); 
 
     async function handleLogout() {
         try {
@@ -121,11 +140,17 @@ export default function Navigation() {
 
     return (
         <>
-            <nav className="nav-extended custom-nav">
+            <nav className="nav-extended custom-nav" style={{height: '100px' }}>
                 <div className="nav-wrapper">
-                    <a href="#" className="brand-logo">
-                        <img src="https://i.ytimg.com/vi/wKUEGzKXYWM/maxresdefault.jpg" alt="Logo" style={{ height: 'auto', width: '200px' }} />
-                    </a>
+                    <Link to="/Empleado" className="brand-logo">
+
+                        <img
+                            src={imageSrc}
+                            alt="Logo"
+                            style={{ height: '110px', width: 'auto', marginLeft: '35px' }}
+
+                        />
+                    </Link>
                     <ul id="nav-mobile" className="right hide-on-med-and-down">
                         <li>
                             <a className="dropdown-trigger btn grey-btn" href="#!" data-target="dropdown2">
@@ -164,9 +189,9 @@ export default function Navigation() {
                                 ) : null}
                                 {idRol === "6690640c24eacbffd867f333" ? (
                                     <li>
-                                        <Link to="/Administrador">Guardado
-                                            <i className="tiny material-icons">turned_in</i>
-                                        </Link>
+                                        <Link to="/Empleado/Guardado">Guardado
+                                        <i className="tiny material-icons">turned_in</i>
+                                    </Link>
                                     </li>
                                 ) : null}
                                 {idRol === "6690640c24eacbffd867f333" ? (
@@ -188,10 +213,6 @@ export default function Navigation() {
                 </div>
             </nav>
 
-            <ul className="sidenav" id="mobile-demo">
-                <li><Link to="/Empleado">Empleos</Link></li>
-                <li><Link to="http://localhost:5173/Administrador">Administrador</Link></li>
-            </ul>
         </>
     );
 }

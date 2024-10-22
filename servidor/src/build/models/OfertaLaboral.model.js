@@ -66,7 +66,7 @@ const schemaOfertaLaboral = new mongoose_1.Schema({
         required: true
     },
     status: {
-        type: Number,
+        type: Boolean,
         required: true
     },
     descripcion: {
