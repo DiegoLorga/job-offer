@@ -1,6 +1,6 @@
 [{
   "_id": {
-    "$oid": "66a819205e1592992a38b7c4"
+    "$oid": "66f5b3a6b3d2f3023d15b476"
   },
   "id_empresa": {
     "$oid": "66a819305e1592992a38b7c7"
@@ -11,9 +11,9 @@
   "horario": "8:00 a 20:00",
   "modalidad": "tiempo completo",
   "direccion": "Calle Bugambilia",
-  "ciudad": "Huajuapan",
-  "estado": "Oaxaca",
-  "status": 0,
+  "ciudad": "TLAPA DE COMONFORT",
+  "estado": "Guerrero",
+  "status": true,
   "descripcion": "Gerente de ventas para sucursal",
   "requisitos": "Ser mayor de 18 años",
   "telefono": {
@@ -23,10 +23,74 @@
   "educacion": "Media superior",
   "idioma": "Español",
   "createdAt": {
-    "$date": "2024-07-29T22:35:12.991Z"
+    "$date": "2024-07-30T23:28:20.816Z"
   },
   "updatedAt": {
-    "$date": "2024-07-29T22:36:12.459Z"
+    "$date": "2024-07-30T23:28:20.816Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66f5b3bab3d2f3023d15b477"
+  },
+  "id_empresa": {
+    "$oid": "66a819305e1592992a38b7c7"
+  },
+  "titulo": "Gerente en ventas",
+  "puesto": "Gerente",
+  "sueldo": 10000,
+  "horario": "8:00 a 20:00",
+  "modalidad": "tiempo completo",
+  "direccion": "Calle Bugambilia",
+  "ciudad": "OAXACA DE JUÁREZ",
+  "estado": "Oaxaca",
+  "status": false,
+  "descripcion": "Gerente de ventas para sucursal",
+  "requisitos": "Ser mayor de 18 años",
+  "telefono": {
+    "$numberLong": "9565678909"
+  },
+  "correo": "elektra@gmail.com",
+  "educacion": "Media superior",
+  "idioma": "Español",
+  "createdAt": {
+    "$date": "2024-07-30T23:30:11.332Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-30T23:30:11.332Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "66f5b3eeb3d2f3023d15b478"
+  },
+  "id_empresa": {
+    "$oid": "66a819305e1592992a38b7c7"
+  },
+  "titulo": "Ingeniero Químico",
+  "puesto": "Ingeniero xd",
+  "sueldo": 20000,
+  "horario": "8:00 a 20:00",
+  "modalidad": "tiempo completo",
+  "direccion": "Calle Bugambilia",
+  "ciudad": "PUERTO ESCONDIDO",
+  "estado": "Oaxaca",
+  "status": true,
+  "descripcion": "Gerente de ventas para sucursal",
+  "requisitos": "Ser mayor de 18 años",
+  "telefono": {
+    "$numberLong": "9565678909"
+  },
+  "correo": "elektra@gmail.com",
+  "educacion": "Media superior",
+  "idioma": "Español",
+  "createdAt": {
+    "$date": "2024-07-30T23:28:20.816Z"
+  },
+  "updatedAt": {
+    "$date": "2024-07-30T23:28:20.816Z"
   },
   "__v": 0
 }]
