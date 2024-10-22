@@ -364,10 +364,22 @@ class UsuarioController {
 
     public async postular(req: Request, res: Response): Promise<void> {
         const { idUsuario, idOferta } = req.body;
-        
+    
         try {
+            // Verificar si el usuario ya se ha postulado a esta oferta
+            const postulacionExistente = await notificacionEmpresa.findOne({ idUsuario, idOferta });
+    
+            if (postulacionExistente) {
+                res.status(400).json({
+                    status: 400,
+                    message: 'Ya te has postulado a esta oferta'
+                });
+                return;
+            }
+    
+            // Obtener la oferta laboral y la empresa relacionada
             const oferta = await OfertaLaboral.findById(idOferta).populate('id_empresa');
-            
+    
             if (!oferta || !oferta.id_empresa) {
                 res.status(404).json({
                     status: 404,
@@ -375,24 +387,35 @@ class UsuarioController {
                 });
                 return;
             }
-            
+    
             const empresa = oferta.id_empresa as any; // Asegúrate de que esto contiene la referencia a la empresa
-            
+    
+            // Obtener el usuario por ID para obtener su nombre
+            const usuario = await Usuario.findById(idUsuario); // Asegúrate de que 'Usuario' es el modelo correcto
+    
+            if (!usuario) {
+                res.status(404).json({
+                    status: 404,
+                    message: 'Usuario no encontrado'
+                });
+                return;
+            }
+    
+            // Crear la notificación con el nombre del usuario
             const nuevaNotificacion = new notificacionEmpresa({
                 recipientId: empresa._id, // Cambiar a empresa._id
-                senderId: idUsuario,
-                message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+                senderId: usuario._id, // Almacena el ID del usuario para referencia
+                message: `El usuario ${usuario.nombre} se ha postulado para la oferta: ${oferta.titulo}`,
                 link: `/Empresa/Postulantes/`,
                 isRead: false
             });
-            
+    
             await nuevaNotificacion.save();
-            
+    
             // Emitir el evento al room de la empresa usando su ID
             server.io.to(`empresa_${empresa._id.toString()}`).emit('nuevaPostulacion', nuevaNotificacion);
             console.log(empresa._id);
-            
-            
+    
             res.status(200).json({
                 status: 200,
                 message: 'Postulación enviada y notificación creada',
@@ -406,6 +429,7 @@ class UsuarioController {
             });
         }
     }
+    
     
     
     

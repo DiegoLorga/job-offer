@@ -27,17 +27,27 @@ export default function Navigation() {
     useEffect(() => {
         const socket = io("http://localhost:3000"); // Conéctate al servidor
         socketRef.current = socket; // Guarda la referencia del socket
-
+    
         const storedUser = localStorage.getItem('usuario');
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
             const empresaId = usuario.id; // ID de la empresa
-
+    
             socket.emit('joinEmpresa', empresaId); // Únete al room de la empresa
-
-            // Escuchar notificaciones
+    
+            // Cargar notificaciones desde la base de datos al cargar la página
+            const fetchNotificaciones = async () => {
+                const response = await fetch(`${API_URL}/empresa/notificaciones/${empresaId}`);
+                const data = await response.json();
+                setNotificaciones(data.notificaciones); // Actualizar el estado con las notificaciones almacenadas
+                console.log(data.notificaciones);
+                
+            };
+    
+            fetchNotificaciones();
+    
+            // Escuchar notificaciones en tiempo real
             socket.on('nuevaPostulacion', (notificacion) => {
-                console.log('Nueva notificación recibida:', notificacion);
                 setNotificaciones((prevNotificaciones) => {
                     const nuevasNotificaciones = [
                         ...prevNotificaciones,
@@ -48,18 +58,18 @@ export default function Navigation() {
                             link: `/Empresa/Postulantes/`,
                         },
                     ];
-                    // Actualiza el estado de notificaciones
                     setTieneNotificaciones(nuevasNotificaciones.length > 0);
                     return nuevasNotificaciones;
                 });
             });
         }
-
+    
         return () => {
             socket.off('nuevaPostulacion'); // Limpia el listener al desmontar
             socket.disconnect(); // Desconectar el socket
         };
     }, []);
+    
 
     useEffect(() => {
         // Obtener el id_rol del usuario almacenado en localStorage
@@ -124,11 +134,9 @@ export default function Navigation() {
                                 <i className="material-icons right">arrow_drop_down</i>
                             </a>
                             <ul id="dropdown2" className="dropdown-content black-options">
-                                {notificaciones.length > 0 ? (
-                                    notificaciones.map((notif, index) => (
-                                        <li key={index}>
-                                            <Link to={notif.link}>{notif.message}</Link>
-                                        </li>
+                                {notificaciones && notificaciones.length > 0 ? (
+                                    notificaciones.map((noti, index) => (
+                                        <li key={index}>{noti.message}</li>
                                     ))
                                 ) : (
                                     <li><span>No hay notificaciones</span></li>
@@ -164,12 +172,6 @@ export default function Navigation() {
                                 {idRol === "6690640c24eacbffd867f333" ? (
                                     <li>
                                         <Link to="/Empresa">Postulaciones
-                                            <i className="tiny material-icons">content_paste</i>
-                                        </Link>
-                                    </li>
-                                ) : idRol === "6690637124eacbffd867f32f" ? (
-                                    <li>
-                                        <Link to="/Empresa/Postulantes">Postulantes
                                             <i className="tiny material-icons">content_paste</i>
                                         </Link>
                                     </li>

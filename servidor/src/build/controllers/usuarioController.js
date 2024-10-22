@@ -352,6 +352,16 @@ class UsuarioController {
         return __awaiter(this, void 0, void 0, function* () {
             const { idUsuario, idOferta } = req.body;
             try {
+                // Verificar si el usuario ya se ha postulado a esta oferta
+                const postulacionExistente = yield notificacionEmpresa_model_1.default.findOne({ idUsuario, idOferta });
+                if (postulacionExistente) {
+                    res.status(400).json({
+                        status: 400,
+                        message: 'Ya te has postulado a esta oferta'
+                    });
+                    return;
+                }
+                // Obtener la oferta laboral y la empresa relacionada
                 const oferta = yield OfertaLaboral_model_1.default.findById(idOferta).populate('id_empresa');
                 if (!oferta || !oferta.id_empresa) {
                     res.status(404).json({
@@ -361,10 +371,20 @@ class UsuarioController {
                     return;
                 }
                 const empresa = oferta.id_empresa; // Asegúrate de que esto contiene la referencia a la empresa
+                // Obtener el usuario por ID para obtener su nombre
+                const usuario = yield usuario_model_1.default.findById(idUsuario); // Asegúrate de que 'Usuario' es el modelo correcto
+                if (!usuario) {
+                    res.status(404).json({
+                        status: 404,
+                        message: 'Usuario no encontrado'
+                    });
+                    return;
+                }
+                // Crear la notificación con el nombre del usuario
                 const nuevaNotificacion = new notificacionEmpresa_model_1.default({
                     recipientId: empresa._id, // Cambiar a empresa._id
-                    senderId: idUsuario,
-                    message: `El usuario ${idUsuario} se ha postulado para la oferta: ${oferta.titulo}`,
+                    senderId: usuario._id, // Almacena el ID del usuario para referencia
+                    message: `El usuario ${usuario.nombre} se ha postulado para la oferta: ${oferta.titulo}`,
                     link: `/Empresa/Postulantes/`,
                     isRead: false
                 });

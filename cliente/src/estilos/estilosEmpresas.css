@@ -244,7 +244,19 @@
 .custom-btn2:hover {
     background-color: #757575; /* Cambia ligeramente el color en hover */
 }
+.oferta-card {
+    display: flex;
+    align-items: center;
+    padding: 0;
+}
 
-
-
-
+.card {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    /* Cambia esto al color de fondo de tu tarjeta */
+}
+.oferta-detalles-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}

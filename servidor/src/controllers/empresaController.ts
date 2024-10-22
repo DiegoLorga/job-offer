@@ -10,7 +10,9 @@ import OfertaLaboral from '../models/OfertaLaboral.model';
 import fotosEmpresa from '../models/fotosEmpresa.model';
 import FotosPerfilEmpresa from '../models/fotosPerfilEmpresa.model';
 import Giro from '../models/giro.model';
+import Notificacion from '../models/notificacionEmpresa.model';
 import { isEmpty } from 'validator';
+import Usuario from '../models/usuario.model';
 
 class EmpresaController {
 
@@ -271,7 +273,87 @@ public async listOne(req: Request, res: Response): Promise<void> {
             });
         }
     }
+
+    public async filtrarPostulaciones(req: Request, res: Response): Promise<void> {
+        try {
+            console.log("Mostrando las postulaciones por empresa");
+            const empresa = await Empresa.findById(req.params.id);
+            if (!empresa) {
+                res.status(404).json(jsonResponse(404, { error: "Empresa no encontrada" }));
+                return;
+            }
     
+            // Obtener las notificaciones para la empresa
+            const notificaciones = await Notificacion.find({ recipientId: empresa._id });
+    
+            // Si no hay notificaciones
+            if (!notificaciones.length) {
+                res.status(404).json({ message: 'No se encontraron notificaciones para esta empresa' });
+                return;
+            }
+    
+            // Transformar las notificaciones para mostrar nombres en lugar de IDs
+            const notificacionesConNombres = await Promise.all(notificaciones.map(async (noti) => {
+                let senderNombre = '';
+                let recipientNombre = '';
+    
+                // Obtener el nombre del remitente (senderId) que puede ser un usuario
+                const sender = await Usuario.findById(noti.senderId);
+                if (sender) {
+                    senderNombre = sender.nombre;
+                    console.log(senderNombre);
+                    
+                } else {
+                    const senderEmpresa = await Empresa.findById(noti.senderId);
+                    if (senderEmpresa) {
+                        senderNombre = senderEmpresa.nombre;
+                    } else {
+                        senderNombre = 'Remitente no encontrado';
+                    }
+                }
+    
+                // Obtener el nombre del destinatario (recipientId) que es la empresa
+                const recipientEmpresa = await Empresa.findById(noti.recipientId);
+                if (recipientEmpresa) {
+                    recipientNombre = recipientEmpresa.nombre;
+                } else {
+                    recipientNombre = 'Destinatario no encontrado';
+                }
+    
+                // Retornar los datos con nombres en lugar de IDs
+                return {
+                    ...noti.toObject(),
+                    senderNombre,
+                    recipientNombre
+                };
+            }));
+    
+            res.json(notificacionesConNombres);
+    
+            console.log("Empresa: ", empresa);
+            console.log("Notificaciones: ", notificacionesConNombres);
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, { error: "Hubo un error" }));
+        }
+    }
+    
+    public async obtenerNotificaciones (req: Request, res: Response) : Promise<void> {
+        try {
+            console.log("Mostrando las postulaciones por empresa");
+            const empresa = await Empresa.findById(req.params.id);
+            if (!empresa) {
+                res.status(404).json(jsonResponse(404, { error: "Empresa no encontrada" }));
+                return;
+            }
+    
+            // Obtener las notificaciones para la empresa
+            const notificaciones = await Notificacion.find({ recipientId: empresa._id });
+    
+            res.status(200).json({ notificaciones });
+        } catch (error) {
+            res.status(500).json(jsonResponse(500, { error: "Hubo un error" }));
+        }
+    };
     
 
 }

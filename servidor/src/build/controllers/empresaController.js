@@ -23,6 +23,8 @@ const OfertaLaboral_model_1 = __importDefault(require("../models/OfertaLaboral.m
 const fotosEmpresa_model_1 = __importDefault(require("../models/fotosEmpresa.model"));
 const fotosPerfilEmpresa_model_1 = __importDefault(require("../models/fotosPerfilEmpresa.model"));
 const giro_model_1 = __importDefault(require("../models/giro.model"));
+const notificacionEmpresa_model_1 = __importDefault(require("../models/notificacionEmpresa.model"));
+const usuario_model_1 = __importDefault(require("../models/usuario.model"));
 class EmpresaController {
     constructor() {
     }
@@ -266,5 +268,80 @@ class EmpresaController {
             }
         });
     }
+    filtrarPostulaciones(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Mostrando las postulaciones por empresa");
+                const empresa = yield empresa_model_1.default.findById(req.params.id);
+                if (!empresa) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, { error: "Empresa no encontrada" }));
+                    return;
+                }
+                // Obtener las notificaciones para la empresa
+                const notificaciones = yield notificacionEmpresa_model_1.default.find({ recipientId: empresa._id });
+                // Si no hay notificaciones
+                if (!notificaciones.length) {
+                    res.status(404).json({ message: 'No se encontraron notificaciones para esta empresa' });
+                    return;
+                }
+                // Transformar las notificaciones para mostrar nombres en lugar de IDs
+                const notificacionesConNombres = yield Promise.all(notificaciones.map((noti) => __awaiter(this, void 0, void 0, function* () {
+                    let senderNombre = '';
+                    let recipientNombre = '';
+                    // Obtener el nombre del remitente (senderId) que puede ser un usuario
+                    const sender = yield usuario_model_1.default.findById(noti.senderId);
+                    if (sender) {
+                        senderNombre = sender.nombre;
+                        console.log(senderNombre);
+                    }
+                    else {
+                        const senderEmpresa = yield empresa_model_1.default.findById(noti.senderId);
+                        if (senderEmpresa) {
+                            senderNombre = senderEmpresa.nombre;
+                        }
+                        else {
+                            senderNombre = 'Remitente no encontrado';
+                        }
+                    }
+                    // Obtener el nombre del destinatario (recipientId) que es la empresa
+                    const recipientEmpresa = yield empresa_model_1.default.findById(noti.recipientId);
+                    if (recipientEmpresa) {
+                        recipientNombre = recipientEmpresa.nombre;
+                    }
+                    else {
+                        recipientNombre = 'Destinatario no encontrado';
+                    }
+                    // Retornar los datos con nombres en lugar de IDs
+                    return Object.assign(Object.assign({}, noti.toObject()), { senderNombre,
+                        recipientNombre });
+                })));
+                res.json(notificacionesConNombres);
+                console.log("Empresa: ", empresa);
+                console.log("Notificaciones: ", notificacionesConNombres);
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, { error: "Hubo un error" }));
+            }
+        });
+    }
+    obtenerNotificaciones(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Mostrando las postulaciones por empresa");
+                const empresa = yield empresa_model_1.default.findById(req.params.id);
+                if (!empresa) {
+                    res.status(404).json((0, jsonResponse_1.jsonResponse)(404, { error: "Empresa no encontrada" }));
+                    return;
+                }
+                // Obtener las notificaciones para la empresa
+                const notificaciones = yield notificacionEmpresa_model_1.default.find({ recipientId: empresa._id });
+                res.status(200).json({ notificaciones });
+            }
+            catch (error) {
+                res.status(500).json((0, jsonResponse_1.jsonResponse)(500, { error: "Hubo un error" }));
+            }
+        });
+    }
+    ;
 }
 exports.empresaController = new EmpresaController();

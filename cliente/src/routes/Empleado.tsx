@@ -368,32 +368,63 @@ export default function Empleados() {
         if (storedUser) {
             const usuario = JSON.parse(storedUser);
             const idUsuario = usuario.id;
-
-
+    
+            // Verifica si el usuario ya se postuló a esta oferta
+            const postulacionesPrevias = usuario.postulaciones || []; // Asegúrate de tener las postulaciones previas en localStorage
+            const yaPostulado = postulacionesPrevias.includes(idOferta);
+    
+            if (yaPostulado) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Ya te has postulado',
+                    text: 'Ya te has postulado a esta oferta.',
+                    confirmButtonText: 'Aceptar',
+                });
+                return; // Detiene el proceso si ya está postulado
+            }
+    
             try {
                 const response = await fetch(`${API_URL}/usuario/postularme`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
                         idUsuario,
                         idOferta,
                     }),
                 });
-
+    
                 if (response.ok) {
-                    socket.emit('nuevaPostulacion', { idOferta, idUsuario});
-
+                    // Emitir el evento al socket para notificar la postulación
+                    socket.emit('nuevaPostulacion', { idOferta, idUsuario });
+    
+                    // Actualizar las postulaciones del usuario localmente
+                    usuario.postulaciones = [...postulacionesPrevias, idOferta];
+                    localStorage.setItem('usuario', JSON.stringify(usuario));
+    
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Postulación exitosa!',
+                        text: 'Te has postulado correctamente.',
+                        confirmButtonText: 'Aceptar',
+                    });
                 } else {
                     const errorData = await response.json();
-                    alert(`Error al postularse: ${errorData.error}`);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error al postularse',
+                        text: errorData.error,
+                        confirmButtonText: 'Aceptar',
+                    });
                 }
             } catch (error) {
                 alert('Error de conexión. Por favor intenta más tarde.');
             }
         }
     };
+    
+    
 
 
 
